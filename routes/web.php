@@ -2,7 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\JenisObatController;
+use App\Http\Controllers\RematriController;
+use App\Http\Controllers\StokObatController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,5 +25,7 @@ Route::get('user', [UserController::class, 'index'])->name('user.index');
 Route::get('user/create', [UserController::class, 'create'])->name('user.create');
 Route::get('user/edit', [UserController::class, 'edit'])->name('user.edit');
 
-// Jenis Obat
-Route::get('jenis_obat', [JenisObatController::class, 'index'])->name('jenis-obat.index');
+// Rematri
+Route::get('rematri', [RematriController::class, 'index'])->name('rematri.index');
+Route::get('rematri/create', [RematriController::class, 'create'])->name('rematri.create');
+Route::get('rematri/edit', [RematriController::class, 'edit'])->name('rematri.edit');
