@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\UserPuskesController;
 use App\Http\Controllers\Admin\RematriController;
 use App\Http\Controllers\Admin\StokObatController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -32,10 +32,12 @@ Route::resource('kabupaten', KabController::class);
 Route::resource('kecamatan', KecController::class);
 // Desa/Kelurahan
 Route::resource('desa', DesaController::class);
-// User
-Route::get('user', [UserController::class, 'index'])->name('user.index');
-Route::get('user/create', [UserController::class, 'create'])->name('user.create');
-Route::get('user/edit', [UserController::class, 'edit'])->name('user.edit');
+// Users
+Route::get('users-puskesmas', [UserPuskesController::class, 'index'])->name('userpuskes.index');
+Route::post('users-puskesmas', [UserPuskesController::class, 'store'])->name('userpuskes.store');
+Route::get('users-puskesmas/{id}/edit', [UserPuskesController::class, 'edit'])->name('userpuskes.edit');
+Route::delete('users-puskesmas/{user}/destroy', [UserPuskesController::class, 'destroy'])->name('userpuskes.destroy');
+Route::post('users-puskesmas/getkecamatan', [UserPuskesController::class, 'getKec'])->name('userpuskes.getkec');
 // Rematri
 Route::get('rematri', [RematriController::class, 'index'])->name('rematri.index');
 Route::get('rematri/create', [RematriController::class, 'create'])->name('rematri.create');

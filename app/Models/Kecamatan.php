@@ -23,4 +23,8 @@ class Kecamatan extends Model
     {
         return $this->hasMany(Desa::class);
     }
+    public function userpuskes()
+    {
+        return $this->hasMany(UserPuskesmas::class);
+    }
 }

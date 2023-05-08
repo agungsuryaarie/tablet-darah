@@ -29,7 +29,7 @@
                                 <thead>
                                     <tr>
                                         <th style="width:5%">No</th>
-                                        <th style="width:15%">Kode Wilayah</th>
+                                        <th style="width:12%">Kode Wilayah</th>
                                         <th>Kabupaten</th>
                                         <th class="text-center" style="width: 10%">Action</th>
                                     </tr>

@@ -14,9 +14,16 @@ class Kabupaten extends Model
     protected $fillable = [
         'kode_wilayah', 'kabupaten'
     ];
-
+    public function user()
+    {
+        return $this->hasMany(User::class);
+    }
     public function kecamatan()
     {
         return $this->hasMany(Kecamatan::class);
+    }
+    public function userpuskes()
+    {
+        return $this->hasMany(UserPuskesmas::class);
     }
 }

@@ -8,7 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class UserPuskesmas extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -17,10 +17,11 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $table = "users";
+    protected $table = "users_puskesmas";
 
     protected $fillable = [
         'kabupaten_id',
+        'kecamatan_id',
         'nik',
         'nama',
         'nohp',
@@ -51,5 +52,9 @@ class User extends Authenticatable
     public function kabupaten()
     {
         return $this->belongsTo(Kabupaten::class);
+    }
+    public function kecamatan()
+    {
+        return $this->belongsTo(Kecamatan::class);
     }
 }
