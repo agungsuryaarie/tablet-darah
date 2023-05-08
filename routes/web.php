@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\StokObatController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\KabController;
 use App\Http\Controllers\Admin\KecController;
+use App\Http\Controllers\Admin\DesaController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
@@ -29,7 +30,9 @@ Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard'
 Route::resource('kabupaten', KabController::class);
 // Kecamatan
 Route::resource('kecamatan', KecController::class);
-// user
+// Desa/Kelurahan
+Route::resource('desa', DesaController::class);
+// User
 Route::get('user', [UserController::class, 'index'])->name('user.index');
 Route::get('user/create', [UserController::class, 'create'])->name('user.create');
 Route::get('user/edit', [UserController::class, 'edit'])->name('user.edit');

@@ -19,4 +19,8 @@ class Kecamatan extends Model
     {
         return $this->belongsTo(Kabupaten::class);
     }
+    public function desa()
+    {
+        return $this->hasMany(Desa::class);
+    }
 }
