@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
-@include('layouts.head')
+@include('admin.layouts.head')
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
-        @include('layouts.navbar')
+        @include('admin.layouts.navbar')
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
             <a href="index3.html" class="brand-link">
@@ -42,7 +42,7 @@
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                         data-accordion="false">
 
-                        @include('layouts.menu')
+                        @include('admin.layouts.menu')
                     </ul>
                 </nav>
             </div>
@@ -51,5 +51,5 @@
             <div id="alerts"></div>
             @yield('content')
         </div>
-        @include('layouts.footer')
+        @include('admin.layouts.footer')
     </div>
