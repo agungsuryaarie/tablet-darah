@@ -27,4 +27,8 @@ class Kecamatan extends Model
     {
         return $this->hasMany(UserPuskesmas::class);
     }
+    public function puskesmas()
+    {
+        return $this->hasMany(Puskesmas::class);
+    }
 }

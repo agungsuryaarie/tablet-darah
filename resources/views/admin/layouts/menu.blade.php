@@ -35,6 +35,18 @@
             </a>
         </li>
         <li class="nav-item">
+            <a href="{{ route('puskesmas.index') }}" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Puskesmas</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{ route('posyandu.index') }}" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Posyandu</p>
+            </a>
+        </li>
+        <li class="nav-item">
             <a href="{{ route('userpuskes.index') }}" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>User Puskesmas</p>
