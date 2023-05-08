@@ -15,8 +15,8 @@ class Kabupaten extends Model
         'kode_wilayah', 'kabupaten'
     ];
 
-    public function sekolah()
+    public function kecamatan()
     {
-        return $this->hasMany(Sekolah::class);
+        return $this->hasMany(Kecamatan::class);
     }
 }
