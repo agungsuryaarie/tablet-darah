@@ -5,6 +5,8 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RematriController;
 use App\Http\Controllers\Admin\StokObatController;
 use App\Http\Controllers\Admin\KabController;
+use App\Http\Controllers\Admin\DashboardController;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,8 +20,10 @@ use App\Http\Controllers\Admin\KabController;
 */
 
 Route::get('/', function () {
-    return view('dashboard');
+    return view('welcome');
 });
+// Dashboard
+Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 // Kabupaten
 Route::resource('kabupaten', KabController::class);
 // user
