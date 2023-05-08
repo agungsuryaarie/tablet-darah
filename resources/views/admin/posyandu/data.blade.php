@@ -21,7 +21,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <a href="javascript:void(0)" id="createNewPuskesmas" class="btn btn-info btn-xs float-right">
+                            <a href="javascript:void(0)" id="createNewPosyandu" class="btn btn-info btn-xs float-right">
                                 <i class="fas fa-plus-circle"></i> Tambah</a>
                         </div>
                         <div class="card-body">
@@ -29,8 +29,8 @@
                                 <thead>
                                     <tr>
                                         <th style="width:5%">No</th>
-                                        <th>Puskesmas</th>
-                                        <th style="width:12%">Kecamatan</th>
+                                        <th>Posyandu</th>
+                                        <th style="width:12%">Desa/Kelurahan</th>
                                         <th class="text-center" style="width: 10%">Action</th>
                                     </tr>
                                 </thead>
@@ -54,27 +54,26 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form id="puskesmasForm" name="puskesmasForm" class="form-horizontal">
+                    <form id="posyanduForm" name="posyanduForm" class="form-horizontal">
                         @csrf
-                        <input type="hidden" name="puskesmas_id" id="puskesmas_id">
+                        <input type="hidden" name="posyandu_id" id="posyandu_id">
                         <div class="form-group">
                             <div class="col-sm-12">
-                                <label>Kecamatan<span class="text-danger">*</span></label>
-                                <select class="browser-default custom-select select2bs4" name="kecamatan_id"
-                                    id="kecamatan_id">
-                                    <option selected disabled>::Pilih Kecamatan::</option>
-                                    @foreach ($kecamatan as $item)
+                                <label>Desa/Kelurahan<span class="text-danger">*</span></label>
+                                <select class="browser-default custom-select select2bs4" name="desa_id" id="desa_id">
+                                    <option selected disabled>::Pilih Desa::</option>
+                                    @foreach ($desa as $item)
                                         <option value="{{ $item->id }}">
-                                            {{ $item->kecamatan }}</option>
+                                            {{ $item->desa }}</option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Nama Puskesmas<span class="text-danger"> *</span></label>
+                            <label class="col-sm-4 control-label">Nama Posyandu<span class="text-danger"> *</span></label>
                             <div class="col-sm-12">
-                                <input type="text" class="form-control" id="nama_puskesmas" name="nama_puskesmas"
-                                    placeholder="Nama Puskesmas">
+                                <input type="text" class="form-control" id="nama_posyandu" name="nama_posyandu"
+                                    placeholder="Nama Posyandu">
                             </div>
                         </div>
                         <div class="form-group">
@@ -111,7 +110,7 @@
                         <h6 class="text-muted">::KEPUTUSAN INI TIDAK DAPAT DIUBAH KEMBALI::</h6>
                     </center>
                     <center>
-                        <h6>Apakah anda yakin menghapus Puskesmas ini ?</h6>
+                        <h6>Apakah anda yakin menghapus Posyandu ini ?</h6>
                     </center>
                 </div>
                 <div class="modal-footer justify-content-between">
@@ -148,18 +147,18 @@
                 lengthMenu: [10, 50, 100, 200, 500],
                 lengthChange: true,
                 autoWidth: false,
-                ajax: "{{ route('puskesmas.index') }}",
+                ajax: "{{ route('posyandu.index') }}",
                 columns: [{
                         data: "DT_RowIndex",
                         name: "DT_RowIndex",
                     },
                     {
-                        data: "puskesmas",
-                        name: "puskesmas",
+                        data: "posyandu",
+                        name: "posyandu",
                     },
                     {
-                        data: "kecamatan",
-                        name: "kecamatan",
+                        data: "desa",
+                        name: "desa",
                     },
                     {
                         data: "action",
@@ -170,24 +169,24 @@
                 ],
             });
 
-            $("#createNewPuskesmas").click(function() {
-                $("#saveBtn").val("create-puskesmas");
-                $("#puskesmas_id").val("");
-                $("#puskesmasForm").trigger("reset");
-                $("#modelHeading").html("Tambah Puskesmas");
+            $("#createNewPosyandu").click(function() {
+                $("#saveBtn").val("create-posyandu");
+                $("#posyandu_id").val("");
+                $("#posyanduForm").trigger("reset");
+                $("#modelHeading").html("Tambah Posyandu");
                 $("#ajaxModel").modal("show");
-                $("#deletePuskes").modal("show");
+                $("#deletePos").modal("show");
             });
 
-            $("body").on("click", ".editPuskes", function() {
-                var puskesmas_id = $(this).data("id");
-                $.get("{{ route('puskesmas.index') }}" + "/" + puskesmas_id + "/edit", function(data) {
-                    $("#modelHeading").html("Edit Puskesmas");
-                    $("#saveBtn").val("edit-puskesmas");
+            $("body").on("click", ".editPos", function() {
+                var posyandu_id = $(this).data("id");
+                $.get("{{ route('posyandu.index') }}" + "/" + posyandu_id + "/edit", function(data) {
+                    $("#modelHeading").html("Edit Posyandu");
+                    $("#saveBtn").val("edit-posyandu");
                     $("#ajaxModel").modal("show");
-                    $("#puskesmas_id").val(data.id);
-                    $("#kecamatan_id").val(data.kecamatan_id);
-                    $("#nama_puskesmas").val(data.puskesmas);
+                    $("#posyandu_id").val(data.id);
+                    $("#desa_id").val(data.desa_id);
+                    $("#nama_posyandu").val(data.posyandu);
                 });
             });
 
@@ -198,8 +197,8 @@
                 );
 
                 $.ajax({
-                    data: $("#puskesmasForm").serialize(),
-                    url: "{{ route('puskesmas.store') }}",
+                    data: $("#posyanduForm").serialize(),
+                    url: "{{ route('posyandu.store') }}",
                     type: "POST",
                     dataType: "json",
                     success: function(data) {
@@ -212,20 +211,20 @@
                                     '</li></strong>');
                                 $(".alert-danger").fadeOut(5000);
                                 $("#saveBtn").html("Simpan");
-                                // $('#puskesmasForm').trigger("reset");
+                                // $('#posyanduForm').trigger("reset");
                             });
                         } else {
                             table.draw();
-                            alertSuccess("Puskesmas berhasil ditambah");
-                            // $('#puskesmasForm').trigger("reset");
+                            alertSuccess("Posyandu berhasil ditambah");
+                            // $('#posyanduForm').trigger("reset");
                             $("#saveBtn").html("Simpan");
                             $('#ajaxModel').modal('hide');
                         }
                     },
                 });
             });
-            $("body").on("click", ".deletePuskes", function() {
-                var puskesmas_id = $(this).data("id");
+            $("body").on("click", ".deletePos", function() {
+                var posyandu_id = $(this).data("id");
                 $("#modelHeadingHps").html("Hapus");
                 $("#ajaxModelHps").modal("show");
                 $("#hapusBtn").click(function(e) {
@@ -235,7 +234,7 @@
                     );
                     $.ajax({
                         type: "DELETE",
-                        url: "{{ route('puskesmas.store') }}" + "/" + puskesmas_id,
+                        url: "{{ route('posyandu.store') }}" + "/" + posyandu_id,
                         data: {
                             _token: "{!! csrf_token() !!}",
                         },
