@@ -22,6 +22,7 @@ class UserPuskesmas extends Authenticatable
     protected $fillable = [
         'kabupaten_id',
         'kecamatan_id',
+        'puskesmas_id',
         'nik',
         'nama',
         'nohp',
@@ -56,5 +57,9 @@ class UserPuskesmas extends Authenticatable
     public function kecamatan()
     {
         return $this->belongsTo(Kecamatan::class);
+    }
+    public function puskesmas()
+    {
+        return $this->belongsTo(Puskesmas::class);
     }
 }

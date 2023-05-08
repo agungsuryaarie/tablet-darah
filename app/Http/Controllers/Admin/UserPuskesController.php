@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Kabupaten;
 use App\Models\Kecamatan;
+use App\Models\Puskesmas;
 use App\Models\UserPuskesmas;
 use Yajra\Datatables\Datatables;
 use Illuminate\Http\Request;
@@ -47,6 +48,7 @@ class UserPuskesController extends Controller
         $message = array(
             'kabupaten_id.required' => 'Kabupaten harus dipilih.',
             'kecamatan_id.required' => 'Kecamatan harus dipilih.',
+            'puskesmas_id.required' => 'Puskesmas harus dipilih.',
             'nik.required' => 'NIK harus diisi.',
             'nik.numeric' => 'NIK harus angka.',
             'nik.max' => 'NIK maksimal 16 digit.',
@@ -87,6 +89,7 @@ class UserPuskesController extends Controller
         $validator = Validator::make($request->all(), [
             'kabupaten_id' => 'required',
             'kecamatan_id' => 'required',
+            'puskesmas_id' => 'required',
             'nik' => $ruleNik,
             'nama' => 'required|max:255',
             'nohp' => 'required|numeric',
@@ -104,6 +107,7 @@ class UserPuskesController extends Controller
             [
                 'kabupaten_id' => $request->kabupaten_id,
                 'kecamatan_id' => $request->kecamatan_id,
+                'puskesmas_id' => $request->puskesmas_id,
                 'nik' => $request->nik,
                 'nama' => $request->nama,
                 'nohp' => $request->nohp,
@@ -129,6 +133,11 @@ class UserPuskesController extends Controller
     public function getKec(Request $request)
     {
         $data['kecamatan'] = Kecamatan::where("kabupaten_id", $request->kabupaten_id)->get(["kecamatan", "id"]);
+        return response()->json($data);
+    }
+    public function getPuskes(Request $request)
+    {
+        $data['puskesmas'] = Puskesmas::where("kecamatan_id", $request->kecamatan_id)->get(["puskesmas", "id"]);
         return response()->json($data);
     }
 }

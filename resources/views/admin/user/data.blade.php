@@ -82,6 +82,14 @@
                                         </select>
                                     </div>
                                 </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Puskesmas<span class="text-danger">*</span></label>
+                                        <select class="browser-default custom-select select2bs4" name="puskesmas_id"
+                                            id="puskesmas">
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
@@ -348,6 +356,26 @@
                         $.each(result.kecamatan, function(key, value) {
                             $("#kecamatan").append('<option value="' + value
                                 .id + '">' + value.kecamatan + '</option>');
+                        });
+                    }
+                });
+            });
+            $('#kecamatan').on('change', function() {
+                var idKec = this.value;
+                $("#puskesmas").html('');
+                $.ajax({
+                    url: "{{ route('userpuskes.getpuskes') }}",
+                    type: "POST",
+                    data: {
+                        kecamatan_id: idKec,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    dataType: 'json',
+                    success: function(result) {
+                        $('#puskesmas').html('<option value="">::Pilih Puskesmas::</option>');
+                        $.each(result.puskesmas, function(key, value) {
+                            $("#puskesmas").append('<option value="' + value
+                                .id + '">' + value.puskesmas + '</option>');
                         });
                     }
                 });

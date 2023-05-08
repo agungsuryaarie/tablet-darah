@@ -44,6 +44,7 @@ Route::post('users-puskesmas', [UserPuskesController::class, 'store'])->name('us
 Route::get('users-puskesmas/{id}/edit', [UserPuskesController::class, 'edit'])->name('userpuskes.edit');
 Route::delete('users-puskesmas/{user}/destroy', [UserPuskesController::class, 'destroy'])->name('userpuskes.destroy');
 Route::post('users-puskesmas/getkecamatan', [UserPuskesController::class, 'getKec'])->name('userpuskes.getkec');
+Route::post('users-puskesmas/getpuskesmas', [UserPuskesController::class, 'getPuskes'])->name('userpuskes.getpuskes');
 // Rematri
 Route::get('rematri', [RematriController::class, 'index'])->name('rematri.index');
 Route::get('rematri/create', [RematriController::class, 'create'])->name('rematri.create');

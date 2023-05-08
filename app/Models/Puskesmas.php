@@ -19,4 +19,8 @@ class Puskesmas extends Model
     {
         return $this->belongsTo(Kecamatan::class);
     }
+    public function userpuskes()
+    {
+        return $this->hasMany(UserPuskesmas::class);
+    }
 }

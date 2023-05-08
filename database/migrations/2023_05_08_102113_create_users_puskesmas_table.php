@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('kabupaten_id');
             $table->unsignedBigInteger('kecamatan_id');
+            $table->unsignedBigInteger('puskesmas_id');
             $table->string('nik')->unique();
             $table->string('nama');
             $table->string('nohp');
