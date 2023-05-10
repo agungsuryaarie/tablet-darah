@@ -20,7 +20,7 @@ class UserSekolahController extends Controller
         $sekolah = Sekolah::where('puskesmas_id', '=', Auth::user()->puskesmas_id)->get();
         // dd($sekolah);
         if ($request->ajax()) {
-            $data = UserSekolah::latest()->get();
+            $data = UserSekolah::where('puskesmas_id', '=', Auth::user()->puskesmas_id)->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('foto', function ($data) {

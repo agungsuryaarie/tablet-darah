@@ -85,7 +85,7 @@
             </li>
         </ul>
     </li>
-@else
+@elseif (Auth::user()->role == 2)
     <li
         class="nav-item {{ request()->segment(1) == 'users-sekolah' || request()->segment(1) == 'users-sekolah' ? 'menu-open' : '' }}">
         <a href="#"
@@ -112,7 +112,8 @@
             </li>
         </ul>
     </li>
-    {{-- <li
+@elseif (Auth::user()->role == 3)
+    <li
         class="nav-item {{ request()->segment(1) == 'tambah-rematri' || request()->segment(1) == 'data-rematri' ? 'menu-open' : '' }}">
         <a href="#"
             class="nav-link {{ request()->segment(1) == 'tambah-rematri' || request()->segment(1) == 'data-rematri' ? 'active' : '' }}">
@@ -136,7 +137,7 @@
                 </a>
             </li>
         </ul>
-    </li> --}}
+    </li>
 @endif
 <div class="user-panel mt-3">
 </div>

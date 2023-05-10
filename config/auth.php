@@ -48,6 +48,10 @@ return [
             'driver' => 'session',
             'provider' => 'userspuskes',
         ],
+        'admsekolah' => [
+            'driver' => 'session',
+            'provider' => 'userssekolah',
+        ],
         // 'admsekolah' => [
         //     'driver' => 'session',
         //     'provider' => 'admins',
@@ -83,6 +87,10 @@ return [
         'userspuskes' => [
             'driver' => 'eloquent',
             'model' => App\Models\UserPuskesmas::class,
+        ],
+        'userssekolah' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\UserSekolah::class,
         ],
 
         // 'users' => [

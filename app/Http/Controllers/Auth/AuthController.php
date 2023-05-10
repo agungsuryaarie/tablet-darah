@@ -33,6 +33,9 @@ class AuthController extends Controller
         } elseif (Auth::guard('admpuskes')->attempt($kredensial)) {
             $request->session()->regenerate();
             return redirect()->intended('dashboard');
+        } elseif (Auth::guard('admsekolah')->attempt($kredensial)) {
+            $request->session()->regenerate();
+            return redirect()->intended('dashboard');
         }
         return back()->withErrors(['email' => 'Maaf email dan password salah!'])->onlyInput('email');
     }
@@ -49,6 +52,11 @@ class AuthController extends Controller
             $request->session()->invalidate();
             $request->session()->regenerateToken();
             Auth::guard('admpuskes')->logout();
+        } elseif (Auth::guard('admsekolah')->check()) {
+
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            Auth::guard('admsekolah')->logout();
         }
         return redirect('/login');
     }

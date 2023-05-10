@@ -35,7 +35,7 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login')->middleware('guest');
     Route::get('logout', 'logout')->name('logout');
 });
-Route::group(['middleware' => ['auth:admdinas,admpuskes']], function () {
+Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah']], function () {
     // Dashboard
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::group(['middleware' => ['checkUser:1']], function () {
