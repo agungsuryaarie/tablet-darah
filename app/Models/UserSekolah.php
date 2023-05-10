@@ -27,8 +27,8 @@ class UserSekolah extends Authenticatable
         'nohp',
         'email',
         'password',
-        'foto',
         'role',
+        'foto',
     ];
 
     /**

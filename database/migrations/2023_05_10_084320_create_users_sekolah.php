@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('users_sekolah', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('puskemas_id');
+            $table->unsignedBigInteger('puskesmas_id');
             $table->unsignedBigInteger('sekolah_id');
-            $table->integer('nik')->unique();
+            $table->string('nik')->unique();
             $table->string('nama');
             $table->string('nohp');
             $table->string('email')->unique();

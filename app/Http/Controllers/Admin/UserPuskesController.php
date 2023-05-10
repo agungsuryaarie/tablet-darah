@@ -125,7 +125,7 @@ class UserPuskesController extends Controller
     {
         Storage::delete('public/foto-user/' . $user->foto);
         $user->delete();
-        return response()->json(['success' => 'User deleted successfully.']);
+        return response()->json(['success' => 'User Sekolah deleted successfully.']);
     }
     public function getPuskes(Request $request)
     {
