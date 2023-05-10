@@ -80,13 +80,39 @@
                 <a href="{{ route('userpuskes.index') }}"
                     class="nav-link {{ request()->segment(1) == 'users-puskesmas' ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>User Puskesmas</p>
+                    <p>Users Puskesmas</p>
                 </a>
             </li>
         </ul>
     </li>
 @else
     <li
+        class="nav-item {{ request()->segment(1) == 'users-sekolah' || request()->segment(1) == 'users-sekolah' ? 'menu-open' : '' }}">
+        <a href="#"
+            class="nav-link {{ request()->segment(1) == 'users-posyandu' || request()->segment(1) == 'users-posyandu' ? 'active' : '' }}">
+            <i class="nav-icon fas fa-database"></i>
+            <p>
+                Master data
+                <i class="right fas fa-angle-left"></i>
+            </p>
+        </a>
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="{{ route('usersekolah.index') }}"
+                    class="nav-link {{ request()->segment(1) == 'users-sekolah' ? 'active' : '' }}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Users Sekolah</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link {{ request()->segment(1) == 'users-posyandu' ? 'active' : '' }}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Users Posyandu</p>
+                </a>
+            </li>
+        </ul>
+    </li>
+    {{-- <li
         class="nav-item {{ request()->segment(1) == 'tambah-rematri' || request()->segment(1) == 'data-rematri' ? 'menu-open' : '' }}">
         <a href="#"
             class="nav-link {{ request()->segment(1) == 'tambah-rematri' || request()->segment(1) == 'data-rematri' ? 'active' : '' }}">
@@ -110,7 +136,7 @@
                 </a>
             </li>
         </ul>
-    </li>
+    </li> --}}
 @endif
 <div class="user-panel mt-3">
 </div>

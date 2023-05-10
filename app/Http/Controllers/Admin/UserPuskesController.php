@@ -18,7 +18,7 @@ class UserPuskesController extends Controller
     public function index(Request $request)
     {
         $menu = 'User Puskesmas';
-        $kabupaten = Kabupaten::latest()->get();
+        $kecamatan = Kecamatan::latest()->get();
         if ($request->ajax()) {
             $data = UserPuskesmas::latest()->get();
             return Datatables::of($data)
@@ -39,14 +39,13 @@ class UserPuskesController extends Controller
                 ->rawColumns(['foto', 'action'])
                 ->make(true);
         }
-        return view('admin.user.data', compact('menu', 'kabupaten'));
+        return view('admin.user.data', compact('menu', 'kecamatan'));
     }
     public function store(Request $request)
     {
         // dd($request->all());
         //Translate Bahasa Indonesia
         $message = array(
-            'kabupaten_id.required' => 'Kabupaten harus dipilih.',
             'kecamatan_id.required' => 'Kecamatan harus dipilih.',
             'puskesmas_id.required' => 'Puskesmas harus dipilih.',
             'nik.required' => 'NIK harus diisi.',
@@ -87,7 +86,6 @@ class UserPuskesController extends Controller
             }
         }
         $validator = Validator::make($request->all(), [
-            'kabupaten_id' => 'required',
             'kecamatan_id' => 'required',
             'puskesmas_id' => 'required',
             'nik' => $ruleNik,
@@ -105,7 +103,6 @@ class UserPuskesController extends Controller
                 'id' => $request->userpuskes_id
             ],
             [
-                'kabupaten_id' => $request->kabupaten_id,
                 'kecamatan_id' => $request->kecamatan_id,
                 'puskesmas_id' => $request->puskesmas_id,
                 'nik' => $request->nik,
@@ -129,11 +126,6 @@ class UserPuskesController extends Controller
         Storage::delete('public/foto-user/' . $user->foto);
         $user->delete();
         return response()->json(['success' => 'User deleted successfully.']);
-    }
-    public function getKec(Request $request)
-    {
-        $data['kecamatan'] = Kecamatan::where("kabupaten_id", $request->kabupaten_id)->get(["kecamatan", "id"]);
-        return response()->json($data);
     }
     public function getPuskes(Request $request)
     {

@@ -29,8 +29,12 @@
                         <small class="text-muted">
                             @if (Auth::user()->role == 1)
                                 administrator
-                            @else
-                                user
+                            @elseif(Auth::user()->role == 2)
+                                admin puskesmas
+                            @elseif(Auth::user()->role == 3)
+                                admin sekolah
+                            @elseif(Auth::user()->role == 4)
+                                admin posyandu
                             @endif
                         </small>
                     </div>

@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Kabupaten;
+use App\Models\Kecamatan;
 use App\Models\Sekolah;
+use App\Models\Puskesmas;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
 use Illuminate\Support\Facades\Validator;
@@ -14,13 +15,16 @@ class SekolahController extends Controller
     public function index(Request $request)
     {
         $menu = 'Sekolah';
-        $kabupaten = Kabupaten::get();
+        $kecamatan = Kecamatan::get();
         if ($request->ajax()) {
             $data = Sekolah::get();
             return Datatables::of($data)
                 ->addIndexColumn()
-                ->addColumn('kabupaten', function ($data) {
-                    return $data->kabupaten->kabupaten;
+                ->addColumn('kecamatan', function ($data) {
+                    return $data->kecamatan->kecamatan;
+                })
+                ->addColumn('puskesmas', function ($data) {
+                    return $data->puskesmas->puskesmas;
                 })
                 ->addColumn('action', function ($row) {
                     $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs editSekolah"><i class="fas fa-edit"></i></a>';
@@ -31,13 +35,14 @@ class SekolahController extends Controller
                 ->make(true);
         }
 
-        return view('admin.sekolah.data', compact('menu', 'kabupaten'));
+        return view('admin.sekolah.data', compact('menu', 'kecamatan'));
     }
     public function store(Request $request)
     {
         //Translate Bahasa Indonesia
         $message = array(
-            'kabupaten_id.required' => 'Kabupaten harus dipilih.',
+            'kecamatan_id.required' => 'Kecamatan harus dipilih.',
+            'puskesmas_id.required' => 'Puskesmas harus dipilih.',
             'nama_sekolah.required' => 'Nama Sekolah harus diisi.',
             'npsn.required' => 'NPSN harus diisi.',
             'npsn.max' => 'NPSN maksimal 8 digit.',
@@ -46,7 +51,8 @@ class SekolahController extends Controller
             'status.required' => 'Status harus dipilih.',
         );
         $validator = Validator::make($request->all(), [
-            'kabupaten_id' => 'required',
+            'kecamatan_id' => 'required',
+            'puskesmas_id' => 'required',
             'npsn' => 'required|max:8|min:8',
             'nama_sekolah' => 'required',
             'jenjang' => 'required',
@@ -61,7 +67,8 @@ class SekolahController extends Controller
                 'id' => $request->sekolah_id
             ],
             [
-                'kabupaten_id' => $request->kabupaten_id,
+                'kecamatan_id' => $request->kecamatan_id,
+                'puskesmas_id' => $request->puskesmas_id,
                 'npsn' => $request->npsn,
                 'sekolah' => $request->nama_sekolah,
                 'jenjang' => $request->jenjang,
@@ -81,5 +88,10 @@ class SekolahController extends Controller
     {
         Sekolah::find($id)->delete();
         return response()->json(['success' => 'Sekolah deleted successfully.']);
+    }
+    public function getPuskes(Request $request)
+    {
+        $data['puskesmas'] = Puskesmas::where("kecamatan_id", $request->kecamatan_id)->get(["puskesmas", "id"]);
+        return response()->json($data);
     }
 }

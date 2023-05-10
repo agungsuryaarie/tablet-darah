@@ -23,4 +23,12 @@ class Puskesmas extends Model
     {
         return $this->hasMany(UserPuskesmas::class);
     }
+    public function usersekolah()
+    {
+        return $this->hasMany(UserSekolah::class);
+    }
+    public function sekolah()
+    {
+        return $this->hasMany(Sekolah::class);
+    }
 }

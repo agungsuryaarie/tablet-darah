@@ -21,7 +21,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <a href="javascript:void(0)" id="createNewSekolah" class="btn btn-info btn-xs float-right">
+                            <a href="javascript:void(0)" id="createNewUsersekolah" class="btn btn-info btn-xs float-right">
                                 <i class="fas fa-plus-circle"></i> Tambah</a>
                         </div>
                         <div class="card-body">
@@ -29,10 +29,10 @@
                                 <thead>
                                     <tr>
                                         <th style="width:5%">No</th>
-                                        <th style="width:8%">NPSN</th>
-                                        <th>Sekolah</th>
-                                        <th style="width:12%">Kecamatan</th>
-                                        <th style="width:12%">Puskesmas</th>
+                                        <th style="width:15%">NIK</th>
+                                        <th>Nama</th>
+                                        <th style="width:20%">Email</th>
+                                        <th class="text-center" style="width:8%">Foto</th>
                                         <th class="text-center" style="width: 10%">Action</th>
                                     </tr>
                                 </thead>
@@ -45,7 +45,7 @@
         </div>
     </section>
     <div class="modal fade" id="ajaxModel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title" id="modelHeading"></h4>
@@ -56,69 +56,79 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form id="sekolahForm" name="sekolahForm" class="form-horizontal">
+                    <form id="usersekolahForm" name="usersekolahForm" class="form-horizontal">
                         @csrf
-                        <input type="hidden" name="sekolah_id" id="sekolah_id">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>Kecamatan<span class="text-danger">*</span></label>
-                                <select class="browser-default custom-select select2bs4" name="kecamatan_id" id="kecamatan">
-                                    <option selected disabled>::Pilih Kecamatan::</option>
-                                    @foreach ($kecamatan as $item)
-                                        <option value="{{ $item->id }}">
-                                            {{ $item->kecamatan }}</option>
-                                    @endforeach
-                                </select>
+                        <input type="hidden" name="usersekolah_id" id="usersekolah_id">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Sekolah<span class="text-danger">*</span></label>
+                                        <select class="browser-default custom-select select2bs4" name="sekolah_id"
+                                            id="sekolah">
+                                            <option selected disabled>::Pilih Sekolah::</option>
+                                            @foreach ($sekolah as $item)
+                                                <option value="{{ $item->id }}">
+                                                    {{ $item->sekolah }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>NIK<span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="nik" name="nik"
+                                            placeholder="NIK" autocomplete="off" value="{{ old('nik') }}"
+                                            onkeypress="return hanyaAngka(event)" autofocus>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Nama<span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="nama" name="nama"
+                                            placeholder="Nama" autocomplete="off" value="{{ old('nama') }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Nomor Handphone <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="nohp" name="nohp"
+                                            placeholder="Nomor Handphone" autocomplete="off" value="{{ old('nohp') }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Email <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="email" name="email"
+                                            placeholder="Email" autocomplete="off" value="{{ old('email') }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Password <span class="text-danger">*</span></label>
+                                        <input type="password" class="form-control" id="password" name="password"
+                                            placeholder="Password" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Re-Password <span class="text-danger">*</span></label>
+                                        <input type="password" class="form-control" id="repassword" name="repassword"
+                                            placeholder="Re-Password" autocomplete="off">
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>Puskesmas<span class="text-danger">*</span></label>
-                                <select class="browser-default custom-select select2bs4" name="puskesmas_id" id="puskesmas">
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label">NPSN<span class="text-danger"> *</span></label>
-                            <div class="col-sm-12">
-                                <input type="text" class="form-control" id="npsn" name="npsn" placeholder="NPSN"
-                                    onkeypress="return hanyaAngka(event)">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label">Nama Sekolah<span class="text-danger"> *</span></label>
-                            <div class="col-sm-12">
-                                <input type="text" class="form-control" id="nama_sekolah" name="nama_sekolah"
-                                    placeholder="Nama sekolah">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-12">
-                                <label>Jenjang<span class="text-danger">*</span></label>
-                                <select class="form-control select2bs4" id="jenjang" name="jenjang" style="width: 100%;">
-                                    <option selected disabled>::Pilih Jenjang::</option>
-                                    <option value="SD">SD</option>
-                                    <option value="SMP">SMP</option>
-                                    <option value="SMA">SMA</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-12">
-                                <label>Status<span class="text-danger">*</span></label>
-                                <select class="form-control select2bs4" id="status" name="status" style="width: 100%;">
-                                    <option selected disabled>::Pilih Status::</option>
-                                    <option value="Negeri">Negeri</option>
-                                    <option value="Swasta">Swasta</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="card-footer">
-                                <button type="submit" class="btn btn-primary btn-sm" id="saveBtn"
-                                    value="create">Simpan
-                                </button>
-                            </div>
+                        <div class="card-footer">
+                            <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Kembali</button>
+                            <button type="submit" class="btn btn-primary btn-sm" id="saveBtn"
+                                value="create">Simpan</button>
                         </div>
                     </form>
                 </div>
@@ -148,7 +158,7 @@
                         <h6 class="text-muted">::KEPUTUSAN INI TIDAK DAPAT DIUBAH KEMBALI::</h6>
                     </center>
                     <center>
-                        <h6>Apakah anda yakin menghapus Sekolah ini ?</h6>
+                        <h6>Apakah anda yakin menghapus User Sekolah ini ?</h6>
                     </center>
                 </div>
                 <div class="modal-footer justify-content-between">
@@ -181,73 +191,69 @@
                 processing: true,
                 serverSide: true,
                 responsive: true,
-                pageLength: 10,
-                lengthMenu: [10, 50, 100, 200, 500],
-                lengthChange: true,
+                lengthChange: false,
                 autoWidth: false,
-                ajax: "{{ route('sekolah.index') }}",
+                ajax: "{{ route('usersekolah.index') }}",
                 columns: [{
-                        data: "DT_RowIndex",
-                        name: "DT_RowIndex",
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex'
                     },
                     {
-                        data: "npsn",
-                        name: "npsn",
+                        data: 'nik',
+                        name: 'nik'
                     },
                     {
-                        data: "sekolah",
-                        name: "sekolah",
+                        data: 'nama',
+                        name: 'nama'
                     },
                     {
-                        data: "kecamatan",
-                        name: "kecamatan",
+                        data: 'email',
+                        name: 'email'
                     },
                     {
-                        data: "puskesmas",
-                        name: "puskesmas",
+                        data: 'foto',
+                        name: 'foto'
                     },
                     {
-                        data: "action",
-                        name: "action",
+                        data: 'action',
+                        name: 'action',
                         orderable: false,
-                        searchable: false,
+                        searchable: false
                     },
-                ],
+                ]
             });
 
-            $("#createNewSekolah").click(function() {
-                $("#saveBtn").val("create-sekolah");
-                $("#sekolah_id").val("");
-                $("#sekolahForm").trigger("reset");
-                $("#modelHeading").html("Tambah Sekolah");
+            $("#createNewUsersekolah").click(function() {
+                $("#saveBtn").val("create-usersekolah");
+                $("#usersekolah_id").val("");
+                $("#usersekolahForm").trigger("reset");
+                $("#modelHeading").html("Tambah User Sekolah");
                 $("#ajaxModel").modal("show");
-                $("#deleteSekolah").modal("show");
+                $("#deleteUsersekolah").modal("show");
             });
 
-            $("body").on("click", ".editSekolah", function() {
-                var sekolah_id = $(this).data("id");
-                $.get("{{ route('sekolah.index') }}" + "/" + sekolah_id + "/edit", function(data) {
-                    $("#modelHeading").html("Edit Sekolah");
-                    $("#saveBtn").val("edit-sekolah");
+            $("body").on("click", ".editUsersekolah", function() {
+                var usersekolah_id = $(this).data("id");
+                $.get("{{ route('usersekolah.index') }}" + "/" + usersekolah_id + "/edit", function(data) {
+                    $("#modelHeading").html("Edit User Sekolah");
+                    $("#saveBtn").val("edit-usersekolah");
                     $("#ajaxModel").modal("show");
-                    $("#kabupaten_id").val(data.kabupaten_id);
-                    $("#sekolah_id").val(data.id);
-                    $("#npsn").val(data.npsn);
-                    $("#nama_sekolah").val(data.sekolah);
-                    $("#jenjang").val(data.jenjang);
-                    $("#status").val(data.status);
+                    $("#usersekolah_id").val(data.id);
+                    $("#sekolah_id").val(data.sekolah_id);
+                    $("#nik").val(data.nik);
+                    $("#nama").val(data.nama);
+                    $("#nohp").val(data.nohp);
+                    $("#email").val(data.email);
                 });
             });
-
             $("#saveBtn").click(function(e) {
                 e.preventDefault();
                 $(this).html(
                     "<span class='spinner-border spinner-border-sm'></span><span class='visually-hidden'><i> menyimpan...</i></span>"
                 );
-
                 $.ajax({
-                    data: $("#sekolahForm").serialize(),
-                    url: "{{ route('sekolah.store') }}",
+                    data: $("#usersekolahForm").serialize(),
+                    url: "{{ route('usersekolah.store') }}",
                     type: "POST",
                     dataType: "json",
                     success: function(data) {
@@ -258,22 +264,22 @@
                                 $('.alert-danger').append('<strong><li>' +
                                     value +
                                     '</li></strong>');
-                                $(".alert-danger").fadeOut(5000);
+                                $(".alert-danger").fadeOut(3000);
                                 $("#saveBtn").html("Simpan");
-                                // $('#sekolahForm').trigger("reset");
+                                // $('#userForm').trigger("reset");
                             });
                         } else {
                             table.draw();
-                            alertSuccess("Sekolah saved successfully.");
-                            // $('#sekolahForm').trigger("reset");
+                            alertSuccess("User Sekolah saved successfully.");
+                            $('#usersekolahForm').trigger("reset");
                             $("#saveBtn").html("Simpan");
                             $('#ajaxModel').modal('hide');
                         }
                     },
                 });
             });
-            $("body").on("click", ".deleteSekolah", function() {
-                var sekolah_id = $(this).data("id");
+            $("body").on("click", ".deleteUsersekolah", function() {
+                var usersekolah_id = $(this).data("id");
                 $("#modelHeadingHps").html("Hapus");
                 $("#ajaxModelHps").modal("show");
                 $("#hapusBtn").click(function(e) {
@@ -283,7 +289,8 @@
                     );
                     $.ajax({
                         type: "DELETE",
-                        url: "{{ route('sekolah.store') }}" + "/" + sekolah_id,
+                        url: "{{ route('usersekolah.store') }}" + "/" + usersekolah_id +
+                            "/destroy",
                         data: {
                             _token: "{!! csrf_token() !!}",
                         },
@@ -306,33 +313,8 @@
                                 $("#hapusBtn").html(
                                     "<i class='fa fa-trash'></i>Hapus");
                                 $('#ajaxModelHps').modal('hide');
-                                // $('#data-table').DataTable().ajax.reload();
                             }
                         },
-                    });
-                });
-            });
-            $(document).ready(function() {
-                $('#kecamatan').on('change', function() {
-                    var idKec = this.value;
-                    $("#puskesmas").html('');
-                    $.ajax({
-                        url: "{{ route('userpuskes.getpuskes') }}",
-                        type: "POST",
-                        data: {
-                            kecamatan_id: idKec,
-                            _token: '{{ csrf_token() }}'
-                        },
-                        dataType: 'json',
-                        success: function(result) {
-                            $('#puskesmas').html(
-                                '<option value="">::Pilih Puskesmas::</option>');
-                            $.each(result.puskesmas, function(key, value) {
-                                $("#puskesmas").append('<option value="' + value
-                                    .id + '">' + value.puskesmas +
-                                    '</option>');
-                            });
-                        }
                     });
                 });
             });

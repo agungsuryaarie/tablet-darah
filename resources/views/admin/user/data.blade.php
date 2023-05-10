@@ -63,22 +63,14 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Kabupaten<span class="text-danger">*</span></label>
-                                        <select class="browser-default custom-select select2bs4" name="kabupaten_id"
-                                            id="kabupaten">
-                                            <option selected disabled>::Pilih Kabupaten::</option>
-                                            @foreach ($kabupaten as $item)
-                                                <option value="{{ $item->id }}">
-                                                    {{ $item->kabupaten }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
                                         <label>Kecamatan<span class="text-danger">*</span></label>
                                         <select class="browser-default custom-select select2bs4" name="kecamatan_id"
                                             id="kecamatan">
+                                            <option selected disabled>::Pilih Kecamatan::</option>
+                                            @foreach ($kecamatan as $item)
+                                                <option value="{{ $item->id }}">
+                                                    {{ $item->kecamatan }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -340,26 +332,6 @@
             })
         });
         $(document).ready(function() {
-            $('#kabupaten').on('change', function() {
-                var idKab = this.value;
-                $("#kecamatan").html('');
-                $.ajax({
-                    url: "{{ route('userpuskes.getkec') }}",
-                    type: "POST",
-                    data: {
-                        kabupaten_id: idKab,
-                        _token: '{{ csrf_token() }}'
-                    },
-                    dataType: 'json',
-                    success: function(result) {
-                        $('#kecamatan').html('<option value="">::Pilih Kecamatan::</option>');
-                        $.each(result.kecamatan, function(key, value) {
-                            $("#kecamatan").append('<option value="' + value
-                                .id + '">' + value.kecamatan + '</option>');
-                        });
-                    }
-                });
-            });
             $('#kecamatan').on('change', function() {
                 var idKec = this.value;
                 $("#puskesmas").html('');
