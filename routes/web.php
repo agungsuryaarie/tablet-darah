@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Admin\UserPuskesController;
 use App\Http\Controllers\Admin\RematriController;
 use App\Http\Controllers\Admin\StokObatController;
@@ -27,28 +28,40 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 Route::get('/', function () {
     return view('welcome');
 });
-// Dashboard
-Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-// Kabupaten
-Route::resource('kabupaten', KabController::class);
-// Kecamatan
-Route::resource('kecamatan', KecController::class);
-// Desa/Kelurahan
-Route::resource('desa', DesaController::class);
-// Puskesmas
-Route::resource('puskesmas', PuskesController::class);
-// Posyandu
-Route::resource('posyandu', PosyanduController::class);
-// Sekolah
-Route::resource('sekolah', SekolahController::class);
-// Users
-Route::get('users-puskesmas', [UserPuskesController::class, 'index'])->name('userpuskes.index');
-Route::post('users-puskesmas', [UserPuskesController::class, 'store'])->name('userpuskes.store');
-Route::get('users-puskesmas/{id}/edit', [UserPuskesController::class, 'edit'])->name('userpuskes.edit');
-Route::delete('users-puskesmas/{user}/destroy', [UserPuskesController::class, 'destroy'])->name('userpuskes.destroy');
-Route::post('users-puskesmas/getkecamatan', [UserPuskesController::class, 'getKec'])->name('userpuskes.getkec');
-Route::post('users-puskesmas/getpuskesmas', [UserPuskesController::class, 'getPuskes'])->name('userpuskes.getpuskes');
-// Rematri
-Route::get('rematri', [RematriController::class, 'index'])->name('rematri.index');
-Route::get('rematri/create', [RematriController::class, 'create'])->name('rematri.create');
-Route::get('rematri/edit', [RematriController::class, 'edit'])->name('rematri.edit');
+Route::controller(AuthController::class)->group(function () {
+    // Login
+    Route::get('login', 'index')->name('login')->middleware('guest');
+    Route::post('login', 'login')->middleware('guest');
+    Route::get('logout', 'logout')->name('logout');
+});
+Route::group(['middleware' => ['auth:admdinas,admpuskes']], function () {
+    // Dashboard
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::group(['middleware' => ['checkUser:1']], function () {
+        // Kabupaten
+        Route::resource('kabupaten', KabController::class);
+        // Kecamatan
+        Route::resource('kecamatan', KecController::class);
+        // Desa/Kelurahan
+        Route::resource('desa', DesaController::class);
+        // Puskesmas
+        Route::resource('puskesmas', PuskesController::class);
+        // Posyandu
+        Route::resource('posyandu', PosyanduController::class);
+        // Sekolah
+        Route::resource('sekolah', SekolahController::class);
+        // Users
+        Route::get('users-puskesmas', [UserPuskesController::class, 'index'])->name('userpuskes.index');
+        Route::post('users-puskesmas', [UserPuskesController::class, 'store'])->name('userpuskes.store');
+        Route::get('users-puskesmas/{id}/edit', [UserPuskesController::class, 'edit'])->name('userpuskes.edit');
+        Route::delete('users-puskesmas/{user}/destroy', [UserPuskesController::class, 'destroy'])->name('userpuskes.destroy');
+        Route::post('users-puskesmas/getkecamatan', [UserPuskesController::class, 'getKec'])->name('userpuskes.getkec');
+        Route::post('users-puskesmas/getpuskesmas', [UserPuskesController::class, 'getPuskes'])->name('userpuskes.getpuskes');
+    });
+    Route::group(['middleware' => ['checkUser:2']], function () {
+        // Rematri
+        Route::get('rematri', [RematriController::class, 'index'])->name('rematri.index');
+        Route::get('rematri/create', [RematriController::class, 'create'])->name('rematri.create');
+        Route::get('rematri/edit', [RematriController::class, 'edit'])->name('rematri.edit');
+    });
+});

@@ -7,25 +7,34 @@
     <div class="wrapper">
         @include('admin.layouts.navbar')
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
-            <!-- Brand Logo -->
             <a href="index3.html" class="brand-link">
                 <img src="{{ url('dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo"
                     class="brand-image img-circle elevation-3" style="opacity: .8">
                 <span class="brand-text font-weight-light">Admin Panel</span>
             </a>
 
-            <!-- Sidebar -->
             <div class="sidebar">
-                <!-- Sidebar user panel (optional) -->
-                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                    <div class="image">
-                        <img src="{{ url('dist/img/user.png') }}" class="img-circle elevation-2" alt="User Image">
+                <div class="user-panel mt-3 pb-3 mb-1 d-flex">
+                    <div class="image mt-2">
+                        @if (Auth::user()->foto == null)
+                            <img src="{{ url('storage/foto-user/blank.png') }}" class="img-circle elevation-2"
+                                alt="User Image">
+                        @else
+                            <img src="{{ url('storage/foto-user/' . Auth::user()->foto) }}"
+                                class="img-circle elevation-2" alt="User Image">
+                        @endif
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block">Administrator</a>
+                        <a href="#" class="d-block">{{ Auth::user()->nama }}</a>
+                        <small class="text-muted">
+                            @if (Auth::user()->role == 1)
+                                administrator
+                            @else
+                                user
+                            @endif
+                        </small>
                     </div>
                 </div>
-
                 <!-- SidebarSearch Form -->
                 <div class="form-inline">
                     <div class="input-group" data-widget="sidebar-search">
@@ -50,6 +59,7 @@
         <div class="content-wrapper">
             <div id="alerts"></div>
             @yield('content')
+            @yield('modal')
         </div>
         @include('admin.layouts.footer')
     </div>

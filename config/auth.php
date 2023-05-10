@@ -40,6 +40,22 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'admdinas' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
+        'admpuskes' => [
+            'driver' => 'session',
+            'provider' => 'userspuskes',
+        ],
+        // 'admsekolah' => [
+        //     'driver' => 'session',
+        //     'provider' => 'admins',
+        // ],
+        // 'admposyandu' => [
+        //     'driver' => 'session',
+        //     'provider' => 'adminp',
+        // ],
     ],
 
     /*
@@ -63,6 +79,10 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
+        ],
+        'userspuskes' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\UserPuskesmas::class,
         ],
 
         // 'users' => [
