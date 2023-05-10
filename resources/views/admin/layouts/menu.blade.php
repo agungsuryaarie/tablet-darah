@@ -47,6 +47,12 @@
             </a>
         </li>
         <li class="nav-item">
+            <a href="{{ route('sekolah.index') }}" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Sekolah</p>
+            </a>
+        </li>
+        <li class="nav-item">
             <a href="{{ route('userpuskes.index') }}" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>User Puskesmas</p>

@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\KecController;
 use App\Http\Controllers\Admin\DesaController;
 use App\Http\Controllers\Admin\PuskesController;
 use App\Http\Controllers\Admin\PosyanduController;
+use App\Http\Controllers\Admin\SekolahController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
@@ -38,6 +39,8 @@ Route::resource('desa', DesaController::class);
 Route::resource('puskesmas', PuskesController::class);
 // Posyandu
 Route::resource('posyandu', PosyanduController::class);
+// Sekolah
+Route::resource('sekolah', SekolahController::class);
 // Users
 Route::get('users-puskesmas', [UserPuskesController::class, 'index'])->name('userpuskes.index');
 Route::post('users-puskesmas', [UserPuskesController::class, 'store'])->name('userpuskes.store');
