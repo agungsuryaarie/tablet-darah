@@ -12,11 +12,19 @@ class Posyandu extends Model
     protected $table = "posyandu";
 
     protected $fillable = [
-        'desa_id', 'posyandu'
+        'kecamatan_id', 'desa_id', 'puskesmas_id', 'posyandu'
     ];
 
+    public function puskesmas()
+    {
+        return $this->belongsTo(Puskesmas::class);
+    }
     public function desa()
     {
         return $this->belongsTo(Desa::class);
+    }
+    public function kecamatan()
+    {
+        return $this->belongsTo(Kecamatan::class);
     }
 }

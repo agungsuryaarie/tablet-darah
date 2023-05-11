@@ -30,7 +30,9 @@
                                     <tr>
                                         <th style="width:5%">No</th>
                                         <th>Posyandu</th>
+                                        <th style="width:12%">Puskesmas</th>
                                         <th style="width:12%">Desa/Kelurahan</th>
+                                        <th style="width:12%">Kecamatan</th>
                                         <th class="text-center" style="width: 10%">Action</th>
                                     </tr>
                                 </thead>
@@ -59,13 +61,27 @@
                         <input type="hidden" name="posyandu_id" id="posyandu_id">
                         <div class="form-group">
                             <div class="col-sm-12">
-                                <label>Desa/Kelurahan<span class="text-danger">*</span></label>
-                                <select class="browser-default custom-select select2bs4" name="desa_id" id="desa_id">
-                                    <option selected disabled>::Pilih Desa::</option>
-                                    @foreach ($desa as $item)
+                                <label>Kecamatan<span class="text-danger">*</span></label>
+                                <select class="browser-default custom-select select2bs4" name="kecamatan_id" id="kecamatan">
+                                    <option selected disabled>::Pilih Kecamatan::</option>
+                                    @foreach ($kecamatan as $item)
                                         <option value="{{ $item->id }}">
-                                            {{ $item->desa }}</option>
+                                            {{ $item->kecamatan }}</option>
                                     @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Desa/Keluarahan<span class="text-danger">*</span></label>
+                                <select class="browser-default custom-select select2bs4" name="desa_id" id="desa">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Puskesmas<span class="text-danger">*</span></label>
+                                <select class="browser-default custom-select select2bs4" name="puskesmas_id" id="puskesmas">
                                 </select>
                             </div>
                         </div>
@@ -149,8 +165,16 @@
                         name: "posyandu",
                     },
                     {
+                        data: "puskesmas",
+                        name: "puskesmas",
+                    },
+                    {
                         data: "desa",
                         name: "desa",
+                    },
+                    {
+                        data: "kecamatan",
+                        name: "kecamatan",
                     },
                     {
                         data: "action",
@@ -177,7 +201,9 @@
                     $("#saveBtn").val("edit-posyandu");
                     $("#ajaxModel").modal("show");
                     $("#posyandu_id").val(data.id);
+                    $("#puskesmas_id").val(data.puskesmas_id);
                     $("#desa_id").val(data.desa_id);
+                    $("#kecamatan_id").val(data.kecamatan_id);
                     $("#nama_posyandu").val(data.posyandu);
                 });
             });
@@ -258,6 +284,50 @@
             $('.select2bs4').select2({
                 theme: 'bootstrap4'
             })
+            $(document).ready(function() {
+                $('#kecamatan').on('change', function() {
+                    var idKec = this.value;
+                    $("#puskesmas").html('');
+                    $.ajax({
+                        url: "{{ route('posyandu.getpuskes') }}",
+                        type: "POST",
+                        data: {
+                            kecamatan_id: idKec,
+                            _token: '{{ csrf_token() }}'
+                        },
+                        dataType: 'json',
+                        success: function(result) {
+                            $('#puskesmas').html(
+                                '<option value="">::Pilih Puskesmas::</option>');
+                            $.each(result.puskesmas, function(key, value) {
+                                $("#puskesmas").append('<option value="' + value
+                                    .id + '">' + value.puskesmas +
+                                    '</option>');
+                            });
+                        }
+                    });
+                });
+                $('#kecamatan').on('change', function() {
+                    var idKec = this.value;
+                    $("#desa").html('');
+                    $.ajax({
+                        url: "{{ route('posyandu.getdesa') }}",
+                        type: "POST",
+                        data: {
+                            kecamatan_id: idKec,
+                            _token: '{{ csrf_token() }}'
+                        },
+                        dataType: 'json',
+                        success: function(result) {
+                            $('#desa').html('<option value="">::Pilih Desa::</option>');
+                            $.each(result.desa, function(key, value) {
+                                $("#desa").append('<option value="' + value
+                                    .id + '">' + value.desa + '</option>');
+                            });
+                        }
+                    });
+                });
+            });
         });
     </script>
 @endsection

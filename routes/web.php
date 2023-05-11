@@ -50,6 +50,8 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah']], function 
         Route::resource('puskesmas', PuskesController::class);
         // Posyandu
         Route::resource('posyandu', PosyanduController::class);
+        Route::post('posyandu/getpuskesmas', [PosyanduController::class, 'getPuskes'])->name('posyandu.getpuskes');
+        Route::post('posyandu/getdesa', [PosyanduController::class, 'getDesa'])->name('posyandu.getdesa');
         // Sekolah
         Route::resource('sekolah', SekolahController::class);
         // Users Puskemas
@@ -57,7 +59,6 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah']], function 
         Route::post('users-puskesmas', [UserPuskesController::class, 'store'])->name('userpuskes.store');
         Route::get('users-puskesmas/{id}/edit', [UserPuskesController::class, 'edit'])->name('userpuskes.edit');
         Route::delete('users-puskesmas/{user}/destroy', [UserPuskesController::class, 'destroy'])->name('userpuskes.destroy');
-        Route::post('users-puskesmas/getkecamatan', [UserPuskesController::class, 'getKec'])->name('userpuskes.getkec');
         Route::post('users-puskesmas/getpuskesmas', [UserPuskesController::class, 'getPuskes'])->name('userpuskes.getpuskes');
     });
     Route::group(['middleware' => ['checkUser:2']], function () {

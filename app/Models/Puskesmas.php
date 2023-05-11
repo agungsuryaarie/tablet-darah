@@ -31,4 +31,8 @@ class Puskesmas extends Model
     {
         return $this->hasMany(Sekolah::class);
     }
+    public function posyandu()
+    {
+        return $this->hasMany(Posyandu::class);
+    }
 }
