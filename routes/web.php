@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\PuskesController;
 use App\Http\Controllers\Admin\PosyanduController;
 use App\Http\Controllers\Admin\SekolahController;
 use App\Http\Controllers\Admin\SekolahBinaanController;
+use App\Http\Controllers\Admin\PosyanduBinaanController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
@@ -64,6 +65,8 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah']], function 
     Route::group(['middleware' => ['checkUser:2']], function () {
         // Sekolah Binaan
         Route::resource('sekolah-binaan', SekolahBinaanController::class);
+        // Posyandu Binaan
+        Route::resource('posyandu-binaan', PosyanduBinaanController::class);
         // Users Sekolah
         Route::get('users-sekolah', [UserSekolahController::class, 'index'])->name('usersekolah.index');
         Route::post('users-sekolah', [UserSekolahController::class, 'store'])->name('usersekolah.store');

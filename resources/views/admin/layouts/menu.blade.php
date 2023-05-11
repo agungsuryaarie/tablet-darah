@@ -105,6 +105,13 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a href="{{ route('posyandu-binaan.index') }}"
+                    class="nav-link {{ request()->segment(1) == 'posyandu-binaan' ? 'active' : '' }}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Posyandu Binaan</p>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a href="{{ route('usersekolah.index') }}"
                     class="nav-link {{ request()->segment(1) == 'users-sekolah' ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
