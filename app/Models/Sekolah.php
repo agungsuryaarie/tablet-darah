@@ -12,7 +12,7 @@ class Sekolah extends Model
     protected $table = "sekolah";
 
     protected $fillable = [
-        'kecamatan_id',  'puskesmas_id', 'npsn', 'sekolah', 'jenjang', 'status'
+        'kecamatan_id',  'puskesmas_id', 'npsn', 'sekolah', 'jenjang', 'status', 'alamat_jalan'
     ];
 
     public function kecamatan()

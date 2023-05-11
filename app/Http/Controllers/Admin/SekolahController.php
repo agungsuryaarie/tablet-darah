@@ -50,6 +50,8 @@ class SekolahController extends Controller
             'npsn.min' => 'NPSN minimal 8 digit.',
             'jenjang.required' => 'Jenjang harus dipilih.',
             'status.required' => 'Status harus dipilih.',
+            'alamat.required' => 'Alamat harus diisi.',
+            'alamat..max' => 'Alamat melebihi batas maksimal karakter.',
         );
         $validator = Validator::make($request->all(), [
             'kecamatan_id' => 'required',
@@ -58,6 +60,7 @@ class SekolahController extends Controller
             'nama_sekolah' => 'required',
             'jenjang' => 'required',
             'status' => 'required',
+            'alamat' => 'required|max:255',
         ], $message);
 
         if ($validator->fails()) {
@@ -74,6 +77,7 @@ class SekolahController extends Controller
                 'sekolah' => $request->nama_sekolah,
                 'jenjang' => $request->jenjang,
                 'status' => $request->status,
+                'alamat_jalan' => $request->alamat,
             ]
         );
         return response()->json(['success' => 'Sekolah saved successfully.']);

@@ -31,8 +31,6 @@
                                         <th style="width:5%">No</th>
                                         <th style="width:8%">NPSN</th>
                                         <th>Sekolah</th>
-                                        <th style="width:12%">Kecamatan</th>
-                                        <th style="width:12%">Puskesmas</th>
                                         <th class="text-center" style="width: 10%">Action</th>
                                     </tr>
                                 </thead>
@@ -59,25 +57,6 @@
                     <form id="sekolahForm" name="sekolahForm" class="form-horizontal">
                         @csrf
                         <input type="hidden" name="sekolah_id" id="sekolah_id">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>Kecamatan<span class="text-danger">*</span></label>
-                                <select class="browser-default custom-select select2bs4" name="kecamatan_id" id="kecamatan">
-                                    <option selected disabled>::Pilih Kecamatan::</option>
-                                    @foreach ($kecamatan as $item)
-                                        <option value="{{ $item->id }}">
-                                            {{ $item->kecamatan }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>Puskesmas<span class="text-danger">*</span></label>
-                                <select class="browser-default custom-select select2bs4" name="puskesmas_id" id="puskesmas">
-                                </select>
-                            </div>
-                        </div>
                         <div class="form-group">
                             <label class="col-sm-4 control-label">NPSN<span class="text-danger"> *</span></label>
                             <div class="col-sm-12">
@@ -122,8 +101,7 @@
                         </div>
                         <div class="form-group">
                             <div class="card-footer">
-                                <button type="submit" class="btn btn-primary btn-sm" id="saveBtn"
-                                    value="create">Simpan
+                                <button type="submit" class="btn btn-primary btn-sm" id="saveBtn" value="create">Simpan
                                 </button>
                             </div>
                         </div>
@@ -155,7 +133,7 @@
                         <h6 class="text-muted">::KEPUTUSAN INI TIDAK DAPAT DIUBAH KEMBALI::</h6>
                     </center>
                     <center>
-                        <h6>Apakah anda yakin menghapus Sekolah ini ?</h6>
+                        <h6>Apakah anda yakin menghapus Sekolah Binaan ini ?</h6>
                     </center>
                 </div>
                 <div class="modal-footer justify-content-between">
@@ -192,7 +170,7 @@
                 lengthMenu: [10, 50, 100, 200, 500],
                 lengthChange: true,
                 autoWidth: false,
-                ajax: "{{ route('sekolah.index') }}",
+                ajax: "{{ route('sekolah-binaan.index') }}",
                 columns: [{
                         data: "DT_RowIndex",
                         name: "DT_RowIndex",
@@ -204,14 +182,6 @@
                     {
                         data: "sekolah",
                         name: "sekolah",
-                    },
-                    {
-                        data: "kecamatan",
-                        name: "kecamatan",
-                    },
-                    {
-                        data: "puskesmas",
-                        name: "puskesmas",
                     },
                     {
                         data: "action",
@@ -231,9 +201,9 @@
                 $("#deleteSekolah").modal("show");
             });
 
-            $("body").on("click", ".editSekolah", function() {
+            $("body").on("click", ".editSekolahB", function() {
                 var sekolah_id = $(this).data("id");
-                $.get("{{ route('sekolah.index') }}" + "/" + sekolah_id + "/edit", function(data) {
+                $.get("{{ route('sekolah-binaan.index') }}" + "/" + sekolah_id + "/edit", function(data) {
                     $("#modelHeading").html("Edit Sekolah");
                     $("#saveBtn").val("edit-sekolah");
                     $("#ajaxModel").modal("show");
@@ -254,7 +224,7 @@
 
                 $.ajax({
                     data: $("#sekolahForm").serialize(),
-                    url: "{{ route('sekolah.store') }}",
+                    url: "{{ route('sekolah-binaan.store') }}",
                     type: "POST",
                     dataType: "json",
                     success: function(data) {
@@ -271,7 +241,7 @@
                             });
                         } else {
                             table.draw();
-                            alertSuccess("Sekolah saved successfully.");
+                            alertSuccess("Sekolah Binaan saved successfully.");
                             // $('#sekolahForm').trigger("reset");
                             $("#saveBtn").html("Simpan");
                             $('#ajaxModel').modal('hide');
@@ -279,7 +249,7 @@
                     },
                 });
             });
-            $("body").on("click", ".deleteSekolah", function() {
+            $("body").on("click", ".deleteSekolahB", function() {
                 var sekolah_id = $(this).data("id");
                 $("#modelHeadingHps").html("Hapus");
                 $("#ajaxModelHps").modal("show");
@@ -290,7 +260,7 @@
                     );
                     $.ajax({
                         type: "DELETE",
-                        url: "{{ route('sekolah.store') }}" + "/" + sekolah_id,
+                        url: "{{ route('sekolah-binaan.store') }}" + "/" + sekolah_id,
                         data: {
                             _token: "{!! csrf_token() !!}",
                         },
@@ -316,30 +286,6 @@
                                 // $('#data-table').DataTable().ajax.reload();
                             }
                         },
-                    });
-                });
-            });
-            $(document).ready(function() {
-                $('#kecamatan').on('change', function() {
-                    var idKec = this.value;
-                    $("#puskesmas").html('');
-                    $.ajax({
-                        url: "{{ route('userpuskes.getpuskes') }}",
-                        type: "POST",
-                        data: {
-                            kecamatan_id: idKec,
-                            _token: '{{ csrf_token() }}'
-                        },
-                        dataType: 'json',
-                        success: function(result) {
-                            $('#puskesmas').html(
-                                '<option value="">::Pilih Puskesmas::</option>');
-                            $.each(result.puskesmas, function(key, value) {
-                                $("#puskesmas").append('<option value="' + value
-                                    .id + '">' + value.puskesmas +
-                                    '</option>');
-                            });
-                        }
                     });
                 });
             });

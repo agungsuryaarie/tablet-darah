@@ -98,8 +98,8 @@
         </a>
         <ul class="nav nav-treeview">
             <li class="nav-item">
-                <a href="{{ route('usersekolah.index') }}"
-                    class="nav-link {{ request()->segment(1) == 'users-sekolah' ? 'active' : '' }}">
+                <a href="{{ route('sekolah-binaan.index') }}"
+                    class="nav-link {{ request()->segment(1) == 'sekolah-binaan' ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Sekolah Binaan</p>
                 </a>
