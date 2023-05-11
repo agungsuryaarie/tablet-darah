@@ -60,6 +60,8 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah']], function 
         Route::post('users-puskesmas/getpuskesmas', [UserPuskesController::class, 'getPuskes'])->name('userpuskes.getpuskes');
     });
     Route::group(['middleware' => ['checkUser:2']], function () {
+        // Sekolah Binaan
+        Route::get('sekolah-binaan', [UserSekolahController::class, 'index'])->name('usersekolah.index');
         // Users Sekolah
         Route::get('users-sekolah', [UserSekolahController::class, 'index'])->name('usersekolah.index');
         Route::post('users-sekolah', [UserSekolahController::class, 'store'])->name('usersekolah.store');

@@ -37,6 +37,7 @@ class SekolahController extends Controller
 
         return view('admin.sekolah.data', compact('menu', 'kecamatan'));
     }
+
     public function store(Request $request)
     {
         //Translate Bahasa Indonesia

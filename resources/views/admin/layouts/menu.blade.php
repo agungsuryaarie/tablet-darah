@@ -101,6 +101,13 @@
                 <a href="{{ route('usersekolah.index') }}"
                     class="nav-link {{ request()->segment(1) == 'users-sekolah' ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
+                    <p>Sekolah Binaan</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('usersekolah.index') }}"
+                    class="nav-link {{ request()->segment(1) == 'users-sekolah' ? 'active' : '' }}">
+                    <i class="far fa-circle nav-icon"></i>
                     <p>Users Sekolah</p>
                 </a>
             </li>
