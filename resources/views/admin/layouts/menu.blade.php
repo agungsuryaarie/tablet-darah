@@ -156,9 +156,9 @@
         </ul>
     </li>
     <li
-        class="nav-item {{ request()->segment(2) == 'create' || request()->segment(1) == 'rematri' ? 'menu-open' : '' }}">
+        class="nav-item {{ request()->segment(1) == 'rematri-create' || request()->segment(1) == 'rematri' ? 'menu-open' : '' }}">
         <a href="#"
-            class="nav-link {{ request()->segment(2) == 'create' || request()->segment(1) == 'rematri' ? 'active' : '' }}">
+            class="nav-link {{ request()->segment(1) == 'rematri-create' || request()->segment(1) == 'rematri' ? 'active' : '' }}">
             <i class="nav-icon fas fa-users"></i>
             <p>
                 Entry Rematri
@@ -168,7 +168,7 @@
         <ul class="nav nav-treeview">
             <li class="nav-item">
                 <a href="{{ route('rematri.create') }}"
-                    class="nav-link {{ request()->segment(1) == 'create' ? 'active' : '' }}">
+                    class="nav-link {{ request()->segment(1) == 'rematri-create' ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Tambah Rematri</p>
                 </a>

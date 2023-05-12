@@ -93,10 +93,12 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
         Route::resource('kelas', KelasController::class);
         // Rematri
         Route::get('rematri', [RematriController::class, 'index'])->name('rematri.index');
-        Route::get('rematri/create', [RematriController::class, 'create'])->name('rematri.create');
+        Route::get('rematri-create', [RematriController::class, 'create'])->name('rematri.create');
+        Route::post('rematri/store', [RematriController::class, 'store'])->name('rematri.store');
+        Route::get('rematri/edit', [RematriController::class, 'edit'])->name('rematri.edit');
+        Route::get('rematri/update', [RematriController::class, 'update'])->name('rematri.update');
         Route::post('rematri/get-kelas', [RematriController::class, 'getKelas']);
         Route::post('rematri/get-desa', [RematriController::class, 'getDesa']);
-        Route::get('rematri/edit', [RematriController::class, 'edit'])->name('rematri.edit');
     });
     Route::group(['middleware' => ['checkUser:4']], function () {
         // Rematri

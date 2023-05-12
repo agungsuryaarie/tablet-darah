@@ -24,15 +24,16 @@
                         <form class="form-horizontal">
                             <div class="card-body">
                                 <div class="form-group row">
-                                    <label for="text" class="col-sm-2 col-form-label">Anak ke berapa?</label>
-                                    <div class="col-sm-3">
-                                        <input type="text" class="form-control" id="" placeholder="Anak ke">
+                                    <label for="text" class="col-sm-2 col-form-label">Nama</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="nama" name="nama"
+                                            placeholder="Nama">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="text" class="col-sm-2 col-form-label">Tempat Lahir</label>
                                     <div class="col-sm-7">
-                                        <input type="text" class="form-control" id=""
+                                        <input type="text" class="form-control" id="tempat_lahir" name="tempat_lahir"
                                             placeholder="Tempat Lahir">
                                     </div>
                                 </div>
@@ -40,8 +41,8 @@
                                     <label for="text" class="col-sm-2 col-form-label">Tgl Lahir (dd-mm-yyyy)</label>
                                     <div class="col-sm-2">
                                         <div class="input-group date" id="reservationdate" data-target-input="nearest">
-                                            <input type="text" class="form-control datetimepicker-input"
-                                                data-target="#reservationdate">
+                                            <input type="text" id="tgl_lahir" name="tgl_lahir"
+                                                class="form-control datetimepicker-input" data-target="#reservationdate">
                                             <div class="input-group-append" data-target="#reservationdate"
                                                 data-toggle="datetimepicker">
                                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -52,37 +53,43 @@
                                 <div class="form-group row">
                                     <label for="text" class="col-sm-2 col-form-label">Nomor KK</label>
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control" id="" placeholder="Nomor KK">
+                                        <input type="text" class="form-control" id="nokk" name="nokk"
+                                            placeholder="Nomor KK">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="text" class="col-sm-2 col-form-label">NIK</label>
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control" id="" placeholder="NIK">
+                                        <input type="text" class="form-control" id="nik" name="nok"
+                                            placeholder="NIK">
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="text" class="col-sm-2 col-form-label">Nama</label>
-                                    <div class="col-sm-6">
-                                        <input type="text" class="form-control" id="" placeholder="Nama">
+                                    <label for="text" class="col-sm-2 col-form-label">Anak ke berapa?</label>
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control" id="anak_ke" name="anak_ke"
+                                            placeholder="Anak ke">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
                                     <div class="col-sm-3">
-                                        <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+                                        <input type="email" class="form-control" id="email" name="email"
+                                            placeholder="Email">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="text" class="col-sm-2 col-form-label">Telp/HP</label>
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control" id="" placeholder="Telp/HP">
+                                        <input type="text" class="form-control" id="tlp" name="tlp"
+                                            placeholder="Telp/HP">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="text" class="col-sm-2 col-form-label">Agama</label>
                                     <div class="col-sm-4">
-                                        <select class="form-control select2 select2bs4" style="width: 100%;">
+                                        <select class="form-control select2 select2bs4" id="agama" name="agama"
+                                            style="width: 100%;">
                                             <option selected="selected">:::Pilih Agama:::</option>
                                             <option value="1">Islam</option>
                                             <option value="2">Kristen </option>
@@ -117,7 +124,7 @@
                                     <label for="text" class="col-sm-2 col-form-label">Berat Badan (kg)<span
                                             class="text-danger">*</span></label>
                                     <div class="col-sm-2">
-                                        <input type="text" class="form-control" id=""
+                                        <input type="text" class="form-control" id="berat_badan" name="berat_badan"
                                             placeholder="Berat Badan">
                                     </div>
                                 </div>
@@ -125,22 +132,23 @@
                                     <label for="text" class="col-sm-2 col-form-label">Tinggi badan (cm)<span
                                             class="text-danger">*</span></label>
                                     <div class="col-sm-2">
-                                        <input type="text" class="form-control" id=""
-                                            placeholder="Tinggi badan">
+                                        <input type="text" class="form-control" id="panjang_badan"
+                                            name="panjang_badan" placeholder="Tinggi badan">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="text" class="col-sm-2 col-form-label">HB<span
                                             class="text-danger">*</span></label>
                                     <div class="col-sm-2">
-                                        <input type="text" class="form-control" id="" placeholder="HB">
+                                        <input type="text" class="form-control" id="hb" name="hb"
+                                            placeholder="HB">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="text" class="col-sm-2 col-form-label">Nama Orang Tua<span
                                             class="text-danger">*</span></label>
                                     <div class="col-sm-2">
-                                        <input type="text" class="form-control" id=""
+                                        <input type="text" class="form-control" id="nama_ortu" name="nama_ortu"
                                             placeholder="Nama Orang Tua">
                                     </div>
                                 </div>
@@ -148,7 +156,7 @@
                                     <label for="text" class="col-sm-2 col-form-label">Nik Orang Tua<span
                                             class="text-danger">*</span></label>
                                     <div class="col-sm-2">
-                                        <input type="text" class="form-control" id=""
+                                        <input type="text" class="form-control" id="nik_ortu" name="nik_ortu"
                                             placeholder="Nik Orang Tua">
                                     </div>
                                 </div>
@@ -156,7 +164,7 @@
                                     <label for="text" class="col-sm-2 col-form-label">Telp/Hp Orang Tua<span
                                             class="text-danger">*</span></label>
                                     <div class="col-sm-2">
-                                        <input type="text" class="form-control" id=""
+                                        <input type="text" class="form-control" id="tlp_ortu" name="tlp_ortu"
                                             placeholder="Telp/Hp Orang Tua">
                                     </div>
                                 </div>
@@ -187,7 +195,7 @@
                                     <label for="text" class="col-sm-2 col-form-label">Alamat Lengkap<span
                                             class="text-danger">*</span></label>
                                     <div class="col-sm-8">
-                                        <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                                        <textarea class="form-control" rows="3" id="alamat" name="alamat" placeholder="Enter ..."></textarea>
                                     </div>
                                 </div>
                             </div>
