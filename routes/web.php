@@ -12,6 +12,8 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\KabController;
 use App\Http\Controllers\Admin\KecController;
 use App\Http\Controllers\Admin\DesaController;
+use App\Http\Controllers\Admin\JurusanController;
+use App\Http\Controllers\Admin\KelasController;
 use App\Http\Controllers\Admin\PuskesController;
 use App\Http\Controllers\Admin\PosyanduController;
 use App\Http\Controllers\Admin\SekolahController;
@@ -85,9 +87,15 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
         Route::get('rematri/edit', [RematriController::class, 'edit'])->name('rematri.edit');
     });
     Route::group(['middleware' => ['checkUser:3']], function () {
+        // Jurusan
+        Route::resource('jurusan', JurusanController::class);
+        // Kelas
+        Route::resource('kelas', KelasController::class);
         // Rematri
         Route::get('rematri', [RematriController::class, 'index'])->name('rematri.index');
         Route::get('rematri/create', [RematriController::class, 'create'])->name('rematri.create');
+        Route::post('rematri/get-kelas', [RematriController::class, 'getKelas']);
+        Route::post('rematri/get-desa', [RematriController::class, 'getDesa']);
         Route::get('rematri/edit', [RematriController::class, 'edit'])->name('rematri.edit');
     });
     Route::group(['middleware' => ['checkUser:4']], function () {

@@ -129,6 +129,33 @@
     </li>
 @elseif (Auth::user()->role == 3)
     <li
+        class="nav-item {{ request()->segment(1) == 'jurusan' || request()->segment(1) == 'kelas' ? 'menu-open' : '' }}">
+        <a href="#"
+            class="nav-link {{ request()->segment(1) == 'jurusan' || request()->segment(1) == 'kelas' ? 'active' : '' }}">
+            <i class="nav-icon fas fa-database"></i>
+            <p>
+                Master data
+                <i class="right fas fa-angle-left"></i>
+            </p>
+        </a>
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="{{ route('jurusan.index') }}"
+                    class="nav-link {{ request()->segment(1) == 'jurusan' ? 'active' : '' }}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Jurusan</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('kelas.index') }}"
+                    class="nav-link {{ request()->segment(1) == 'kelas' ? 'active' : '' }}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Kelas</p>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li
         class="nav-item {{ request()->segment(2) == 'create' || request()->segment(1) == 'rematri' ? 'menu-open' : '' }}">
         <a href="#"
             class="nav-link {{ request()->segment(2) == 'create' || request()->segment(1) == 'rematri' ? 'active' : '' }}">

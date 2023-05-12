@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Rematri;
 use App\Models\Kecamatan;
 use App\Models\Desa;
+use App\Models\Jurusan;
+use App\Models\Kelas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -37,8 +39,17 @@ class RematriController extends Controller
     public function create()
     {
         $menu = 'Tambah Data Rematri';
+        $jurusan = Jurusan::where('sekolah_id', Auth::user()->sekolah_id)->get();
+        $kecamatan = Kecamatan::get();
+        return view('admin.rematri-sekolah.create', compact('menu', 'jurusan', 'kecamatan'));
+    }
 
-        return view('admin.rematri-sekolah.create', compact('menu'));
+    public function getKelas(Request $request)
+    {
+        $data['kelas'] = Kelas::with('jurusan')->where("jurusan_id", $request->jurusan_id)
+            ->get();
+
+        return response()->json($data);
     }
 
     public function edit()
@@ -46,6 +57,7 @@ class RematriController extends Controller
         $menu = 'Edit Data Rematri';
         return view('admin.rematri-sekolah.edit', compact('menu',));
     }
+
     public function getDesa(Request $request)
     {
         $data['desa'] = Desa::where("kecamatan_id", $request->kecamatan_id)->get(["desa", "id"]);
