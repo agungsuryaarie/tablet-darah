@@ -9,7 +9,7 @@
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
                         <li class="breadcrumb-item active">{{ $menu }}</li>
                     </ol>
                 </div>
@@ -29,7 +29,6 @@
                                         <th style="width:17%">No KK</th>
                                         <th style="width:17%">NIK</th>
                                         <th>Nama</th>
-                                        <th style="width:15%">Sekolah</th>
                                         <th class="text-center" style="width: 10%">Action</th>
                                     </tr>
                                 </thead>
@@ -60,7 +59,7 @@
                 lengthMenu: [10, 50, 100, 200, 500],
                 lengthChange: true,
                 autoWidth: false,
-                ajax: "{{ route('rematri.index') }}",
+                ajax: "{{ route('rematrip.index') }}",
                 columns: [{
                         data: "DT_RowIndex",
                         name: "DT_RowIndex",
@@ -76,10 +75,6 @@
                     {
                         data: "nama",
                         name: "nama",
-                    },
-                    {
-                        data: "sekolah",
-                        name: "sekolah",
                     },
                     {
                         data: "action",
