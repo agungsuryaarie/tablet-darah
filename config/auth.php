@@ -52,6 +52,10 @@ return [
             'driver' => 'session',
             'provider' => 'userssekolah',
         ],
+        'admposyandu' => [
+            'driver' => 'session',
+            'provider' => 'usersposyandu',
+        ],
         // 'admsekolah' => [
         //     'driver' => 'session',
         //     'provider' => 'admins',
@@ -91,6 +95,10 @@ return [
         'userssekolah' => [
             'driver' => 'eloquent',
             'model' => App\Models\UserSekolah::class,
+        ],
+        'usersposyandu' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\UserPosyandu::class,
         ],
 
         // 'users' => [
