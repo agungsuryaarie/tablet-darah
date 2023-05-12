@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Admin\UserPuskesController;
 use App\Http\Controllers\Admin\UserSekolahController;
+use App\Http\Controllers\Admin\UserPosyanduController;
 use App\Http\Controllers\Admin\RematriController;
 use App\Http\Controllers\Admin\StokObatController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -72,8 +73,11 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah']], function 
         Route::post('users-sekolah', [UserSekolahController::class, 'store'])->name('usersekolah.store');
         Route::get('users-sekolah/{id}/edit', [UserSekolahController::class, 'edit'])->name('usersekolah.edit');
         Route::delete('users-sekolah/{user}/destroy', [UserSekolahController::class, 'destroy'])->name('usersekolah.destroy');
-        Route::post('users-sekolah/getkecamatan', [UserSekolahController::class, 'getKec'])->name('usersekolah.getkec');
-        Route::post('users-sekolah/getsekolah', [UserSekolahController::class, 'getPuskes'])->name('usersekolah.getpuskes');
+        // Users Posyandu
+        Route::get('users-posyandu', [UserPosyanduController::class, 'index'])->name('userposyandu.index');
+        Route::post('users-posyandu', [UserPosyanduController::class, 'store'])->name('userposyandu.store');
+        Route::get('users-posyandu/{id}/edit', [UserPosyanduController::class, 'edit'])->name('userposyandu.edit');
+        Route::delete('users-posyandu/{user}/destroy', [UserPosyanduController::class, 'destroy'])->name('userposyandu.destroy');
         // Rematri
         Route::get('rematri', [RematriController::class, 'index'])->name('rematri.index');
         Route::get('rematri/create', [RematriController::class, 'create'])->name('rematri.create');

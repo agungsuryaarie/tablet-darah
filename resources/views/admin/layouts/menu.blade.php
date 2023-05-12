@@ -87,9 +87,9 @@
     </li>
 @elseif (Auth::user()->role == 2)
     <li
-        class="nav-item {{ request()->segment(1) == 'users-sekolah' || request()->segment(1) == 'users-sekolah' ? 'menu-open' : '' }}">
+        class="nav-item {{ request()->segment(1) == 'users-sekolah' || request()->segment(1) == 'users-sekolah' || request()->segment(1) == 'sekolah-binaan' || request()->segment(1) == 'posyandu-binaan' ? 'menu-open' : '' }}">
         <a href="#"
-            class="nav-link {{ request()->segment(1) == 'users-posyandu' || request()->segment(1) == 'users-posyandu' ? 'active' : '' }}">
+            class="nav-link {{ request()->segment(1) == 'users-posyandu' || request()->segment(1) == 'users-posyandu' || request()->segment(1) == 'sekolah-binaan' || request()->segment(1) == 'posyandu-binaan' ? 'active' : '' }}">
             <i class="nav-icon fas fa-database"></i>
             <p>
                 Master data
@@ -119,7 +119,8 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link {{ request()->segment(1) == 'users-posyandu' ? 'active' : '' }}">
+                <a href="{{ route('userposyandu.index') }}"
+                    class="nav-link {{ request()->segment(1) == 'users-posyandu' ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Users Posyandu</p>
                 </a>

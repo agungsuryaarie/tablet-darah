@@ -21,7 +21,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <a href="javascript:void(0)" id="createNewPosyandu" class="btn btn-info btn-xs float-right">
+                            <a href="javascript:void(0)" id="createNewUserposyandu" class="btn btn-info btn-xs float-right">
                                 <i class="fas fa-plus-circle"></i> Tambah</a>
                         </div>
                         <div class="card-body">
@@ -29,8 +29,10 @@
                                 <thead>
                                     <tr>
                                         <th style="width:5%">No</th>
-                                        <th>Posyandu</th>
-                                        <th style="width:12%">Desa/Kelurahan</th>
+                                        <th style="width:15%">NIK</th>
+                                        <th>Nama</th>
+                                        <th style="width:20%">Email</th>
+                                        <th class="text-center" style="width:8%">Foto</th>
                                         <th class="text-center" style="width: 10%">Action</th>
                                     </tr>
                                 </thead>
@@ -43,7 +45,7 @@
         </div>
     </section>
     <div class="modal fade" id="ajaxModel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title" id="modelHeading"></h4>
@@ -54,33 +56,79 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form id="posyanduForm" name="posyanduForm" class="form-horizontal">
+                    <form id="userposyanduForm" name="userposyanduForm" class="form-horizontal">
                         @csrf
-                        <input type="hidden" name="posyandu_id" id="posyandu_id">
-                        <div class="form-group">
-                            <div class="col-sm-12">
-                                <label>Desa<span class="text-danger">*</span></label>
-                                <select class="browser-default custom-select select2bs4" name="desa_id" id="desa">
-                                    <option selected disabled>::Pilih Desa::</option>
-                                    @foreach ($desa as $item)
-                                        <option value="{{ $item->id }}">
-                                            {{ $item->desa }}</option>
-                                    @endforeach
-                                </select>
+                        <input type="hidden" name="userposyandu_id" id="userposyandu_id">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Posyandu<span class="text-danger">*</span></label>
+                                        <select class="browser-default custom-select select2bs4" name="posyandu_id"
+                                            id="posyandu">
+                                            <option selected disabled>::Pilih Posyandu::</option>
+                                            @foreach ($posyandu as $item)
+                                                <option value="{{ $item->id }}">
+                                                    {{ $item->posyandu }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>NIK<span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="nik" name="nik"
+                                            placeholder="NIK" autocomplete="off" value="{{ old('nik') }}"
+                                            onkeypress="return hanyaAngka(event)" autofocus>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Nama<span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="nama" name="nama"
+                                            placeholder="Nama" autocomplete="off" value="{{ old('nama') }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Nomor Handphone <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="nohp" name="nohp"
+                                            placeholder="Nomor Handphone" autocomplete="off" value="{{ old('nohp') }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Email <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="email" name="email"
+                                            placeholder="Email" autocomplete="off" value="{{ old('email') }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Password <span class="text-danger">*</span></label>
+                                        <input type="password" class="form-control" id="password" name="password"
+                                            placeholder="Password" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Re-Password <span class="text-danger">*</span></label>
+                                        <input type="password" class="form-control" id="repassword" name="repassword"
+                                            placeholder="Re-Password" autocomplete="off">
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label">Nama Posyandu<span class="text-danger"> *</span></label>
-                            <div class="col-sm-12">
-                                <input type="text" class="form-control" id="nama_posyandu" name="nama_posyandu"
-                                    placeholder="Nama Posyandu">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="card-footer">
-                                <button type="submit" class="btn btn-primary btn-sm" id="saveBtn" value="create">Simpan
-                                </button>
-                            </div>
+                        <div class="card-footer">
+                            <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Kembali</button>
+                            <button type="submit" class="btn btn-primary btn-sm" id="saveBtn"
+                                value="create">Simpan</button>
                         </div>
                     </form>
                 </div>
@@ -110,7 +158,7 @@
                         <h6 class="text-muted">::KEPUTUSAN INI TIDAK DAPAT DIUBAH KEMBALI::</h6>
                     </center>
                     <center>
-                        <h6>Apakah anda yakin menghapus Posyandu Binaan ini ?</h6>
+                        <h6>Apakah anda yakin menghapus User Posyandu ini ?</h6>
                     </center>
                 </div>
                 <div class="modal-footer justify-content-between">
@@ -124,6 +172,14 @@
 @endsection
 @section('script')
     <script>
+        // Fungsi hanyaAngka
+        function hanyaAngka(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+
+                return false;
+            return true;
+        }
         $(function() {
             $.ajaxSetup({
                 headers: {
@@ -135,61 +191,69 @@
                 processing: true,
                 serverSide: true,
                 responsive: true,
-                pageLength: 10,
-                lengthMenu: [10, 50, 100, 200, 500],
-                lengthChange: true,
+                lengthChange: false,
                 autoWidth: false,
-                ajax: "{{ route('posyandu-binaan.index') }}",
+                ajax: "{{ route('userposyandu.index') }}",
                 columns: [{
-                        data: "DT_RowIndex",
-                        name: "DT_RowIndex",
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex'
                     },
                     {
-                        data: "posyandu",
-                        name: "posyandu",
+                        data: 'nik',
+                        name: 'nik'
                     },
                     {
-                        data: "desa",
-                        name: "desa",
+                        data: 'nama',
+                        name: 'nama'
                     },
                     {
-                        data: "action",
-                        name: "action",
+                        data: 'email',
+                        name: 'email'
+                    },
+                    {
+                        data: 'foto',
+                        name: 'foto'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
                         orderable: false,
-                        searchable: false,
+                        searchable: false
                     },
-                ],
+                ]
             });
 
-            $("#createNewPosyandu").click(function() {
-                $("#saveBtn").val("create-posyandu");
-                $("#posyandu_id").val("");
-                $("#posyanduForm").trigger("reset");
-                $("#modelHeading").html("Tambah Posyandu");
+            $("#createNewUserposyandu").click(function() {
+                $("#saveBtn").val("create-userposyandu");
+                $("#userposyandu_id").val("");
+                $("#userposyanduForm").trigger("reset");
+                $("#modelHeading").html("Tambah User Posyandu");
                 $("#ajaxModel").modal("show");
-                $("#deletePos").modal("show");
+                $("#deleteUserposyandu").modal("show");
             });
 
-            $("body").on("click", ".editPosB", function() {
-                var posyandu_id = $(this).data("id");
-                $.get("{{ route('posyandu-binaan.index') }}" + "/" + posyandu_id + "/edit", function(data) {
-                    $("#modelHeading").html("Edit Posyandu");
-                    $("#saveBtn").val("edit-posyandu");
+            $("body").on("click", ".editUserposyandu", function() {
+                var userposyandu_id = $(this).data("id");
+                $.get("{{ route('userposyandu.index') }}" + "/" + userposyandu_id + "/edit", function(
+                    data) {
+                    $("#modelHeading").html("Edit User Posyandu");
+                    $("#saveBtn").val("edit-userposyandu");
                     $("#ajaxModel").modal("show");
-                    $("#posyandu_id").val(data.id);
-                    $("#desa_id").val(data.desa_id);
-                    $("#nama_posyandu").val(data.posyandu);
+                    $("#userposyandu_id").val(data.id);
+                    $("#posyandu_id").val(data.posyandu_id);
+                    $("#nik").val(data.nik);
+                    $("#nama").val(data.nama);
+                    $("#nohp").val(data.nohp);
+                    $("#email").val(data.email);
                 });
             });
-
             $("#saveBtn").click(function(e) {
                 e.preventDefault();
                 $(this).html(
                     "<span class='spinner-border spinner-border-sm'></span><span class='visually-hidden'><i> menyimpan...</i></span>"
                 );
-
                 $.ajax({
-                    data: $("#posyanduForm").serialize(),
+                    data: $("#userposyanduForm").serialize(),
                     url: "{{ route('userposyandu.store') }}",
                     type: "POST",
                     dataType: "json",
@@ -201,22 +265,22 @@
                                 $('.alert-danger').append('<strong><li>' +
                                     value +
                                     '</li></strong>');
-                                $(".alert-danger").fadeOut(5000);
+                                $(".alert-danger").fadeOut(3000);
                                 $("#saveBtn").html("Simpan");
-                                // $('#posyanduForm').trigger("reset");
+                                // $('#userForm').trigger("reset");
                             });
                         } else {
                             table.draw();
-                            alertSuccess("Posyandu berhasil ditambah");
-                            // $('#posyanduForm').trigger("reset");
+                            alertSuccess("User Posyandu saved successfully.");
+                            $('#userposyanduForm').trigger("reset");
                             $("#saveBtn").html("Simpan");
                             $('#ajaxModel').modal('hide');
                         }
                     },
                 });
             });
-            $("body").on("click", ".deletePosB", function() {
-                var posyandu_id = $(this).data("id");
+            $("body").on("click", ".deleteUserposyandu", function() {
+                var userposyandu_id = $(this).data("id");
                 $("#modelHeadingHps").html("Hapus");
                 $("#ajaxModelHps").modal("show");
                 $("#hapusBtn").click(function(e) {
@@ -226,7 +290,8 @@
                     );
                     $.ajax({
                         type: "DELETE",
-                        url: "{{ route('posyandu-binaan.store') }}" + "/" + posyandu_id,
+                        url: "{{ route('userposyandu.store') }}" + "/" + userposyandu_id +
+                            "/destroy",
                         data: {
                             _token: "{!! csrf_token() !!}",
                         },
@@ -249,7 +314,6 @@
                                 $("#hapusBtn").html(
                                     "<i class='fa fa-trash'></i>Hapus");
                                 $('#ajaxModelHps').modal('hide');
-                                // $('#data-table').DataTable().ajax.reload();
                             }
                         },
                     });
