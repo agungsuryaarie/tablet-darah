@@ -20,6 +20,7 @@ class UserSekolah extends Authenticatable
     protected $table = "users_sekolah";
 
     protected $fillable = [
+        'kecamatan_id',
         'puskesmas_id',
         'sekolah_id',
         'nik',
