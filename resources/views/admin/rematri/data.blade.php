@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('content')
     <section class="content-header">
@@ -21,55 +21,19 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card">
-                        <div class="card-header">
-                            <a href="{{ route('rematri.create') }}" id="" class="btn btn-info btn-xs float-right">
-                                <i class="fas fa-plus-circle"></i> Tambah</a>
-                        </div>
                         <div class="card-body">
-                            <table id="example1" class="table table-bordered table-striped">
+                            <table id="example1" class="table table-bordered table-striped data-table">
                                 <thead>
                                     <tr>
-                                        <th>No</th>
-                                        <th>NIK</th>
+                                        <th style="width:5%">No</th>
+                                        <th style="width:17%">No KK</th>
+                                        <th style="width:17%">NIK</th>
                                         <th>Nama</th>
-                                        <th>Tgl Lahir</th>
-                                        <th>Nama Ortu</th>
-                                        <th>Prov</th>
-                                        <th>Kab/Kota</th>
-                                        <th>Kec</th>
-                                        <th>Puskesmas</th>
-                                        <th>Desa/kel</th>
-                                        <th>Posyandu</th>
-                                        <th>Sekolah</th>
-                                        <th>Action</th>
+                                        <th style="width:15%">Sekolah</th>
+                                        <th class="text-center" style="width: 10%">Action</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>1219033007940002</td>
-                                        <td>Agung Surya bahari</td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>
-                                            <div class="text-center">
-                                                <a href="{{ route('rematri.edit') }}" class="btn btn-success btn-xs">
-                                                    <i class="fa fa-edit" title="Edit Data"></i>
-                                                </a>
-                                                <button type="submit" class="btn btn-danger btn-xs">
-                                                    <i class="fa fa-trash" title="Hapus"></i>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
+                                <tbody></tbody>
                             </table>
                         </div>
                     </div>
@@ -82,12 +46,49 @@
 @section('script')
     <script>
         $(function() {
-            $("#example1").DataTable({
-                "responsive": true,
-                "lengthChange": false,
-                "autoWidth": false,
-                "buttons": ["csv", "excel", "pdf", "print"]
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+            $.ajaxSetup({
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                },
+            });
+
+            var table = $(".data-table").DataTable({
+                processing: true,
+                serverSide: true,
+                responsive: true,
+                pageLength: 10,
+                lengthMenu: [10, 50, 100, 200, 500],
+                lengthChange: true,
+                autoWidth: false,
+                ajax: "{{ route('rematri.index') }}",
+                columns: [{
+                        data: "DT_RowIndex",
+                        name: "DT_RowIndex",
+                    },
+                    {
+                        data: "nokk",
+                        name: "nokk",
+                    },
+                    {
+                        data: "nik",
+                        name: "nik",
+                    },
+                    {
+                        data: "nama",
+                        name: "nama",
+                    },
+                    {
+                        data: "sekolah",
+                        name: "sekolah",
+                    },
+                    {
+                        data: "action",
+                        name: "action",
+                        orderable: false,
+                        searchable: false,
+                    },
+                ],
+            });
         });
     </script>
 @endsection

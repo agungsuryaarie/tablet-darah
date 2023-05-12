@@ -129,9 +129,9 @@
     </li>
 @elseif (Auth::user()->role == 3)
     <li
-        class="nav-item {{ request()->segment(1) == 'tambah-rematri' || request()->segment(1) == 'data-rematri' ? 'menu-open' : '' }}">
+        class="nav-item {{ request()->segment(1) == 'rematri-create' || request()->segment(1) == 'rematri' ? 'menu-open' : '' }}">
         <a href="#"
-            class="nav-link {{ request()->segment(1) == 'tambah-rematri' || request()->segment(1) == 'data-rematri' ? 'active' : '' }}">
+            class="nav-link {{ request()->segment(1) == 'rematri-create' || request()->segment(1) == 'rematri' ? 'active' : '' }}">
             <i class="nav-icon fas fa-users"></i>
             <p>
                 Entry Rematri
@@ -140,13 +140,15 @@
         </a>
         <ul class="nav nav-treeview">
             <li class="nav-item">
-                <a href="#" class="nav-link {{ request()->segment(1) == 'kabupaten' ? 'active' : '' }}">
+                <a href="{{ route('rematri.create') }}"
+                    class="nav-link {{ request()->segment(1) == 'rematri-create' ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Tambah Rematri</p>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link {{ request()->segment(1) == 'kecamatan' ? 'active' : '' }}">
+                <a href="{{ route('rematri.index') }}"
+                    class="nav-link {{ request()->segment(1) == 'rematri' ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Data Rematri</p>
                 </a>

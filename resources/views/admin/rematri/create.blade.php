@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('content')
     <section class="content-header">
@@ -20,10 +20,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
-                    <!-- Horizontal Form -->
                     <div class="card card-info">
-                        <!-- /.card-header -->
-                        <!-- form start -->
                         <form class="form-horizontal">
                             <div class="card-body">
                                 <div class="form-group row">

@@ -83,4 +83,10 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
         Route::get('rematri/create', [RematriController::class, 'create'])->name('rematri.create');
         Route::get('rematri/edit', [RematriController::class, 'edit'])->name('rematri.edit');
     });
+    Route::group(['middleware' => ['checkUser:3']], function () {
+        // Rematri
+        Route::get('rematri', [RematriController::class, 'index'])->name('rematri.index');
+        Route::get('rematri/create', [RematriController::class, 'create'])->name('rematri.create');
+        Route::get('rematri/edit', [RematriController::class, 'edit'])->name('rematri.edit');
+    });
 });
