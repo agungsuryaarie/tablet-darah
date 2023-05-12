@@ -5,15 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Rematri extends Model
+class RematriP extends Model
 {
     use HasFactory;
 
-    protected $table = "rematri";
+
+    protected $table = "rematri_posyandu";
 
     protected $fillable = [
         'puskesmas_id',
-        'sekolah_id',
+        'posyandu_id',
         'anak_ke',
         'tempat_lahir',
         'tgl_lahir',
@@ -35,8 +36,8 @@ class Rematri extends Model
     {
         return $this->belongsTo(Puskesmas::class);
     }
-    public function sekolah()
+    public function posyandu()
     {
-        return $this->belongsTo(Sekolah::class);
+        return $this->belongsTo(Posyandu::class);
     }
 }

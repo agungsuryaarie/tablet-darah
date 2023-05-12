@@ -27,4 +27,8 @@ class Posyandu extends Model
     {
         return $this->belongsTo(Kecamatan::class);
     }
+    public function rematrip()
+    {
+        return $this->hasMany(RematriP::class);
+    }
 }

@@ -27,4 +27,8 @@ class Sekolah extends Model
     {
         return $this->hasMany(UserSekolah::class);
     }
+    public function rematri()
+    {
+        return $this->hasMany(Rematri::class);
+    }
 }

@@ -31,20 +31,20 @@ class RematriController extends Controller
                 ->make(true);
         }
 
-        return view('admin.rematri.data', compact('menu'));
+        return view('admin.rematri-sekolah.data', compact('menu'));
     }
 
     public function create()
     {
         $menu = 'Tambah Data Rematri';
 
-        return view('admin.rematri.create', compact('menu'));
+        return view('admin.rematri-sekolah.create', compact('menu'));
     }
 
     public function edit()
     {
         $menu = 'Edit Data Rematri';
-        return view('admin.rematri.edit', compact('menu',));
+        return view('admin.rematri-sekolah.edit', compact('menu',));
     }
     public function getDesa(Request $request)
     {

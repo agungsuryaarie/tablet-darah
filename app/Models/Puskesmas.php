@@ -35,4 +35,12 @@ class Puskesmas extends Model
     {
         return $this->hasMany(Posyandu::class);
     }
+    public function rematri()
+    {
+        return $this->hasMany(Rematri::class);
+    }
+    public function rematrip()
+    {
+        return $this->hasMany(RematriP::class);
+    }
 }
