@@ -26,7 +26,6 @@ class RematriPosyandu extends Model
         'berat_badan',
         'panjang_badan',
         'agama',
-        'hb',
         'nama_ortu',
         'nik_ortu',
         'tlp_ortu',
@@ -40,7 +39,13 @@ class RematriPosyandu extends Model
         return $this->belongsTo(Puskesmas::class);
     }
     public function posyandu()
+
     {
         return $this->belongsTo(Posyandu::class);
+    }
+
+    public function desa()
+    {
+        return $this->belongsTo(Desa::class);
     }
 }

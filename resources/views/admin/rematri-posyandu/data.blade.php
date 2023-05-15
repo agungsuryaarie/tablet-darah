@@ -26,9 +26,10 @@
                                 <thead>
                                     <tr>
                                         <th style="width:5%">No</th>
-                                        <th style="width:17%">No KK</th>
                                         <th style="width:17%">NIK</th>
-                                        <th>Nama</th>
+                                        <th style="width:17%">Nama</th>
+                                        <th style="width:17%">Tgl Lahir</th>
+                                        <th style="width:17%">Nama Ortu</th>
                                         <th class="text-center" style="width: 10%">Action</th>
                                     </tr>
                                 </thead>
@@ -42,6 +43,40 @@
     </section>
 @endsection
 
+@section('modal')
+    {{-- Modal Delete --}}
+    <div class="modal fade" id="ajaxModelHps">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title" id="modelHeadingHps">
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-dismissible fade show" role="alert" style="display: none;">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <center>
+                        <h6 class="text-muted">::KEPUTUSAN INI TIDAK DAPAT DIUBAH KEMBALI::</h6>
+                    </center>
+                    <center>
+                        <h6>Apakah anda yakin menghapus Data Rematri ini ?</h6>
+                    </center>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Kembali</button>
+                    <button type="submit" class="btn btn-danger btn-sm " id="hapusBtn"><i class="fa fa-trash"></i>
+                        Hapus</button>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
 @section('script')
     <script>
         $(function() {
@@ -59,14 +94,10 @@
                 lengthMenu: [10, 50, 100, 200, 500],
                 lengthChange: true,
                 autoWidth: false,
-                ajax: "{{ route('rematrip.index') }}",
+                ajax: "{{ route('rematri.posyandu.index') }}",
                 columns: [{
                         data: "DT_RowIndex",
                         name: "DT_RowIndex",
-                    },
-                    {
-                        data: "nokk",
-                        name: "nokk",
                     },
                     {
                         data: "nik",
@@ -77,12 +108,67 @@
                         name: "nama",
                     },
                     {
+                        data: "tgl_lahir",
+                        name: "tgl_lahir",
+                    },
+                    {
+                        data: "nama_ortu",
+                        name: "nama_ortu",
+                    },
+                    {
                         data: "action",
                         name: "action",
                         orderable: false,
                         searchable: false,
                     },
                 ],
+            });
+
+            $("body").on("click", ".editRematri", function() {
+                var rematri_id = $(this).data("id");
+                var url = "{{ url('rematri-posyandu/edit') }}" + "/" + rematri_id;
+                window.location = url;
+            });
+
+            $("body").on("click", ".deleteRematri", function() {
+                var rematri_id = $(this).data("id");
+                $("#modelHeadingHps").html("Hapus");
+                $("#ajaxModelHps").modal("show");
+                $("#hapusBtn").click(function(e) {
+                    e.preventDefault();
+                    $(this).html(
+                        "<span class='spinner-border spinner-border-sm'></span><span class='visually-hidden'><i> menghapus...</i></span>"
+                    );
+                    $.ajax({
+                        type: "DELETE",
+                        url: "{{ url('rematri-posyandu') }}" + "/" + rematri_id +
+                            "/destroy",
+                        data: {
+                            _token: "{!! csrf_token() !!}",
+                        },
+                        success: function(data) {
+                            if (data.errors) {
+                                $('.alert-danger').html('');
+                                $.each(data.errors, function(key, value) {
+                                    $('.alert-danger').show();
+                                    $('.alert-danger').append('<strong><li>' +
+                                        value +
+                                        '</li></strong>');
+                                    $(".alert-danger").fadeOut(5000);
+                                    $("#hapusBtn").html(
+                                        "<i class='fa fa-trash'></i>Hapus"
+                                    );
+                                });
+                            } else {
+                                table.draw();
+                                alertSuccess(data.success);
+                                $("#hapusBtn").html(
+                                    "<i class='fa fa-trash'></i>Hapus");
+                                $('#ajaxModelHps').modal('hide');
+                            }
+                        },
+                    });
+                });
             });
         });
     </script>

@@ -184,9 +184,9 @@
     </li>
 @elseif (Auth::user()->role == 4)
     <li
-        class="nav-item {{ request()->segment(2) == 'create' || request()->segment(1) == 'rematri-posyandu' ? 'menu-open' : '' }}">
+        class="nav-item {{ request()->segment(1) == 'rematri-posyandu-create' || request()->segment(1) == 'rematri-posyandu' ? 'menu-open' : '' }}">
         <a href="#"
-            class="nav-link {{ request()->segment(2) == 'create' || request()->segment(1) == 'rematri-posyandu' ? 'active' : '' }}">
+            class="nav-link {{ request()->segment(1) == 'rematri-posyandu-create' || request()->segment(1) == 'rematri-posyandu' ? 'active' : '' }}">
             <i class="nav-icon fas fa-users"></i>
             <p>
                 Entry Rematri
@@ -195,14 +195,14 @@
         </a>
         <ul class="nav nav-treeview">
             <li class="nav-item">
-                <a href="{{ route('rematrip.create') }}"
-                    class="nav-link {{ request()->segment(2) == 'create' ? 'active' : '' }}">
+                <a href="{{ route('rematri.posyandu.create') }}"
+                    class="nav-link {{ request()->segment(1) == 'rematri-posyandu-create' ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Tambah Rematri</p>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('rematrip.index') }}"
+                <a href="{{ route('rematri.posyandu.index') }}"
                     class="nav-link {{ request()->segment(1) == 'rematri-posyandu' ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Data Rematri</p>

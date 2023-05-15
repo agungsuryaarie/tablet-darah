@@ -103,8 +103,12 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
     });
     Route::group(['middleware' => ['checkUser:4']], function () {
         // Rematri
-        Route::get('rematri-posyandu', [RematriPosyanduController::class, 'index'])->name('rematrip.index');
-        Route::get('rematri-posyandu/create', [RematriPosyanduController::class, 'create'])->name('rematrip.create');
-        Route::get('rematri-posyandu/edit', [RematriPosyanduController::class, 'edit'])->name('rematrip.edit');
+        Route::get('rematri-posyandu', [RematriPosyanduController::class, 'index'])->name('rematri.posyandu.index');
+        Route::get('rematri-posyandu-create', [RematriPosyanduController::class, 'create'])->name('rematri.posyandu.create');
+        Route::post('rematri-posyandu/store', [RematriPosyanduController::class, 'store'])->name('rematri.posyandu.store');
+        Route::get('rematri-posyandu/edit/{rematri}', [RematriPosyanduController::class, 'edit'])->name('rematri.posyandu.edit');
+        Route::post('rematri-posyandu/update/{rematri}', [RematriPosyanduController::class, 'update'])->name('rematri.posyandu.update');
+        Route::delete('rematri-posyandu/{rematri}/destroy', [RematriPosyanduController::class, 'destroy'])->name('rematri.posyandu.destroy');
+        Route::post('rematri-posyandu/get-desa', [RematriPosyanduController::class, 'getDesa']);
     });
 });

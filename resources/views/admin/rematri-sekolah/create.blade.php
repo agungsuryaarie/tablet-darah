@@ -184,17 +184,6 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="text" class="col-sm-2 col-form-label">HB<span
-                                            class="text-danger">*</span></label>
-                                    <div class="col-sm-2">
-                                        <input type="text" class="form-control @error('hb') is-invalid @enderror"
-                                            id="hb" name="hb" placeholder="HB">
-                                        @error('hb')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="form-group row">
                                     <label for="text" class="col-sm-2 col-form-label">Nama Orang Tua<span
                                             class="text-danger">*</span></label>
                                     <div class="col-sm-2">

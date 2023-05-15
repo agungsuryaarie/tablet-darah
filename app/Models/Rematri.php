@@ -27,7 +27,6 @@ class Rematri extends Model
         'agama',
         'jurusan_id',
         'kelas_id',
-        'hb',
         'nama_ortu',
         'nik_ortu',
         'tlp_ortu',
