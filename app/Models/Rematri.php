@@ -15,6 +15,7 @@ class Rematri extends Model
         'puskesmas_id',
         'sekolah_id',
         'anak_ke',
+        'email',
         'tempat_lahir',
         'tgl_lahir',
         'nokk',
@@ -42,5 +43,20 @@ class Rematri extends Model
     public function sekolah()
     {
         return $this->belongsTo(Sekolah::class);
+    }
+
+    public function jurusan()
+    {
+        return $this->belongsTo(Jurusan::class);
+    }
+
+    public function kelas()
+    {
+        return $this->belongsTo(Kelas::class);
+    }
+
+    public function desa()
+    {
+        return $this->belongsTo(Desa::class);
     }
 }

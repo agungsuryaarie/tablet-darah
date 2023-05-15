@@ -5,19 +5,19 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Desa;
 use App\Models\Kecamatan;
-use App\Models\RematriP;
+use App\Models\RematriPosyandu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
 
-class RematriPController extends Controller
+class RematriPosyanduController extends Controller
 {
     public function index(Request $request)
     {
         $menu = 'Rematri';
         $kecamatan = Kecamatan::get();
         if ($request->ajax()) {
-            $data = RematriP::where('posyandu_id', '=', Auth::user()->posyandu_id)->get();
+            $data = RematriPosyandu::where('posyandu_id', '=', Auth::user()->posyandu_id)->get();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
