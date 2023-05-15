@@ -6,7 +6,7 @@ use App\Http\Controllers\Admin\UserPuskesController;
 use App\Http\Controllers\Admin\UserSekolahController;
 use App\Http\Controllers\Admin\UserPosyanduController;
 use App\Http\Controllers\Admin\RematriController;
-use App\Http\Controllers\Admin\RematriPController;
+use App\Http\Controllers\Admin\RematriPosyanduController;
 use App\Http\Controllers\Admin\StokObatController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\KabController;
@@ -103,8 +103,8 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
     });
     Route::group(['middleware' => ['checkUser:4']], function () {
         // Rematri
-        Route::get('rematri-posyandu', [RematriPController::class, 'index'])->name('rematrip.index');
-        Route::get('rematri-posyandu/create', [RematriPController::class, 'create'])->name('rematrip.create');
-        Route::get('rematri-posyandu/edit', [RematriPController::class, 'edit'])->name('rematrip.edit');
+        Route::get('rematri-posyandu', [RematriPosyanduController::class, 'index'])->name('rematrip.index');
+        Route::get('rematri-posyandu/create', [RematriPosyanduController::class, 'create'])->name('rematrip.create');
+        Route::get('rematri-posyandu/edit', [RematriPosyanduController::class, 'edit'])->name('rematrip.edit');
     });
 });

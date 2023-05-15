@@ -190,7 +190,7 @@
 
                 $.ajax({
                     data: $("#posyanduForm").serialize(),
-                    url: "{{ route('userposyandu.store') }}",
+                    url: "{{ route('posyandu-binaan.store') }}",
                     type: "POST",
                     dataType: "json",
                     success: function(data) {
