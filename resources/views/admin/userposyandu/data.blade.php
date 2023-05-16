@@ -32,6 +32,7 @@
                                         <th style="width:15%">NIK</th>
                                         <th>Nama</th>
                                         <th style="width:20%">Email</th>
+                                        <th style="width:20%">Posyandu</th>
                                         <th class="text-center" style="width:8%">Foto</th>
                                         <th class="text-center" style="width: 10%">Action</th>
                                     </tr>
@@ -65,12 +66,8 @@
                                     <div class="form-group">
                                         <label>Posyandu<span class="text-danger">*</span></label>
                                         <select class="browser-default custom-select select2bs4" name="posyandu_id"
-                                            id="posyandu">
+                                            id="posyandu_id">
                                             <option selected disabled>::Pilih Posyandu::</option>
-                                            @foreach ($posyandu as $item)
-                                                <option value="{{ $item->id }}">
-                                                    {{ $item->posyandu }}</option>
-                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -211,6 +208,10 @@
                         name: 'email'
                     },
                     {
+                        data: 'posyandu',
+                        name: 'posyandu'
+                    },
+                    {
                         data: 'foto',
                         name: 'foto'
                     },
@@ -230,6 +231,25 @@
                 $("#modelHeading").html("Tambah User Posyandu");
                 $("#ajaxModel").modal("show");
                 $("#deleteUserposyandu").modal("show");
+                $.ajax({
+                    url: "{{ url('posyandu/get-posyandu') }}",
+                    type: "POST",
+                    data: {
+                        puskesmas_id: {{ Auth::user()->puskesmas_id }},
+                        _token: '{{ csrf_token() }}'
+                    },
+                    dataType: 'json',
+                    success: function(result) {
+                        $('#posyandu_id').html(
+                            '<option value="">::Pilih Posyandu::</option>');
+                        $.each(result, function(key, value) {
+                            $("#posyandu_id").append('<option value="' +
+                                value
+                                .id + '">' + value.posyandu +
+                                '</option>');
+                        });
+                    }
+                });
             });
 
             $("body").on("click", ".editUserposyandu", function() {
@@ -240,7 +260,28 @@
                     $("#saveBtn").val("edit-userposyandu");
                     $("#ajaxModel").modal("show");
                     $("#userposyandu_id").val(data.id);
-                    $("#posyandu_id").val(data.posyandu_id);
+                    $.ajax({
+                        url: "{{ url('posyandu/get-posyandu') }}",
+                        type: "POST",
+                        data: {
+                            puskesmas_id: {{ Auth::user()->puskesmas_id }},
+                            _token: '{{ csrf_token() }}'
+                        },
+                        dataType: 'json',
+                        success: function(result) {
+                            $('#posyandu_id').html(
+                                '<option value="">::Pilih Posyandu::</option>');
+                            $.each(result, function(key, value) {
+                                $("#posyandu_id").append('<option value="' +
+                                    value
+                                    .id + '">' + value.posyandu +
+                                    '</option>');
+                                $('#posyandu_id option[value=' +
+                                    data.posyandu_id + ']').prop(
+                                    'selected', true);
+                            });
+                        }
+                    });
                     $("#nik").val(data.nik);
                     $("#nama").val(data.nama);
                     $("#nohp").val(data.nohp);

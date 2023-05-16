@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Desa;
+use App\Models\Kecamatan;
 use App\Models\Posyandu;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
@@ -15,27 +16,31 @@ class PosyanduBinaanController extends Controller
     public function index(Request $request)
     {
         $menu = 'Posyandu Binaan';
-        $desa = Desa::where('kecamatan_id', '=', Auth::user()->kecamatan_id)->get();
+        $kecamatan = Kecamatan::get();
+        $desa = Desa::where('kecamatan_id', Auth::user()->kecamatan_id)->get();
         if ($request->ajax()) {
-            $data = Posyandu::where('puskesmas_id', '=', Auth::user()->puskesmas_id)->get();
+            $data = Posyandu::where('puskesmas_id', Auth::user()->puskesmas_id)->get();
             return Datatables::of($data)
                 ->addIndexColumn()
-                ->addColumn('posyandu', function ($data) {
-                    return $data->posyandu;
+                ->addColumn('puskesmas', function ($data) {
+                    return $data->puskesmas->puskesmas;
                 })
                 ->addColumn('desa', function ($data) {
                     return $data->desa->desa;
                 })
+                ->addColumn('kecamatan', function ($data) {
+                    return $data->kecamatan->kecamatan;
+                })
                 ->addColumn('action', function ($row) {
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs editPosB"><i class="fas fa-edit"></i></a>';
-                    $btn = '<center>' . $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-xs deletePosB"><i class="fas fa-trash"></i></a><center>';
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs editPos"><i class="fas fa-edit"></i></a>';
+                    $btn = '<center>' . $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-xs deletePos"><i class="fas fa-trash"></i></a><center>';
                     return $btn;
                 })
-                ->rawColumns(['posyandu', 'desa', 'action'])
+                ->rawColumns(['posyandu', 'puskesmas', 'desa', 'kecamatan', 'action'])
                 ->make(true);
         }
 
-        return view('admin.posyandu-binaan.data', compact('menu', 'desa'));
+        return view('admin.posyandu-binaan.data', compact('menu', 'kecamatan', 'desa'));
     }
     public function store(Request $request)
     {
@@ -60,6 +65,7 @@ class PosyanduBinaanController extends Controller
                 'kecamatan_id' => Auth::user()->kecamatan_id,
                 'desa_id' => $request->desa_id,
                 'puskesmas_id' => Auth::user()->puskesmas_id,
+                'kode_posyandu' => $request->kode_posyandu,
                 'posyandu' => $request->nama_posyandu,
             ]
         );

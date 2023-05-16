@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\PosyanduController;
 use App\Http\Controllers\Admin\SekolahController;
 use App\Http\Controllers\Admin\SekolahBinaanController;
 use App\Http\Controllers\Admin\PosyanduBinaanController;
+use App\Http\Controllers\Admin\SesiController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
@@ -35,30 +36,42 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 Route::get('/', function () {
     return view('welcome');
 });
+
 Route::controller(AuthController::class)->group(function () {
     // Login
     Route::get('login', 'index')->name('login')->middleware('guest');
     Route::post('login', 'login')->middleware('guest');
     Route::get('logout', 'logout')->name('logout');
 });
+
 Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']], function () {
     // Dashboard
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::group(['middleware' => ['checkUser:1']], function () {
         // Kabupaten
         Route::resource('kabupaten', KabController::class);
+        Route::post('kabupaten/get-kabupaten', [KabController::class, 'getKabupaten']);
+
         // Kecamatan
         Route::resource('kecamatan', KecController::class);
+        Route::post('kecamatan/get-kecamatan', [KecController::class, 'getKecamatan']);
+
         // Desa/Kelurahan
         Route::resource('desa', DesaController::class);
+        Route::post('desa/get-desa', [DesaController::class, 'getDesa']);
+
         // Puskesmas
         Route::resource('puskesmas', PuskesController::class);
+        Route::post('puskesmas/get-puskes', [PuskesController::class, 'getPuskes']);
+
         // Posyandu
         Route::resource('posyandu', PosyanduController::class);
-        Route::post('posyandu/getpuskesmas', [PosyanduController::class, 'getPuskes'])->name('posyandu.getpuskes');
-        Route::post('posyandu/getdesa', [PosyanduController::class, 'getDesa'])->name('posyandu.getdesa');
+
         // Sekolah
         Route::resource('sekolah', SekolahController::class);
+        Route::post('sekolah/get-jenjang', [SekolahController::class, 'getJenjang']);
+        Route::post('sekolah/get-status', [SekolahController::class, 'getStatus']);
+
         // Users Puskemas
         Route::get('users-puskesmas', [UserPuskesController::class, 'index'])->name('userpuskes.index');
         Route::post('users-puskesmas', [UserPuskesController::class, 'store'])->name('userpuskes.store');
@@ -66,31 +79,52 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
         Route::delete('users-puskesmas/{user}/destroy', [UserPuskesController::class, 'destroy'])->name('userpuskes.destroy');
         Route::post('users-puskesmas/getpuskesmas', [UserPuskesController::class, 'getPuskes'])->name('userpuskes.getpuskes');
     });
+
     Route::group(['middleware' => ['checkUser:2']], function () {
+
+        Route::post('kecamatan/get-kecamatan', [KecController::class, 'getKecamatan']);
+        Route::post('desa/get-desa', [DesaController::class, 'getDesa']);
+        Route::post('puskesmas/get-puskes', [PuskesController::class, 'getPuskes']);
+        Route::post('posyandu/get-posyandu', [PosyanduController::class, 'getPosyandu']);
+        Route::post('sekolah/get-sekolah', [SekolahController::class, 'getSekolah']);
+        Route::post('sekolah/get-jenjang', [SekolahController::class, 'getJenjang']);
+        Route::post('sekolah/get-status', [SekolahController::class, 'getStatus']);
+
+
         // Sekolah Binaan
         Route::resource('sekolah-binaan', SekolahBinaanController::class);
+
         // Posyandu Binaan
         Route::resource('posyandu-binaan', PosyanduBinaanController::class);
+
         // Users Sekolah
         Route::get('users-sekolah', [UserSekolahController::class, 'index'])->name('usersekolah.index');
         Route::post('users-sekolah', [UserSekolahController::class, 'store'])->name('usersekolah.store');
         Route::get('users-sekolah/{id}/edit', [UserSekolahController::class, 'edit'])->name('usersekolah.edit');
         Route::delete('users-sekolah/{user}/destroy', [UserSekolahController::class, 'destroy'])->name('usersekolah.destroy');
+
         // Users Posyandu
         Route::get('users-posyandu', [UserPosyanduController::class, 'index'])->name('userposyandu.index');
         Route::post('users-posyandu', [UserPosyanduController::class, 'store'])->name('userposyandu.store');
         Route::get('users-posyandu/{id}/edit', [UserPosyanduController::class, 'edit'])->name('userposyandu.edit');
         Route::delete('users-posyandu/{user}/destroy', [UserPosyanduController::class, 'destroy'])->name('userposyandu.destroy');
+
         // Rematri
         Route::get('rematri', [RematriController::class, 'index'])->name('rematri.index');
         Route::get('rematri/create', [RematriController::class, 'create'])->name('rematri.create');
         Route::get('rematri/edit', [RematriController::class, 'edit'])->name('rematri.edit');
     });
+
     Route::group(['middleware' => ['checkUser:3']], function () {
+
         // Jurusan
         Route::resource('jurusan', JurusanController::class);
+        Route::post('jurusan/get-jurusan', [JurusanController::class, 'getJurusan']);
+
         // Kelas
         Route::resource('kelas', KelasController::class);
+        Route::post('kelas/get-kelas', [KelasController::class, 'getKelas']);
+
         // Rematri
         Route::get('rematri', [RematriController::class, 'index'])->name('rematri.index');
         Route::get('rematri-create', [RematriController::class, 'create'])->name('rematri.create');
@@ -100,8 +134,13 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
         Route::delete('rematri/{rematri}/destroy', [RematriController::class, 'destroy'])->name('rematri.destroy');
         Route::post('rematri/get-kelas', [RematriController::class, 'getKelas']);
         Route::post('rematri/get-desa', [RematriController::class, 'getDesa']);
+
+        Route::resource('sesi', SesiController::class);
+        Route::get('sesi/rematri/{id}', [SesiController::class, 'rematri'])->name('sesi.rematri');
     });
+
     Route::group(['middleware' => ['checkUser:4']], function () {
+
         // Rematri
         Route::get('rematri-posyandu', [RematriPosyanduController::class, 'index'])->name('rematri.posyandu.index');
         Route::get('rematri-posyandu-create', [RematriPosyanduController::class, 'create'])->name('rematri.posyandu.create');

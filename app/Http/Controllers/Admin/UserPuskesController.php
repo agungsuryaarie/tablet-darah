@@ -27,9 +27,12 @@ class UserPuskesController extends Controller
                     if ($data->foto != null) {
                         $foto = '<center><img src="' . url("storage/foto-user/" . $data->foto) . '" width="30px" class="img rounded"><center>';
                     } else {
-                        $foto = '<center><img src="' . url("storage/foto-user/blank.png") . '" width="30px" class="img rounded"><center>';
+                        $foto = '<center><img src="' . url("blank.png") . '" width="30px" class="img rounded"><center>';
                     }
                     return $foto;
+                })
+                ->addColumn('puskesmas', function ($data) {
+                    return $data->puskesmas->puskesmas;
                 })
                 ->addColumn('action', function ($row) {
                     $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs editUserpuskes"><i class="fas fa-edit"></i></a>';

@@ -21,9 +21,6 @@ class PosyanduController extends Controller
             $data = Posyandu::get();
             return Datatables::of($data)
                 ->addIndexColumn()
-                ->addColumn('posyandu', function ($data) {
-                    return $data->posyandu;
-                })
                 ->addColumn('puskesmas', function ($data) {
                     return $data->puskesmas->puskesmas;
                 })
@@ -51,11 +48,13 @@ class PosyanduController extends Controller
             'kecamatan_id.required' => 'Kecamatan harus dipilih.',
             'desa_id.required' => 'Desa harus dipilih.',
             'puskesmas_id.required' => 'Puskesmas harus dipilih.',
+            'kode_posyandu.required' => 'Kode Posyandu harus diisi.',
             'nama_posyandu.required' => 'Nama Posyandu harus diisi.',
         );
         $validator = Validator::make($request->all(), [
             'kecamatan_id' => 'required',
             'desa_id' => 'required',
+            'kode_posyandu' => 'required',
             'puskesmas_id' => 'required',
             'nama_posyandu' => 'required',
         ], $message);
@@ -70,6 +69,7 @@ class PosyanduController extends Controller
             [
                 'kecamatan_id' => $request->kecamatan_id,
                 'desa_id' => $request->desa_id,
+                'kode_posyandu' => $request->kode_posyandu,
                 'puskesmas_id' => $request->puskesmas_id,
                 'posyandu' => $request->nama_posyandu,
             ]
@@ -88,14 +88,10 @@ class PosyanduController extends Controller
         Posyandu::find($id)->delete();
         return response()->json(['success' => 'Posyandu deleted successfully.']);
     }
-    public function getPuskes(Request $request)
+
+    public function getPosyandu(Request $request)
     {
-        $data['puskesmas'] = Puskesmas::where("kecamatan_id", $request->kecamatan_id)->get(["puskesmas", "id"]);
-        return response()->json($data);
-    }
-    public function getDesa(Request $request)
-    {
-        $data['desa'] = Desa::where("kecamatan_id", $request->kecamatan_id)->get(["desa", "id"]);
+        $data = Posyandu::where("puskesmas_id", $request->puskesmas_id)->get(["posyandu", "id"]);
         return response()->json($data);
     }
 }

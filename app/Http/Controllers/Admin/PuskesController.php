@@ -19,8 +19,12 @@ class PuskesController extends Controller
             $data = Puskesmas::get();
             return Datatables::of($data)
                 ->addIndexColumn()
-                ->addColumn('puskesmas', function ($data) {
-                    return $data->puskesmas;
+                ->addColumn('kode_puskesmas', function ($data) {
+                    if ($data->kode_puskesmas == '') {
+                        return '-';
+                    } else {
+                        return $data->kode_puskesmas;
+                    }
                 })
                 ->addColumn('kecamatan', function ($data) {
                     return $data->kecamatan->kecamatan;
@@ -41,10 +45,12 @@ class PuskesController extends Controller
         //Translate Bahasa Indonesia
         $message = array(
             'kecamatan_id.required' => 'Kecamatan harus dipilih.',
+            'kode_puskesmas.required' => 'Kode Puskesmas harus diisi.',
             'nama_puskesmas.required' => 'Nama Puskesmas harus diisi.',
         );
         $validator = Validator::make($request->all(), [
             'kecamatan_id' => 'required',
+            'kode_puskesmas' => 'required',
             'nama_puskesmas' => 'required',
         ], $message);
 
@@ -57,6 +63,7 @@ class PuskesController extends Controller
             ],
             [
                 'kecamatan_id' => $request->kecamatan_id,
+                'kode_puskesmas' => $request->kode_puskesmas,
                 'puskesmas' => $request->nama_puskesmas,
             ]
         );
@@ -67,6 +74,12 @@ class PuskesController extends Controller
     {
         $puskesmas = Puskesmas::find($id);
         return response()->json($puskesmas);
+    }
+
+    public function getPuskes(Request $request)
+    {
+        $data = Puskesmas::where("kecamatan_id", $request->kecamatan_id)->get(["puskesmas", "id"]);
+        return response()->json($data);
     }
 
     public function destroy($id)

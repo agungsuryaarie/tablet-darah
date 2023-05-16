@@ -32,6 +32,7 @@
                                         <th style="width:15%">NIK</th>
                                         <th>Nama</th>
                                         <th style="width:20%">Email</th>
+                                        <th style="width:20%">Sekolah</th>
                                         <th class="text-center" style="width:8%">Foto</th>
                                         <th class="text-center" style="width: 10%">Action</th>
                                     </tr>
@@ -65,12 +66,7 @@
                                     <div class="form-group">
                                         <label>Sekolah<span class="text-danger">*</span></label>
                                         <select class="browser-default custom-select select2bs4" name="sekolah_id"
-                                            id="sekolah">
-                                            <option selected disabled>::Pilih Sekolah::</option>
-                                            @foreach ($sekolah as $item)
-                                                <option value="{{ $item->id }}">
-                                                    {{ $item->sekolah }}</option>
-                                            @endforeach
+                                            id="sekolah_id">
                                         </select>
                                     </div>
                                 </div>
@@ -211,6 +207,10 @@
                         name: 'email'
                     },
                     {
+                        data: 'sekolah',
+                        name: 'sekolah'
+                    },
+                    {
                         data: 'foto',
                         name: 'foto'
                     },
@@ -230,6 +230,25 @@
                 $("#modelHeading").html("Tambah User Sekolah");
                 $("#ajaxModel").modal("show");
                 $("#deleteUsersekolah").modal("show");
+                $.ajax({
+                    url: "{{ url('sekolah/get-sekolah') }}",
+                    type: "POST",
+                    data: {
+                        kecamatan_id: {{ Auth::user()->kecamatan_id }},
+                        _token: '{{ csrf_token() }}'
+                    },
+                    dataType: 'json',
+                    success: function(result) {
+                        $('#sekolah_id').html(
+                            '<option value="">:::Pilih Sekolah:::</option>');
+                        $.each(result, function(key, value) {
+                            $("#sekolah_id").append('<option value="' +
+                                value
+                                .id + '">' + value.sekolah +
+                                '</option>');
+                        });
+                    }
+                });
             });
 
             $("body").on("click", ".editUsersekolah", function() {
@@ -239,7 +258,29 @@
                     $("#saveBtn").val("edit-usersekolah");
                     $("#ajaxModel").modal("show");
                     $("#usersekolah_id").val(data.id);
-                    $("#sekolah_id").val(data.sekolah_id);
+                    $.ajax({
+                        url: "{{ url('sekolah/get-sekolah') }}",
+                        type: "POST",
+                        data: {
+                            kecamatan_id: {{ Auth::user()->kecamatan_id }},
+                            _token: '{{ csrf_token() }}'
+                        },
+                        dataType: 'json',
+                        success: function(result) {
+                            $('#sekolah_id').html(
+                                '<option value="">:::Pilih Sekolah:::</option>');
+                            $.each(result, function(key, value) {
+                                $("#sekolah_id").append('<option value="' +
+                                    value
+                                    .id + '">' + value.sekolah +
+                                    '</option>');
+                                $('#sekolah_id option[value=' +
+                                        data.sekolah_id + ']')
+                                    .prop(
+                                        'selected', true);
+                            });
+                        }
+                    });
                     $("#nik").val(data.nik);
                     $("#nama").val(data.nama);
                     $("#nohp").val(data.nohp);

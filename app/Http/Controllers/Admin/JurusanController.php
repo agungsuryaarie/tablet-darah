@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Jurusan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Yajra\Datatables\Datatables;
 use Illuminate\Support\Facades\Validator;
 
@@ -14,7 +15,7 @@ class JurusanController extends Controller
     {
         $menu = 'Jurusan';
         if ($request->ajax()) {
-            $data = Jurusan::get();
+            $data = Jurusan::where('sekolah_id', Auth::user()->sekolah_id)->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -51,7 +52,7 @@ class JurusanController extends Controller
                 'sekolah_id' => $request->sekolah_id,
             ]
         );
-        return response()->json(['success' => 'Desa saved successfully.']);
+        return response()->json(['success' => 'Jurusan saved successfully.']);
     }
 
     public function edit($id)
@@ -64,5 +65,11 @@ class JurusanController extends Controller
     {
         Jurusan::find($id)->delete();
         return response()->json(['success' => 'Jurusan deleted successfully.']);
+    }
+
+    public function getJurusan(Request $request)
+    {
+        $data = Jurusan::where('sekolah_id', $request->sekolah_id)->get(["nama", "id"]);
+        return response()->json($data);
     }
 }

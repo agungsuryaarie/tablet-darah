@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Kecamatan;
 use App\Models\Puskesmas;
 use App\Models\Sekolah;
 use Yajra\Datatables\Datatables;
@@ -16,14 +17,28 @@ class SekolahBinaanController extends Controller
 {
     public function index(Request $request)
     {
-        $menu = 'Sekolah Binaan';
+        $menu = 'Sekolah';
+        $kecamatan = Kecamatan::get();
         if ($request->ajax()) {
-            $data = Sekolah::where('puskesmas_id', '=', Auth::user()->puskesmas_id)->get();
+            $data = Sekolah::where('puskesmas_id', Auth::user()->puskesmas_id)->latest()->get();
             return Datatables::of($data)
                 ->addIndexColumn()
+                ->addColumn('status', function ($data) {
+                    if ($data->status === 'N') {
+                        return 'Negeri';
+                    } else {
+                        return 'Swasta';
+                    }
+                })
+                ->addColumn('kecamatan', function ($data) {
+                    return $data->kecamatan->kecamatan;
+                })
+                ->addColumn('puskesmas', function ($data) {
+                    return $data->puskesmas->puskesmas;
+                })
                 ->addColumn('action', function ($row) {
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs editSekolahB"><i class="fas fa-edit"></i></a>';
-                    $btn = '<center>' . $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-xs deleteSekolahB"><i class="fas fa-trash"></i></a><center>';
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs editSekolah"><i class="fas fa-edit"></i></a>';
+                    $btn = '<center>' . $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-xs deleteSekolah"><i class="fas fa-trash"></i></a><center>';
                     return $btn;
                 })
                 ->rawColumns(['kecamatan', 'action'])
@@ -32,6 +47,7 @@ class SekolahBinaanController extends Controller
 
         return view('admin.sekolah-binaan.data', compact('menu'));
     }
+
     public function store(Request $request)
     {
         //Translate Bahasa Indonesia

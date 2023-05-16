@@ -31,6 +31,10 @@
                                         <th style="width:5%">No</th>
                                         <th style="width:8%">NPSN</th>
                                         <th>Sekolah</th>
+                                        <th style="width:12%">Jenjang</th>
+                                        <th style="width:10%">Status</th>
+                                        <th style="width:12%">Kecamatan</th>
+                                        <th style="width:15%">Puskesmas</th>
                                         <th class="text-center" style="width: 10%">Action</th>
                                     </tr>
                                 </thead>
@@ -75,11 +79,6 @@
                             <div class="col-sm-12">
                                 <label>Jenjang<span class="text-danger">*</span></label>
                                 <select class="form-control select2bs4" id="jenjang" name="jenjang" style="width: 100%;">
-                                    <option selected disabled>::Pilih Jenjang::</option>
-                                    <option value="SD">SD</option>
-                                    <option value="SMP">SMP</option>
-                                    <option value="SMA">SMA</option>
-                                    <option value="SMK">SMK</option>
                                 </select>
                             </div>
                         </div>
@@ -87,9 +86,6 @@
                             <div class="col-sm-12">
                                 <label>Status<span class="text-danger">*</span></label>
                                 <select class="form-control select2bs4" id="status" name="status" style="width: 100%;">
-                                    <option selected disabled>::Pilih Status::</option>
-                                    <option value="N">Negeri</option>
-                                    <option value="S">Swasta</option>
                                 </select>
                             </div>
                         </div>
@@ -184,6 +180,22 @@
                         name: "sekolah",
                     },
                     {
+                        data: "jenjang",
+                        name: "jenjang",
+                    },
+                    {
+                        data: "status",
+                        name: "status",
+                    },
+                    {
+                        data: "kecamatan",
+                        name: "kecamatan",
+                    },
+                    {
+                        data: "puskesmas",
+                        name: "puskesmas",
+                    },
+                    {
                         data: "action",
                         name: "action",
                         orderable: false,
@@ -199,9 +211,48 @@
                 $("#modelHeading").html("Tambah Sekolah");
                 $("#ajaxModel").modal("show");
                 $("#deleteSekolah").modal("show");
+                $.ajax({
+                    url: "{{ url('kecamatan/get-kecamatan') }}",
+                    type: "POST",
+                    dataType: 'json',
+                    success: function(result) {
+                        $('#kecamatan_id').html(
+                            '<option value="">:::Pilih Kecamatan:::</option>');
+                        $.each(result, function(key, value) {
+                            $("#kecamatan_id").append('<option value="' + value
+                                .id + '">' + value.kecamatan + '</option>');
+                        });
+                    }
+                });
+                $.ajax({
+                    url: "{{ url('sekolah/get-jenjang') }}",
+                    type: "POST",
+                    dataType: 'json',
+                    success: function(result) {
+                        $('#jenjang').html(
+                            '<option value="">:::Pilih Jenjang:::</option>');
+                        $.each(result, function(key, value) {
+                            $("#jenjang").append('<option value="' + value
+                                .nama + '">' + value.nama + '</option>');
+                        });
+                    }
+                });
+                $.ajax({
+                    url: "{{ url('sekolah/get-status') }}",
+                    type: "POST",
+                    dataType: 'json',
+                    success: function(result) {
+                        $('#status').html(
+                            '<option value="">:::Pilih Status:::</option>');
+                        $.each(result, function(key, value) {
+                            $("#status").append('<option value="' + value
+                                .kode + '">' + value.status + '</option>');
+                        });
+                    }
+                });
             });
 
-            $("body").on("click", ".editSekolahB", function() {
+            $("body").on("click", ".editSekolah", function() {
                 var sekolah_id = $(this).data("id");
                 $.get("{{ route('sekolah-binaan.index') }}" + "/" + sekolah_id + "/edit", function(data) {
                     $("#modelHeading").html("Edit Sekolah");
@@ -210,9 +261,88 @@
                     $("#sekolah_id").val(data.id);
                     $("#npsn").val(data.npsn);
                     $("#nama_sekolah").val(data.sekolah);
-                    $("#jenjang").val(data.jenjang);
-                    $("#status").val(data.status);
+                    $.ajax({
+                        url: "{{ url('sekolah/get-jenjang') }}",
+                        type: "POST",
+                        dataType: 'json',
+                        success: function(result) {
+                            $('#jenjang').html(
+                                '<option value="">:::Pilih Jenjang:::</option>');
+                            $.each(result, function(key, value) {
+                                $("#jenjang").append('<option value="' + value
+                                    .nama + '">' + value.nama + '</option>');
+                            });
+                            $('#jenjang option[value=' +
+                                data.jenjang + ']').prop(
+                                'selected', true);
+                        }
+                    });
+                    $.ajax({
+                        url: "{{ url('sekolah/get-status') }}",
+                        type: "POST",
+                        dataType: 'json',
+                        success: function(result) {
+                            $('#status').html(
+                                '<option value="">:::Pilih Status:::</option>');
+                            $.each(result, function(key, value) {
+                                $("#status").append('<option value="' + value
+                                    .kode + '">' + value.status +
+                                    '</option>');
+                            });
+                            $('#status option[value=' +
+                                data.status + ']').prop(
+                                'selected', true);
+                        }
+                    });
                     $("#alamat").val(data.alamat_jalan);
+                    $.ajax({
+                        url: "{{ url('kecamatan/get-kecamatan') }}",
+                        type: "POST",
+                        dataType: 'json',
+                        success: function(result) {
+                            $('#kecamatan_id').html(
+                                '<option value="">:::Pilih Kecamatan:::</option>');
+                            $.each(result, function(key, value) {
+                                $("#kecamatan_id").append('<option value="' +
+                                    value.id + '">' + value.kecamatan +
+                                    '</option>');
+                                $('#kecamatan_id option[value=' +
+                                    data.kecamatan_id + ']').prop(
+                                    'selected', true);
+                            });
+                        }
+                    });
+                    $(document).ready(function() {
+                        $.ajax({
+                            url: "{{ url('puskesmas/get-puskes') }}",
+                            type: "POST",
+                            data: {
+                                kecamatan_id: data.kecamatan_id,
+                                _token: '{{ csrf_token() }}'
+                            },
+                            dataType: 'json',
+                            success: function(result) {
+                                $('#puskesmas_id').html(
+                                    '<option value="">::Pilih Puskesmas::</option>'
+                                );
+                                $.each(result, function(key,
+                                    value) {
+                                    $("#puskesmas_id")
+                                        .append(
+                                            '<option value="' +
+                                            value
+                                            .id + '">' +
+                                            value
+                                            .puskesmas +
+                                            '</option>');
+                                    $('#puskesmas_id option[value=' +
+                                            data.puskesmas_id + ']')
+                                        .prop(
+                                            'selected', true);
+                                });
+                            }
+                        });
+                    });
                 });
             });
 
@@ -249,7 +379,7 @@
                     },
                 });
             });
-            $("body").on("click", ".deleteSekolahB", function() {
+            $("body").on("click", ".deleteSekolah", function() {
                 var sekolah_id = $(this).data("id");
                 $("#modelHeadingHps").html("Hapus");
                 $("#ajaxModelHps").modal("show");

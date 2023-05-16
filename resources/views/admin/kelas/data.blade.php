@@ -62,11 +62,6 @@
                             <div class="col-sm-12">
                                 <label>Jurusan<span class="text-danger">*</span></label>
                                 <select class="browser-default custom-select select2bs4" name="jurusan_id" id="jurusan_id">
-                                    <option selected disabled>::Pilih Jurusan::</option>
-                                    @foreach ($jurusan as $item)
-                                        <option value="{{ $item->id }}">
-                                            {{ $item->nama }}</option>
-                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -180,6 +175,23 @@
                 $("#modelHeading").html("Tambah Kelas");
                 $("#ajaxModel").modal("show");
                 $("#deleteKelas").modal("show");
+                $.ajax({
+                    url: "{{ url('jurusan/get-jurusan') }}",
+                    type: "POST",
+                    data: {
+                        sekolah_id: {{ Auth::user()->sekolah_id }},
+                        _token: '{{ csrf_token() }}'
+                    },
+                    dataType: 'json',
+                    success: function(result) {
+                        $('#jurusan_id').html(
+                            '<option value="">:::Pilih Jurusan:::</option>');
+                        $.each(result, function(key, value) {
+                            $("#jurusan_id").append('<option value="' + value
+                                .id + '">' + value.nama + '</option>');
+                        });
+                    }
+                });
             });
 
             $("body").on("click", ".editKelas", function() {
@@ -189,7 +201,29 @@
                     $("#saveBtn").val("edit-kelas");
                     $("#ajaxModel").modal("show");
                     $("#kelas_id").val(data.id);
+                    $("#ruangan").val(data.ruangan);
                     $("#nama").val(data.nama);
+                    $.ajax({
+                        url: "{{ url('jurusan/get-jurusan') }}",
+                        type: "POST",
+                        data: {
+                            sekolah_id: {{ Auth::user()->sekolah_id }},
+                            _token: '{{ csrf_token() }}'
+                        },
+                        dataType: 'json',
+                        success: function(result) {
+                            $('#jurusan_id').html(
+                                '<option value="">:::Pilih Jurusan:::</option>');
+                            $.each(result, function(key, value) {
+                                $("#jurusan_id").append('<option value="' +
+                                    value
+                                    .id + '">' + value.nama + '</option>');
+                                $('#jurusan_id option[value=' +
+                                    data.jurusan_id + ']').prop(
+                                    'selected', true);
+                            });
+                        }
+                    });
                 });
             });
 

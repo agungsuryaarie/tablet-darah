@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Jenjang;
 use App\Models\Kecamatan;
 use App\Models\Sekolah;
 use App\Models\Puskesmas;
+use App\Models\Status;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
 use Illuminate\Support\Facades\Validator;
@@ -20,6 +22,13 @@ class SekolahController extends Controller
             $data = Sekolah::get();
             return Datatables::of($data)
                 ->addIndexColumn()
+                ->addColumn('status', function ($data) {
+                    if ($data->status === 'N') {
+                        return 'Negeri';
+                    } else {
+                        return 'Swasta';
+                    }
+                })
                 ->addColumn('kecamatan', function ($data) {
                     return $data->kecamatan->kecamatan;
                 })
@@ -94,9 +103,22 @@ class SekolahController extends Controller
         Sekolah::find($id)->delete();
         return response()->json(['success' => 'Sekolah deleted successfully.']);
     }
-    public function getPuskes(Request $request)
+
+    public function getSekolah(Request $request)
     {
-        $data['puskesmas'] = Puskesmas::where("kecamatan_id", $request->kecamatan_id)->get(["puskesmas", "id"]);
+        $data = Sekolah::where('kecamatan_id', $request->kecamatan_id)->get(["sekolah", "id"]);
+        return response()->json($data);
+    }
+
+    public function getJenjang()
+    {
+        $data = Jenjang::get(["nama"]);
+        return response()->json($data);
+    }
+
+    public function getStatus()
+    {
+        $data = Status::get(["kode", "status"]);
         return response()->json($data);
     }
 }

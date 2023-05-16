@@ -22,11 +22,14 @@ class UserPosyanduController extends Controller
             $data = UserPosyandu::where('puskesmas_id', '=', Auth::user()->puskesmas_id)->get();
             return Datatables::of($data)
                 ->addIndexColumn()
+                ->addColumn('posyandu', function ($data) {
+                    return $data->posyandu->posyandu;
+                })
                 ->addColumn('foto', function ($data) {
                     if ($data->foto != null) {
                         $foto = '<center><img src="' . url("storage/foto-user/" . $data->foto) . '" width="30px" class="img rounded"><center>';
                     } else {
-                        $foto = '<center><img src="' . url("storage/foto-user/blank.png") . '" width="30px" class="img rounded"><center>';
+                        $foto = '<center><img src="' . url("blank.png") . '" width="30px" class="img rounded"><center>';
                     }
                     return $foto;
                 })

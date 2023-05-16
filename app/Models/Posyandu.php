@@ -12,7 +12,7 @@ class Posyandu extends Model
     protected $table = "posyandu";
 
     protected $fillable = [
-        'kecamatan_id', 'desa_id', 'puskesmas_id', 'posyandu'
+        'kecamatan_id', 'desa_id', 'puskesmas_id', 'kode_posyandu', 'posyandu'
     ];
 
     public function puskesmas()

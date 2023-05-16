@@ -29,6 +29,7 @@
                                 <thead>
                                     <tr>
                                         <th style="width:5%">No</th>
+                                        <th style="width:12%">Kode Puskesmas</th>
                                         <th>Puskesmas</th>
                                         <th style="width:12%">Kecamatan</th>
                                         <th class="text-center" style="width: 10%">Action</th>
@@ -62,12 +63,19 @@
                                 <label>Kecamatan<span class="text-danger">*</span></label>
                                 <select class="browser-default custom-select select2bs4" name="kecamatan_id"
                                     id="kecamatan_id">
-                                    <option selected disabled>::Pilih Kecamatan::</option>
+                                    {{-- <option selected disabled>::Pilih Kecamatan::</option>
                                     @foreach ($kecamatan as $item)
                                         <option value="{{ $item->id }}">
                                             {{ $item->kecamatan }}</option>
-                                    @endforeach
+                                    @endforeach --}}
                                 </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Kode Puskesmas<span class="text-danger"> *</span></label>
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control" id="kode_puskesmas" name="kode_puskesmas"
+                                    placeholder="Kode Puskesmas">
                             </div>
                         </div>
                         <div class="form-group">
@@ -146,6 +154,10 @@
                         name: "DT_RowIndex",
                     },
                     {
+                        data: "kode_puskesmas",
+                        name: "kode_puskesmas",
+                    },
+                    {
                         data: "puskesmas",
                         name: "puskesmas",
                     },
@@ -169,6 +181,19 @@
                 $("#modelHeading").html("Tambah Puskesmas");
                 $("#ajaxModel").modal("show");
                 $("#deletePuskes").modal("show");
+                $.ajax({
+                    url: "{{ url('kecamatan/get-kecamatan') }}",
+                    type: "POST",
+                    dataType: 'json',
+                    success: function(result) {
+                        $('#kecamatan_id').html(
+                            '<option value="">:::Pilih Kecamatan:::</option>');
+                        $.each(result, function(key, value) {
+                            $("#kecamatan_id").append('<option value="' + value
+                                .id + '">' + value.kecamatan + '</option>');
+                        });
+                    }
+                });
             });
 
             $("body").on("click", ".editPuskes", function() {
@@ -178,8 +203,26 @@
                     $("#saveBtn").val("edit-puskesmas");
                     $("#ajaxModel").modal("show");
                     $("#puskesmas_id").val(data.id);
-                    $("#kecamatan_id").val(data.kecamatan_id);
+                    // $("#kecamatan_id").val(data.kecamatan_id);
+                    $("#kode_puskesmas").val(data.kode_puskesmas);
                     $("#nama_puskesmas").val(data.puskesmas);
+                    $.ajax({
+                        url: "{{ url('kecamatan/get-kecamatan') }}",
+                        type: "POST",
+                        dataType: 'json',
+                        success: function(result) {
+                            $('#kecamatan_id').html(
+                                '<option value="">:::Pilih Kecamatan:::</option>');
+                            $.each(result, function(key, value) {
+                                $("#kecamatan_id").append('<option value="' +
+                                    value.id + '">' + value.kecamatan +
+                                    '</option>');
+                                $('#kecamatan_id option[value=' +
+                                    data.kecamatan_id + ']').prop(
+                                    'selected', true);
+                            });
+                        }
+                    });
                 });
             });
 

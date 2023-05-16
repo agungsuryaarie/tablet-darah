@@ -70,6 +70,12 @@ class KabController extends Controller
         return response()->json($kabupaten);
     }
 
+    public function getKabupaten()
+    {
+        $data = Kabupaten::get(["kabupaten", "id"]);
+        return response()->json($data);
+    }
+
     public function destroy($id)
     {
         Kabupaten::find($id)->delete();

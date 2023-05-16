@@ -12,7 +12,7 @@ class Puskesmas extends Model
     protected $table = "puskesmas";
 
     protected $fillable = [
-        'kecamatan_id', 'puskesmas'
+        'kecamatan_id', 'kode_puskesmas', 'puskesmas'
     ];
 
     public function kecamatan()

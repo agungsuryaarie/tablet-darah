@@ -77,6 +77,12 @@ class DesaController extends Controller
         return response()->json($desa);
     }
 
+    public function getDesa(Request $request)
+    {
+        $data = Desa::where("kecamatan_id", $request->kecamatan_id)->get(["desa", "id"]);
+        return response()->json($data);
+    }
+
     public function destroy($id)
     {
         Desa::find($id)->delete();

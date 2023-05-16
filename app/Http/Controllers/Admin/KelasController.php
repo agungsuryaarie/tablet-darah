@@ -17,7 +17,7 @@ class KelasController extends Controller
         $menu = 'Kelas';
         $jurusan = Jurusan::where('sekolah_id', Auth::user()->sekolah_id)->get();
         if ($request->ajax()) {
-            $data = Kelas::latest()->get();
+            $data = Kelas::where('sekolah_id', Auth::user()->sekolah_id)->latest()->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('jurusan', function ($data) {
@@ -75,5 +75,12 @@ class KelasController extends Controller
     {
         Kelas::find($id)->delete();
         return response()->json(['success' => 'Kelas deleted successfully.']);
+    }
+
+
+    public function getKelas(Request $request)
+    {
+        $data = Kelas::with('jurusan')->where('jurusan_id', $request->jurusan_id)->get();
+        return response()->json($data);
     }
 }

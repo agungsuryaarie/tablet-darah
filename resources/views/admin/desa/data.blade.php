@@ -63,11 +63,6 @@
                                 <label>Kecamatan<span class="text-danger">*</span></label>
                                 <select class="browser-default custom-select select2bs4" name="kecamatan_id"
                                     id="kecamatan_id">
-                                    <option selected disabled>::Pilih Kecamatan::</option>
-                                    @foreach ($kecamatan as $item)
-                                        <option value="{{ $item->id }}">
-                                            {{ $item->kecamatan }}</option>
-                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -189,6 +184,19 @@
                 $("#modelHeading").html("Tambah Desa/Kelurahan");
                 $("#ajaxModel").modal("show");
                 $("#deleteDesa").modal("show");
+                $.ajax({
+                    url: "{{ url('kecamatan/get-kecamatan') }}",
+                    type: "POST",
+                    dataType: 'json',
+                    success: function(result) {
+                        $('#kecamatan_id').html(
+                            '<option value="">:::Pilih Kecamatan:::</option>');
+                        $.each(result, function(key, value) {
+                            $("#kecamatan_id").append('<option value="' + value
+                                .id + '">' + value.kecamatan + '</option>');
+                        });
+                    }
+                });
             });
 
             $("body").on("click", ".editDesa", function() {
@@ -198,7 +206,23 @@
                     $("#saveBtn").val("edit-desa");
                     $("#ajaxModel").modal("show");
                     $("#desa_id").val(data.id);
-                    $("#kecamatan_id").val(data.kecamatan_id);
+                    $.ajax({
+                        url: "{{ url('kecamatan/get-kecamatan') }}",
+                        type: "POST",
+                        dataType: 'json',
+                        success: function(result) {
+                            $('#kecamatan_id').html(
+                                '<option value="">:::Pilih Kecamatan:::</option>');
+                            $.each(result, function(key, value) {
+                                $("#kecamatan_id").append('<option value="' +
+                                    value.id + '">' + value.kecamatan +
+                                    '</option>');
+                                $('#kecamatan_id option[value=' +
+                                    data.kecamatan_id + ']').prop(
+                                    'selected', true);
+                            });
+                        }
+                    });
                     $("#kode_wilayah").val(data.kode_wilayah);
                     $("#nama_desa").val(data.desa);
                 });

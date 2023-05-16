@@ -63,11 +63,6 @@
                                 <label>Kabupaten<span class="text-danger">*</span></label>
                                 <select class="browser-default custom-select select2bs4" name="kabupaten_id"
                                     id="kabupaten_id">
-                                    <option selected disabled>::Pilih Kabupaten::</option>
-                                    @foreach ($kabupaten as $item)
-                                        <option value="{{ $item->id }}">
-                                            {{ $item->kabupaten }}</option>
-                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -189,6 +184,19 @@
                 $("#modelHeading").html("Tambah Kecamatan");
                 $("#ajaxModel").modal("show");
                 $("#deleteKec").modal("show");
+                $.ajax({
+                    url: "{{ url('kabupaten/get-kabupaten') }}",
+                    type: "POST",
+                    dataType: 'json',
+                    success: function(result) {
+                        $('#kabupaten_id').html(
+                            '<option value="">:::Pilih Kabupaten:::</option>');
+                        $.each(result, function(key, value) {
+                            $("#kabupaten_id").append('<option value="' + value
+                                .id + '">' + value.kabupaten + '</option>');
+                        });
+                    }
+                });
             });
 
             $("body").on("click", ".editKec", function() {
@@ -198,6 +206,23 @@
                     $("#saveBtn").val("edit-kecamatan");
                     $("#ajaxModel").modal("show");
                     $("#kecamatan_id").val(data.id);
+                    $.ajax({
+                        url: "{{ url('kabupaten/get-kabupaten') }}",
+                        type: "POST",
+                        dataType: 'json',
+                        success: function(result) {
+                            $('#kabupaten_id').html(
+                                '<option value="">:::Pilih Kabupaten:::</option>');
+                            $.each(result, function(key, value) {
+                                $("#kabupaten_id").append('<option value="' +
+                                    value.id + '">' + value.kabupaten +
+                                    '</option>');
+                                $('#kabupaten_id option[value=' +
+                                    data.kabupaten_id + ']').prop(
+                                    'selected', true);
+                            });
+                        }
+                    });
                     $("#kabupaten_id").val(data.kabupaten_id);
                     $("#kode_wilayah").val(data.kode_wilayah);
                     $("#nama_kecamatan").val(data.kecamatan);

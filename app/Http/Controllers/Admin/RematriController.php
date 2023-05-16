@@ -109,7 +109,6 @@ class RematriController extends Controller
         return redirect()->route('rematri.index')->with('success', json_encode(['success' => 'Rematri saved successfully.']));
     }
 
-
     public function edit($id)
     {
         $menu = 'Edit Data Rematri';

@@ -87,7 +87,7 @@
     </li>
 @elseif (Auth::user()->role == 2)
     <li
-        class="nav-item {{ request()->segment(1) == 'users-sekolah' || request()->segment(1) == 'users-sekolah' || request()->segment(1) == 'sekolah-binaan' || request()->segment(1) == 'posyandu-binaan' ? 'menu-open' : '' }}">
+        class="nav-item {{ request()->segment(1) == 'users-posyandu' || request()->segment(1) == 'users-sekolah' || request()->segment(1) == 'sekolah-binaan' || request()->segment(1) == 'posyandu-binaan' ? 'menu-open' : '' }}">
         <a href="#"
             class="nav-link {{ request()->segment(1) == 'users-posyandu' || request()->segment(1) == 'users-posyandu' || request()->segment(1) == 'sekolah-binaan' || request()->segment(1) == 'posyandu-binaan' ? 'active' : '' }}">
             <i class="nav-icon fas fa-database"></i>
@@ -181,6 +181,14 @@
                 </a>
             </li>
         </ul>
+    </li>
+    <li class="nav-item">
+        <a href="{{ route('sesi.index') }}" class="nav-link {{ request()->segment(1) == 'sesi' ? 'active' : '' }}">
+            <i class="nav-icon fas fa-capsules"></i>
+            <p>
+                Sesi TTD
+            </p>
+        </a>
     </li>
 @elseif (Auth::user()->role == 4)
     <li

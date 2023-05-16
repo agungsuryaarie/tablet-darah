@@ -31,8 +31,10 @@
                                         <th style="width:5%">No</th>
                                         <th style="width:8%">NPSN</th>
                                         <th>Sekolah</th>
+                                        <th style="width:12%">Jenjang</th>
+                                        <th style="width:10%">Status</th>
                                         <th style="width:12%">Kecamatan</th>
-                                        <th style="width:12%">Puskesmas</th>
+                                        <th style="width:15%">Puskesmas</th>
                                         <th class="text-center" style="width: 10%">Action</th>
                                     </tr>
                                 </thead>
@@ -62,19 +64,16 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Kecamatan<span class="text-danger">*</span></label>
-                                <select class="browser-default custom-select select2bs4" name="kecamatan_id" id="kecamatan">
-                                    <option selected disabled>::Pilih Kecamatan::</option>
-                                    @foreach ($kecamatan as $item)
-                                        <option value="{{ $item->id }}">
-                                            {{ $item->kecamatan }}</option>
-                                    @endforeach
+                                <select class="browser-default custom-select select2bs4" name="kecamatan_id"
+                                    id="kecamatan_id">
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Puskesmas<span class="text-danger">*</span></label>
-                                <select class="browser-default custom-select select2bs4" name="puskesmas_id" id="puskesmas">
+                                <select class="browser-default custom-select select2bs4" name="puskesmas_id"
+                                    id="puskesmas_id">
                                 </select>
                             </div>
                         </div>
@@ -96,11 +95,6 @@
                             <div class="col-sm-12">
                                 <label>Jenjang<span class="text-danger">*</span></label>
                                 <select class="form-control select2bs4" id="jenjang" name="jenjang" style="width: 100%;">
-                                    <option selected disabled>::Pilih Jenjang::</option>
-                                    <option value="SD">SD</option>
-                                    <option value="SMP">SMP</option>
-                                    <option value="SMA">SMA</option>
-                                    <option value="SMK">SMK</option>
                                 </select>
                             </div>
                         </div>
@@ -108,9 +102,6 @@
                             <div class="col-sm-12">
                                 <label>Status<span class="text-danger">*</span></label>
                                 <select class="form-control select2bs4" id="status" name="status" style="width: 100%;">
-                                    <option selected disabled>::Pilih Status::</option>
-                                    <option value="N">Negeri</option>
-                                    <option value="S">Swasta</option>
                                 </select>
                             </div>
                         </div>
@@ -206,6 +197,14 @@
                         name: "sekolah",
                     },
                     {
+                        data: "jenjang",
+                        name: "jenjang",
+                    },
+                    {
+                        data: "status",
+                        name: "status",
+                    },
+                    {
                         data: "kecamatan",
                         name: "kecamatan",
                     },
@@ -229,6 +228,45 @@
                 $("#modelHeading").html("Tambah Sekolah");
                 $("#ajaxModel").modal("show");
                 $("#deleteSekolah").modal("show");
+                $.ajax({
+                    url: "{{ url('kecamatan/get-kecamatan') }}",
+                    type: "POST",
+                    dataType: 'json',
+                    success: function(result) {
+                        $('#kecamatan_id').html(
+                            '<option value="">:::Pilih Kecamatan:::</option>');
+                        $.each(result, function(key, value) {
+                            $("#kecamatan_id").append('<option value="' + value
+                                .id + '">' + value.kecamatan + '</option>');
+                        });
+                    }
+                });
+                $.ajax({
+                    url: "{{ url('sekolah/get-jenjang') }}",
+                    type: "POST",
+                    dataType: 'json',
+                    success: function(result) {
+                        $('#jenjang').html(
+                            '<option value="">:::Pilih Jenjang:::</option>');
+                        $.each(result, function(key, value) {
+                            $("#jenjang").append('<option value="' + value
+                                .nama + '">' + value.nama + '</option>');
+                        });
+                    }
+                });
+                $.ajax({
+                    url: "{{ url('sekolah/get-status') }}",
+                    type: "POST",
+                    dataType: 'json',
+                    success: function(result) {
+                        $('#status').html(
+                            '<option value="">:::Pilih Status:::</option>');
+                        $.each(result, function(key, value) {
+                            $("#status").append('<option value="' + value
+                                .kode + '">' + value.status + '</option>');
+                        });
+                    }
+                });
             });
 
             $("body").on("click", ".editSekolah", function() {
@@ -240,9 +278,116 @@
                     $("#sekolah_id").val(data.id);
                     $("#npsn").val(data.npsn);
                     $("#nama_sekolah").val(data.sekolah);
-                    $("#jenjang").val(data.jenjang);
-                    $("#status").val(data.status);
+                    $.ajax({
+                        url: "{{ url('sekolah/get-jenjang') }}",
+                        type: "POST",
+                        dataType: 'json',
+                        success: function(result) {
+                            $('#jenjang').html(
+                                '<option value="">:::Pilih Jenjang:::</option>');
+                            $.each(result, function(key, value) {
+                                $("#jenjang").append('<option value="' + value
+                                    .nama + '">' + value.nama + '</option>');
+                            });
+                            $('#jenjang option[value=' +
+                                data.jenjang + ']').prop(
+                                'selected', true);
+                        }
+                    });
+                    $.ajax({
+                        url: "{{ url('sekolah/get-status') }}",
+                        type: "POST",
+                        dataType: 'json',
+                        success: function(result) {
+                            $('#status').html(
+                                '<option value="">:::Pilih Status:::</option>');
+                            $.each(result, function(key, value) {
+                                $("#status").append('<option value="' + value
+                                    .kode + '">' + value.status +
+                                    '</option>');
+                            });
+                            $('#status option[value=' +
+                                data.status + ']').prop(
+                                'selected', true);
+                        }
+                    });
                     $("#alamat").val(data.alamat_jalan);
+                    $.ajax({
+                        url: "{{ url('kecamatan/get-kecamatan') }}",
+                        type: "POST",
+                        dataType: 'json',
+                        success: function(result) {
+                            $('#kecamatan_id').html(
+                                '<option value="">:::Pilih Kecamatan:::</option>');
+                            $.each(result, function(key, value) {
+                                $("#kecamatan_id").append('<option value="' +
+                                    value.id + '">' + value.kecamatan +
+                                    '</option>');
+                                $('#kecamatan_id option[value=' +
+                                    data.kecamatan_id + ']').prop(
+                                    'selected', true);
+                            });
+                        }
+                    });
+                    $(document).ready(function() {
+                        $.ajax({
+                            url: "{{ url('puskesmas/get-puskes') }}",
+                            type: "POST",
+                            data: {
+                                kecamatan_id: data.kecamatan_id,
+                                _token: '{{ csrf_token() }}'
+                            },
+                            dataType: 'json',
+                            success: function(result) {
+                                $('#puskesmas_id').html(
+                                    '<option value="">::Pilih Puskesmas::</option>'
+                                );
+                                $.each(result, function(key,
+                                    value) {
+                                    $("#puskesmas_id")
+                                        .append(
+                                            '<option value="' +
+                                            value
+                                            .id + '">' +
+                                            value
+                                            .puskesmas +
+                                            '</option>');
+                                    $('#puskesmas_id option[value=' +
+                                            data.puskesmas_id + ']')
+                                        .prop(
+                                            'selected', true);
+                                });
+                            }
+                        });
+                    });
+                });
+            });
+
+            $(document).ready(function() {
+                $('#kecamatan_id').on('change', function() {
+                    var idKec = this.value;
+                    $("#puskesmas_id").html('');
+                    $.ajax({
+                        url: "{{ url('puskesmas/get-puskes') }}",
+                        type: "POST",
+                        data: {
+                            kecamatan_id: idKec,
+                            _token: '{{ csrf_token() }}'
+                        },
+                        dataType: 'json',
+                        success: function(result) {
+                            $('#puskesmas_id').html(
+                                '<option value="">::Pilih Puskesmas::</option>'
+                            );
+                            $.each(result, function(key, value) {
+                                $("#puskesmas_id").append(
+                                    '<option value="' + value
+                                    .id + '">' + value
+                                    .puskesmas +
+                                    '</option>');
+                            });
+                        }
+                    });
                 });
             });
 
@@ -279,6 +424,7 @@
                     },
                 });
             });
+            
             $("body").on("click", ".deleteSekolah", function() {
                 var sekolah_id = $(this).data("id");
                 $("#modelHeadingHps").html("Hapus");
@@ -319,30 +465,7 @@
                     });
                 });
             });
-            $(document).ready(function() {
-                $('#kecamatan').on('change', function() {
-                    var idKec = this.value;
-                    $("#puskesmas").html('');
-                    $.ajax({
-                        url: "{{ route('userpuskes.getpuskes') }}",
-                        type: "POST",
-                        data: {
-                            kecamatan_id: idKec,
-                            _token: '{{ csrf_token() }}'
-                        },
-                        dataType: 'json',
-                        success: function(result) {
-                            $('#puskesmas').html(
-                                '<option value="">::Pilih Puskesmas::</option>');
-                            $.each(result.puskesmas, function(key, value) {
-                                $("#puskesmas").append('<option value="' + value
-                                    .id + '">' + value.puskesmas +
-                                    '</option>');
-                            });
-                        }
-                    });
-                });
-            });
+
             $('.select2bs4').select2({
                 theme: 'bootstrap4'
             })

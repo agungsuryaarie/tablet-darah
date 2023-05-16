@@ -31,6 +31,7 @@
                                         <th style="width:5%">No</th>
                                         <th style="width:15%">NIK</th>
                                         <th>Nama</th>
+                                        <th>Puskesmas</th>
                                         <th style="width:20%">Email</th>
                                         <th class="text-center" style="width:8%">Foto</th>
                                         <th class="text-center" style="width: 10%">Action</th>
@@ -65,12 +66,7 @@
                                     <div class="form-group">
                                         <label>Kecamatan<span class="text-danger">*</span></label>
                                         <select class="browser-default custom-select select2bs4" name="kecamatan_id"
-                                            id="kecamatan">
-                                            <option selected disabled>::Pilih Kecamatan::</option>
-                                            @foreach ($kecamatan as $item)
-                                                <option value="{{ $item->id }}">
-                                                    {{ $item->kecamatan }}</option>
-                                            @endforeach
+                                            id="kecamatan_id">
                                         </select>
                                     </div>
                                 </div>
@@ -78,7 +74,7 @@
                                     <div class="form-group">
                                         <label>Puskesmas<span class="text-danger">*</span></label>
                                         <select class="browser-default custom-select select2bs4" name="puskesmas_id"
-                                            id="puskesmas">
+                                            id="puskesmas_id">
                                         </select>
                                     </div>
                                 </div>
@@ -215,6 +211,10 @@
                         name: 'nama'
                     },
                     {
+                        data: 'puskesmas',
+                        name: 'puskesmas'
+                    },
+                    {
                         data: 'email',
                         name: 'email'
                     },
@@ -238,6 +238,19 @@
                 $("#modelHeading").html("Tambah User Puskesmas");
                 $("#ajaxModel").modal("show");
                 $("#deleteUserpuskes").modal("show");
+                $.ajax({
+                    url: "{{ url('kecamatan/get-kecamatan') }}",
+                    type: "POST",
+                    dataType: 'json',
+                    success: function(result) {
+                        $('#kecamatan_id').html(
+                            '<option value="">:::Pilih Kecamatan:::</option>');
+                        $.each(result, function(key, value) {
+                            $("#kecamatan_id").append('<option value="' + value
+                                .id + '">' + value.kecamatan + '</option>');
+                        });
+                    }
+                });
             });
 
             $("body").on("click", ".editUserpuskes", function() {
@@ -248,7 +261,45 @@
                     $("#ajaxModel").modal("show");
                     $("#userpuskes_id").val(data.id);
                     $("#kabupaten_id").val(data.kabupaten_id);
-                    $("#kecamatan_id").val(data.kecamatan_id);
+                    $.ajax({
+                        url: "{{ url('kecamatan/get-kecamatan') }}",
+                        type: "POST",
+                        dataType: 'json',
+                        success: function(result) {
+                            $('#kecamatan_id').html(
+                                '<option value="">:::Pilih Kecamatan:::</option>');
+                            $.each(result, function(key, value) {
+                                $("#kecamatan_id").append('<option value="' +
+                                    value.id + '">' + value.kecamatan +
+                                    '</option>');
+                                $('#kecamatan_id option[value=' +
+                                    data.kecamatan_id + ']').prop(
+                                    'selected', true);
+                            });
+                        }
+                    });
+                    $.ajax({
+                        url: "{{ url('puskesmas/get-puskes') }}",
+                        type: "POST",
+                        data: {
+                            kecamatan_id: data.kecamatan_id,
+                            _token: '{{ csrf_token() }}'
+                        },
+                        dataType: 'json',
+                        success: function(result) {
+                            $('#puskesmas_id').html(
+                                '<option value="">::Pilih Puskesmas::</option>');
+                            $.each(result, function(key, value) {
+                                $("#puskesmas_id").append('<option value="' +
+                                    value
+                                    .id + '">' + value.puskesmas +
+                                    '</option>');
+                                $('#puskesmas_id option[value=' +
+                                    data.puskesmas_id + ']').prop(
+                                    'selected', true);
+                            });
+                        }
+                    });
                     $("#nik").val(data.nik);
                     $("#nama").val(data.nama);
                     $("#nohp").val(data.nohp);
@@ -332,11 +383,11 @@
             })
         });
         $(document).ready(function() {
-            $('#kecamatan').on('change', function() {
+            $('#kecamatan_id').on('change', function() {
                 var idKec = this.value;
-                $("#puskesmas").html('');
+                $("#puskesmas_id").html('');
                 $.ajax({
-                    url: "{{ route('userpuskes.getpuskes') }}",
+                    url: "{{ url('puskesmas/get-puskes') }}",
                     type: "POST",
                     data: {
                         kecamatan_id: idKec,
@@ -344,9 +395,10 @@
                     },
                     dataType: 'json',
                     success: function(result) {
-                        $('#puskesmas').html('<option value="">::Pilih Puskesmas::</option>');
-                        $.each(result.puskesmas, function(key, value) {
-                            $("#puskesmas").append('<option value="' + value
+                        $('#puskesmas_id').html(
+                            '<option value="">::Pilih Puskesmas::</option>');
+                        $.each(result, function(key, value) {
+                            $("#puskesmas_id").append('<option value="' + value
                                 .id + '">' + value.puskesmas + '</option>');
                         });
                     }

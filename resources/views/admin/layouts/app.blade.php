@@ -17,8 +17,7 @@
                 <div class="user-panel mt-3 pb-3 mb-1 d-flex">
                     <div class="image mt-2">
                         @if (Auth::user()->foto == null)
-                            <img src="{{ url('storage/foto-user/blank.png') }}" class="img-circle elevation-2"
-                                alt="User Image">
+                            <img src="{{ url('blank.png') }}" class="img-circle elevation-2" alt="User Image">
                         @else
                             <img src="{{ url('storage/foto-user/' . Auth::user()->foto) }}"
                                 class="img-circle elevation-2" alt="User Image">

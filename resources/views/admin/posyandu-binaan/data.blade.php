@@ -29,8 +29,11 @@
                                 <thead>
                                     <tr>
                                         <th style="width:5%">No</th>
+                                        <th style="width:12%">Kode Posyandu</th>
                                         <th>Posyandu</th>
+                                        <th>Puskesmas</th>
                                         <th style="width:12%">Desa/Kelurahan</th>
+                                        <th style="width:12%">Kecamatan</th>
                                         <th class="text-center" style="width: 10%">Action</th>
                                     </tr>
                                 </thead>
@@ -60,13 +63,15 @@
                         <div class="form-group">
                             <div class="col-sm-12">
                                 <label>Desa<span class="text-danger">*</span></label>
-                                <select class="browser-default custom-select select2bs4" name="desa_id" id="desa">
-                                    <option selected disabled>::Pilih Desa::</option>
-                                    @foreach ($desa as $item)
-                                        <option value="{{ $item->id }}">
-                                            {{ $item->desa }}</option>
-                                    @endforeach
+                                <select class="browser-default custom-select select2bs4" name="desa_id" id="desa_id">
                                 </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Kode Posyandu<span class="text-danger"> *</span></label>
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control" id="kode_posyandu" name="kode_posyandu"
+                                    placeholder="Kode Posyandu">
                             </div>
                         </div>
                         <div class="form-group">
@@ -145,12 +150,24 @@
                         name: "DT_RowIndex",
                     },
                     {
+                        data: "kode_posyandu",
+                        name: "kode_posyandu",
+                    },
+                    {
                         data: "posyandu",
                         name: "posyandu",
                     },
                     {
+                        data: "puskesmas",
+                        name: "puskesmas",
+                    },
+                    {
                         data: "desa",
                         name: "desa",
+                    },
+                    {
+                        data: "kecamatan",
+                        name: "kecamatan",
                     },
                     {
                         data: "action",
@@ -168,16 +185,55 @@
                 $("#modelHeading").html("Tambah Posyandu");
                 $("#ajaxModel").modal("show");
                 $("#deletePos").modal("show");
+                $.ajax({
+                    url: "{{ url('desa/get-desa') }}",
+                    type: "POST",
+                    data: {
+                        kecamatan_id: {{ Auth::user()->kecamatan_id }},
+                        _token: '{{ csrf_token() }}'
+                    },
+                    dataType: 'json',
+                    success: function(result) {
+                        $('#desa_id').html(
+                            '<option value="">:::Pilih Desa:::</option>');
+                        $.each(result, function(key, value) {
+                            $("#desa_id").append('<option value="' +
+                                value.id + '">' + value.desa +
+                                '</option>');
+                        });
+                    }
+                });
             });
 
-            $("body").on("click", ".editPosB", function() {
+            $("body").on("click", ".editPos", function() {
                 var posyandu_id = $(this).data("id");
                 $.get("{{ route('posyandu-binaan.index') }}" + "/" + posyandu_id + "/edit", function(data) {
                     $("#modelHeading").html("Edit Posyandu");
                     $("#saveBtn").val("edit-posyandu");
                     $("#ajaxModel").modal("show");
+                    $("#kode_posyandu").val(data.kode_posyandu);
                     $("#posyandu_id").val(data.id);
-                    $("#desa_id").val(data.desa_id);
+                    $.ajax({
+                        url: "{{ url('desa/get-desa') }}",
+                        type: "POST",
+                        data: {
+                            kecamatan_id: data.kecamatan_id,
+                            _token: '{{ csrf_token() }}'
+                        },
+                        dataType: 'json',
+                        success: function(result) {
+                            $('#desa_id').html(
+                                '<option value="">:::Pilih Desa:::</option>');
+                            $.each(result, function(key, value) {
+                                $("#desa_id").append('<option value="' +
+                                    value.id + '">' + value.desa +
+                                    '</option>');
+                                $('#desa_id option[value=' +
+                                    data.desa_id + ']').prop(
+                                    'selected', true);
+                            });
+                        }
+                    });
                     $("#nama_posyandu").val(data.posyandu);
                 });
             });
@@ -215,7 +271,7 @@
                     },
                 });
             });
-            $("body").on("click", ".deletePosB", function() {
+            $("body").on("click", ".deletePos", function() {
                 var posyandu_id = $(this).data("id");
                 $("#modelHeadingHps").html("Hapus");
                 $("#ajaxModelHps").modal("show");
