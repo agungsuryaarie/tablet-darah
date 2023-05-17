@@ -27,42 +27,46 @@
                         </div>
                         <div class="card-body">
                             <div class="row">
-
-                                @foreach ($sesi as $item)
-                                    <div class="col-sm-4 mb-3">
-                                        <a href="{{ route('sesi.rematri', $item->id) }}">
-                                            <div class="position-relative p-3 bg-blue rounded" style="height: 180px">
-                                                <div class="ribbon-wrapper ribbon-lg">
-                                                    <div class="ribbon bg-success">
-                                                        Berlangsung
+                                @if ($sesi)
+                                    @foreach ($sesi as $item)
+                                        <div class="col-sm-4 mb-3">
+                                            <a href="{{ route('sesi.rematri', $item->id) }}">
+                                                <div class="position-relative p-3 bg-blue rounded" style="height: 180px">
+                                                    <div class="ribbon-wrapper ribbon-lg">
+                                                        <div class="ribbon bg-success">
+                                                            Berlangsung
+                                                        </div>
+                                                    </div>
+                                                    <div class="row p-3">
+                                                        <div class="col-12 text-center">
+                                                            <h5>{{ $item->sekolah->sekolah }}</h5>
+                                                        </div>
+                                                        <div class="col-6 text-center text-sm mt-2">
+                                                            Kelas : {{ $item->kelas->nama }} {{ $item->jurusan->nama }}
+                                                            {{ $item->kelas->ruangan }}
+                                                        </div>
+                                                        <div class="col-6 text-center text-sm mt-2">
+                                                            Sesi : {{ $item->nama }}
+                                                        </div>
+                                                        <div class="col-6 text-center text-sm mt-2">
+                                                            Jlh Peserta : {{ $rematri }}
+                                                        </div>
+                                                        <div class="col-6 text-center text-sm mt-2">
+                                                            Jlh Minum : {{ $rematri }}/50
+                                                        </div>
+                                                        <div class="col-12 text-center mt-2">
+                                                            <div>{{ $item->created_at->isoFormat('D MMMM Y') }}</div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="row p-3">
-                                                    <div class="col-12 text-center">
-                                                        <h5>{{ $item->sekolah->sekolah }}</h5>
-                                                    </div>
-                                                    <div class="col-6 text-center text-sm mt-2">
-                                                        Kelas : {{ $item->kelas->nama }} {{ $item->jurusan->nama }}
-                                                        {{ $item->kelas->ruangan }}
-                                                    </div>
-                                                    <div class="col-6 text-center text-sm mt-2">
-                                                        Sesi : {{ $item->nama }}
-                                                    </div>
-                                                    <div class="col-6 text-center text-sm mt-2">
-                                                        Jlh Peserta : 10 Rematri
-                                                    </div>
-                                                    <div class="col-6 text-center text-sm mt-2">
-                                                        Jlh Minum : 0/10
-                                                    </div>
-                                                    <div class="col-12 text-center mt-2">
-                                                        <div>{{ $item->created_at->isoFormat('D MMMM Y') }}</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </a>
+                                            </a>
+                                        </div>
+                                    @endforeach
+                                @else
+                                    <div class="card-body text-center">
+                                        <h6>Sesi tidak ditemukan . . .</h6>
                                     </div>
-                                @endforeach
-
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -70,7 +74,6 @@
             </div>
         </div>
     </section>
-
     <div class="modal fade" id="ajaxModel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -210,5 +213,8 @@
                 },
             });
         });
+        $('.select2bs4').select2({
+            theme: 'bootstrap4'
+        })
     </script>
 @endsection

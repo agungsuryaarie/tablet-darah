@@ -17,7 +17,11 @@ class SesiController extends Controller
     {
         $menu = 'Sesi';
         $sesi = Sesi::where('sekolah_id', Auth::user()->sekolah_id)->latest()->get();
-        return view('admin.sesi.data', compact('menu', 'sesi'));
+        foreach ($sesi as $s) {
+            $kelas = $s->kelas_id;
+        }
+        $rematri = Rematri::where('kelas_id', $kelas)->count();
+        return view('admin.sesi.data', compact('menu', 'sesi', 'rematri'));
     }
 
     public function store(Request $request)
@@ -38,7 +42,7 @@ class SesiController extends Controller
             return response()->json(['errors' => $validator->errors()->all()]);
         }
 
-        $sesi = Sesi::updateOrCreate(
+        Sesi::updateOrCreate(
             [
                 'id' => $request->sesi_id
             ],
@@ -51,9 +55,18 @@ class SesiController extends Controller
                 'kelas_id' => $request->kelas_id,
             ]
         );
+        // $rematri = Rematri::where('kelas_id', $request->kelas_id)->first();
+        $sesiid  = Sesi::orderBy('id', 'DESC')->first();
+        SesiRematri::updateOrCreate(
+            [
+                'id' => $request->sesi_id
+            ],
+            [
 
-        $rematri = Rematri::where('kelas_id', $request->kelas_id)->first();
-
+                'sesi_id' => $sesiid->id,
+                'kelas_id' => $sesiid->kelas_id,
+            ]
+        );
 
         return response()->json(['success' => 'Sesi saved successfully.']);
     }
@@ -63,25 +76,23 @@ class SesiController extends Controller
     {
         $menu = 'Sesi';
         $sesi = Sesi::where('id', $id)->first();
-        $data = Sesi::with('rematri')->where('id', $id)->latest()->get();
-        dd($data);
+        $kelas = $sesi->kelas_id;
+        $rematri = Rematri::where('kelas_id', $kelas)->count();
+        // $data = Sesi::with('rematri')->where('id', $id)->latest()->get();
+        // dd($data);
         if ($request->ajax()) {
-            $data = Sesi::with('rematri')->where('id', $id)->latest()->get();
+            $data = Rematri::get();
             return Datatables::of($data)
                 ->addIndexColumn()
-                ->addColumn('kelas', function ($data) {
-                    return $data->kelas->nama . ' ' . $data->jurusan->nama . ' ' . $data->kelas->ruangan;
-                })
                 ->addColumn('action', function ($row) {
 
-                    return '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs absenRematri"><i class="fab fa-autoprefixer"></i></a>';
+                    return '<center><a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs absenRematri"><i class="fa fa-camera"></i></a></center>';
                 })
-                ->rawColumns(['kecamatan', 'action'])
+                ->rawColumns(['action'])
                 ->make(true);
         }
-        return view('admin.sesi.rematri', compact('menu', 'sesi'));
+        return view('admin.sesi.rematri', compact('menu', 'sesi', 'rematri'));
     }
-
     public function ttd($id)
     {
         $menu = 'Sesi TTD';

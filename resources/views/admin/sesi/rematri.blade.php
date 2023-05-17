@@ -21,7 +21,12 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="card">
-                        <div class="card-body">
+                        <div class="card-header primary">
+                            <div class="float-left mb-0">
+                                <h6>Detail Sesi</h6>
+                            </div>
+                        </div>
+                        <div class="table-responsive table-hover">
                             <table class="table">
                                 <tbody>
                                     <tr>
@@ -45,12 +50,16 @@
                                         <td>:</td>
                                         <td>{{ $sesi->created_at->isoFormat('D MMMM Y') }}</td>
                                     </tr>
+                                    <tr>
+                                        <td>Jumlah Rematri</td>
+                                        <td>:</td>
+                                        <td>{{ $rematri }}</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
-
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
@@ -58,9 +67,9 @@
                                 <thead>
                                     <tr>
                                         <th style="width:5%">No</th>
-                                        <th style="width:17%">NIK</th>
-                                        <th style="width:17%">Nama</th>
-                                        <th class="text-center" style="width: 10%">Action</th>
+                                        <th style="width:15%">NIK</th>
+                                        <th>Nama</th>
+                                        <th class="text-center" style="width: 5%">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>

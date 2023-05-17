@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Kelas extends Model
 {
@@ -15,5 +16,18 @@ class Kelas extends Model
     public function jurusan()
     {
         return $this->belongsTo(Jurusan::class);
+    }
+    public function rematri()
+    {
+        return $this->hasMany(Rematri::class);
+    }
+    public function jumlahrematri()
+    {
+        $rematri = DB::table('rematri')->count();
+        return $rematri;
+    }
+    public function sesi()
+    {
+        return $this->belongsTo(Sesi::class);
     }
 }

@@ -11,5 +11,5 @@ class SesiRematri extends Model
 
     protected $table = "sesi_rematri";
 
-    protected $fillable = ['rematri_id', 'sesi_id'];
+    protected $fillable = ['sesi_id', 'kelas_id'];
 }

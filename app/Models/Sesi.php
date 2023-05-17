@@ -27,6 +27,10 @@ class Sesi extends Model
         return $this->belongsTo(Jurusan::class);
     }
 
+    // public function kelas()
+    // {
+    //     return $this->hasMany(Kelas::class);
+    // }
     public function kelas()
     {
         return $this->belongsTo(Kelas::class);
@@ -34,6 +38,6 @@ class Sesi extends Model
 
     public function rematri()
     {
-        return $this->belongsToMany(Rematri::class)->as('rematri');
+        return $this->belongsTo(Rematri::class);
     }
 }

@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('sesi_rematri', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('rematri_id');
-            $table->foreign('rematri_id')->references('id')->on('rematri');
             $table->unsignedBigInteger('sesi_id');
+            $table->unsignedBigInteger('kelas_id');
             $table->foreign('sesi_id')->references('id')->on('sesi');
             $table->timestamps();
         });
