@@ -53,7 +53,7 @@
                                     <tr>
                                         <td>Jumlah Rematri</td>
                                         <td>:</td>
-                                        <td>{{ $rematri }} orang</td>
+                                        <td>{{ $count }} orang</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -156,7 +156,7 @@
 
             $("body").on("click", ".absenRematri", function() {
                 var sesi_id = {{ $sesi->id }};
-                var rematri_id = $(this).data("id");
+                var rematri_id = {{ $rematri->id }};
                 var url = "{{ url('sesi/ttd') }}" + "/" + sesi_id + "/" + rematri_id;
                 window.location = url;
             });

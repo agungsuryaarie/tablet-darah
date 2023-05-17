@@ -74,11 +74,18 @@ class SesiController extends Controller
         $menu = 'Sesi';
         $sesi = Sesi::where('id', $id)->first();
         $kelas = $sesi->kelas_id;
-        $rematri = Rematri::where('kelas_id', $kelas)->count();
-        // $data = Sesi::with('rematri')->where('id', $id)->latest()->get();
+        $count = Rematri::where('kelas_id', $kelas)->count();
+        $rematri = Rematri::where('kelas_id', $kelas)->first();
+        // $data = Rematri::where('rematri.kelas_id', $sesi->kelas_id)
+        //     ->join('foto_sesi', 'rematri.id', '=', 'foto_sesi.rematri_id')
+        //     ->get();
         // dd($data);
         if ($request->ajax()) {
-            $data = Rematri::where('kelas_id', $sesi->kelas_id)->get();
+            // $data = Rematri::where('kelas_id', $sesi->kelas_id)
+            //     ->get();
+            $data = Rematri::where('rematri.kelas_id', $sesi->kelas_id)
+                ->join('foto_sesi', 'rematri.id', '=', 'foto_sesi.rematri_id')
+                ->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -87,12 +94,12 @@ class SesiController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         }
-        return view('admin.sesi.rematri', compact('menu', 'sesi', 'rematri'));
+        return view('admin.sesi.rematri', compact('menu', 'sesi', 'rematri', 'count'));
     }
     public function ttd($id, $ids)
     {
         $menu = 'Foto';
-        $rematri = Rematri::where('id', $id)->first();
+        $rematri = Rematri::where('id', $ids)->first();
         $sesi = Sesi::where('id', $id)->first();
         return view('admin.sesi.ttd', compact('menu', 'rematri', 'sesi'));
     }
@@ -117,10 +124,10 @@ class SesiController extends Controller
             'sekolah_id' => Auth::user()->sekolah_id,
             'kelas_id' => $request->kelas_id,
             'sesi_id' => $request->sesi_id,
-            'rematri_id' => $request->sesi_id,
+            'rematri_id' => $request->rematri_id,
             'foto' => $img->hashName(),
         ]);
         //redirect to index
-        return redirect()->route('sesi.rematri', $request->sesi_id)->with(['status' => 'Foto Berhasil Diupdate!']);
+        return redirect()->route('sesi.rematri', $request->sesi_id)->with(['status' => 'Foto uploaded successfully.']);
     }
 }

@@ -58,10 +58,7 @@ class Rematri extends Model
     {
         return $this->belongsTo(Desa::class);
     }
-    public function fotosesi()
-    {
-        return $this->hasMany(FotoSesi::class);
-    }
+
     // public function sesi()
     // {
     //     return $this->belongsToMany(Sesi::class);
