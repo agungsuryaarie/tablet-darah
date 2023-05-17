@@ -9,5 +9,7 @@ class SesiRematri extends Model
 {
     use HasFactory;
 
-    
+    protected $table = "sesi_rematri";
+
+    protected $fillable = ['rematri_id', 'sesi_id'];
 }

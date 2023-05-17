@@ -37,6 +37,7 @@ class SesiController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()->all()]);
         }
+
         $sesi = Sesi::updateOrCreate(
             [
                 'id' => $request->sesi_id
@@ -51,13 +52,7 @@ class SesiController extends Controller
             ]
         );
 
-        $rematri = Rematri::where('kelas_id', $request->kelas_id)->get();
-
-        foreach ($rematri as $item) {
-            SesiRematri::create([
-                'name' => $item,
-            ]);
-        }
+        $rematri = Rematri::where('kelas_id', $request->kelas_id)->first();
 
 
         return response()->json(['success' => 'Sesi saved successfully.']);
