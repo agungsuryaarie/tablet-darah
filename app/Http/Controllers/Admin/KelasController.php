@@ -57,6 +57,7 @@ class KelasController extends Controller
                 'id' => $request->kelas_id
             ],
             [
+                'sekolah_id' => Auth::user()->sekolah_id,
                 'nama' => $request->nama,
                 'jurusan_id' => $request->jurusan_id,
                 'ruangan' => $request->ruangan,
