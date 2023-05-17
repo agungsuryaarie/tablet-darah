@@ -31,4 +31,9 @@ class Sesi extends Model
     {
         return $this->belongsTo(Kelas::class);
     }
+
+    public function rematri()
+    {
+        return $this->belongsToMany(Rematri::class)->as('rematri');
+    }
 }

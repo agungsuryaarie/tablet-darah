@@ -147,7 +147,7 @@
 
             $("body").on("click", ".absenRematri", function() {
                 var rematri_id = $(this).data("id");
-                var url = "{{ url('rematri/edit') }}" + "/" + rematri_id;
+                var url = "{{ url('sesi/ttd') }}" + "/" + rematri_id;
                 window.location = url;
             });
 

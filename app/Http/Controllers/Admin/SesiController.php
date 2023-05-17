@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Rematri;
 use App\Models\Sesi;
+use App\Models\SesiRematri;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\Datatables\Datatables;
@@ -36,7 +37,7 @@ class SesiController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()->all()]);
         }
-        Sesi::updateOrCreate(
+        $sesi = Sesi::updateOrCreate(
             [
                 'id' => $request->sesi_id
             ],
@@ -49,6 +50,16 @@ class SesiController extends Controller
                 'kelas_id' => $request->kelas_id,
             ]
         );
+
+        $rematri = Rematri::where('kelas_id', $request->kelas_id)->get();
+
+        foreach ($rematri as $item) {
+            SesiRematri::create([
+                'name' => $item,
+            ]);
+        }
+
+
         return response()->json(['success' => 'Sesi saved successfully.']);
     }
 
@@ -57,19 +68,28 @@ class SesiController extends Controller
     {
         $menu = 'Sesi';
         $sesi = Sesi::where('id', $id)->first();
+        $data = Sesi::with('rematri')->where('id', $id)->latest()->get();
+        dd($data);
         if ($request->ajax()) {
-            $data = Rematri::where('kelas_id', $sesi->kelas_id)->latest()->get();
+            $data = Sesi::with('rematri')->where('id', $id)->latest()->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('kelas', function ($data) {
                     return $data->kelas->nama . ' ' . $data->jurusan->nama . ' ' . $data->kelas->ruangan;
                 })
                 ->addColumn('action', function ($row) {
+
                     return '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs absenRematri"><i class="fab fa-autoprefixer"></i></a>';
                 })
                 ->rawColumns(['kecamatan', 'action'])
                 ->make(true);
         }
         return view('admin.sesi.rematri', compact('menu', 'sesi'));
+    }
+
+    public function ttd($id)
+    {
+        $menu = 'Sesi TTD';
+        return view('admin.sesi.ttd', compact('menu'));
     }
 }

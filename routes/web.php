@@ -137,6 +137,7 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
 
         Route::resource('sesi', SesiController::class);
         Route::get('sesi/rematri/{id}', [SesiController::class, 'rematri'])->name('sesi.rematri');
+        Route::get('sesi/ttd/{id}', [SesiController::class, 'ttd'])->name('sesi.ttd');
     });
 
     Route::group(['middleware' => ['checkUser:4']], function () {
