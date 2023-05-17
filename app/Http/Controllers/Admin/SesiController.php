@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\FotoSesi;
 use App\Models\Rematri;
 use App\Models\Sesi;
 use App\Models\SesiRematri;
@@ -17,11 +18,7 @@ class SesiController extends Controller
     {
         $menu = 'Sesi';
         $sesi = Sesi::where('sekolah_id', Auth::user()->sekolah_id)->latest()->get();
-        foreach ($sesi as $s) {
-            $kelas = $s->kelas_id;
-        }
-        $rematri = Rematri::where('kelas_id', $kelas)->count();
-        return view('admin.sesi.data', compact('menu', 'sesi', 'rematri'));
+        return view('admin.sesi.data', compact('menu', 'sesi'));
     }
 
     public function store(Request $request)
@@ -81,11 +78,10 @@ class SesiController extends Controller
         // $data = Sesi::with('rematri')->where('id', $id)->latest()->get();
         // dd($data);
         if ($request->ajax()) {
-            $data = Rematri::get();
+            $data = Rematri::where('kelas_id', $sesi->kelas_id)->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-
                     return '<center><a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs absenRematri"><i class="fa fa-camera"></i></a></center>';
                 })
                 ->rawColumns(['action'])
@@ -93,9 +89,38 @@ class SesiController extends Controller
         }
         return view('admin.sesi.rematri', compact('menu', 'sesi', 'rematri'));
     }
-    public function ttd($id)
+    public function ttd($id, $ids)
     {
-        $menu = 'Sesi TTD';
-        return view('admin.sesi.ttd', compact('menu'));
+        $menu = 'Foto';
+        $rematri = Rematri::where('id', $id)->first();
+        $sesi = Sesi::where('id', $id)->first();
+        return view('admin.sesi.ttd', compact('menu', 'rematri', 'sesi'));
+    }
+    public function upload(Request $request)
+    {
+        // dd($request->all());
+        //Translate Bahasa Indonesia
+        $message = array(
+            'foto.images' => 'File harus image.',
+            'foto.mimes' => 'Foto harus jpeg,png,jpg.',
+            'foto,max' => 'File maksimal 3MB.',
+        );
+        $this->validate($request, [
+            'foto' => 'image|mimes:jpeg,png,jpg|max:3000'
+        ], $message);
+        $img = $request->file('foto');
+        $img->storeAs('public/foto-sesi/', $img->hashName());
+
+        FotoSesi::create([
+            'kecamatan_id' => Auth::user()->kecamatan_id,
+            'puskesmas_id' => Auth::user()->puskesmas_id,
+            'sekolah_id' => Auth::user()->sekolah_id,
+            'kelas_id' => $request->kelas_id,
+            'sesi_id' => $request->sesi_id,
+            'rematri_id' => $request->sesi_id,
+            'foto' => $img->hashName(),
+        ]);
+        //redirect to index
+        return redirect()->route('sesi.rematri', $request->sesi_id)->with(['status' => 'Foto Berhasil Diupdate!']);
     }
 }

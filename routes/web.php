@@ -137,7 +137,8 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
 
         Route::resource('sesi', SesiController::class);
         Route::get('sesi/rematri/{id}', [SesiController::class, 'rematri'])->name('sesi.rematri');
-        Route::get('sesi/ttd/{id}', [SesiController::class, 'ttd'])->name('sesi.ttd');
+        Route::get('sesi/ttd/{id}/{ids}', [SesiController::class, 'ttd'])->name('sesi.ttd');
+        Route::post('sesi/upload', [SesiController::class, 'upload'])->name('sesi.uploadfoto');
     });
 
     Route::group(['middleware' => ['checkUser:4']], function () {

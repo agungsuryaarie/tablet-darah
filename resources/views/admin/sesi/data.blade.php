@@ -48,12 +48,6 @@
                                                         <div class="col-6 text-center text-sm mt-2">
                                                             Sesi : {{ $item->nama }}
                                                         </div>
-                                                        <div class="col-6 text-center text-sm mt-2">
-                                                            Jlh Peserta : {{ $rematri }}
-                                                        </div>
-                                                        <div class="col-6 text-center text-sm mt-2">
-                                                            Jlh Minum : {{ $rematri }}/50
-                                                        </div>
                                                         <div class="col-12 text-center mt-2">
                                                             <div>{{ $item->created_at->isoFormat('D MMMM Y') }}</div>
                                                         </div>

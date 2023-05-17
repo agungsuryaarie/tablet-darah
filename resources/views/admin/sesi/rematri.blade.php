@@ -5,12 +5,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>{{ $menu }}</h1>
+                    <h1>Detail Sesi</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">{{ $menu }}</li>
+                        <li class="breadcrumb-item"><a href="{{ route('sesi.index') }}">Sesi</a></li>
+                        <li class="breadcrumb-item active">Detail Sesi</li>
                     </ol>
                 </div>
             </div>
@@ -23,7 +23,7 @@
                     <div class="card">
                         <div class="card-header primary">
                             <div class="float-left mb-0">
-                                <h6>Detail Sesi</h6>
+                                <h6>Informasi Sesi</h6>
                             </div>
                         </div>
                         <div class="table-responsive table-hover">
@@ -53,7 +53,7 @@
                                     <tr>
                                         <td>Jumlah Rematri</td>
                                         <td>:</td>
-                                        <td>{{ $rematri }}</td>
+                                        <td>{{ $rematri }} orang</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -155,8 +155,9 @@
             });
 
             $("body").on("click", ".absenRematri", function() {
+                var sesi_id = {{ $sesi->id }};
                 var rematri_id = $(this).data("id");
-                var url = "{{ url('sesi/ttd') }}" + "/" + rematri_id;
+                var url = "{{ url('sesi/ttd') }}" + "/" + sesi_id + "/" + rematri_id;
                 window.location = url;
             });
 
