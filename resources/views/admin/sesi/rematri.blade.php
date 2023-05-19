@@ -69,7 +69,7 @@
                                         <th style="width:5%">No</th>
                                         <th style="width:15%">NIK</th>
                                         <th>Nama</th>
-                                        <th class="text-center" style="width: 5%">Action</th>
+                                        <th class="text-center" style="width: 8%">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -110,6 +110,37 @@
                     <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Kembali</button>
                     <button type="submit" class="btn btn-danger btn-sm " id="hapusBtn"><i class="fa fa-trash"></i>
                         Hapus</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- Modal Foto --}}
+    <div class="modal fade" id="ajaxFoto">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title" id="modelHeadingFoto">
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-dismissible fade show" role="alert" style="display: none;">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <center>
+                        <div class="fotoDiv"></div>
+                        <input type="text" name="foto_id" id="foto_id">
+                        <input type="text" name="foto" id="foto">
+                        {{-- <img src="{{ url('storage/foto-sesi/' . Auth::user()->foto) }}" alt="Image Profile"
+                            class="img-thumbnail rounded img-preview" width="120px"> --}}
+                    </center>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Kembali</button>
                 </div>
             </div>
         </div>
@@ -156,11 +187,26 @@
 
             $("body").on("click", ".absenRematri", function() {
                 var sesi_id = {{ $sesi->id }};
-                var rematri_id = {{ $rematri->id }};
+                var rematri_id = $(this).data("id");
                 var url = "{{ url('sesi/ttd') }}" + "/" + sesi_id + "/" + rematri_id;
                 window.location = url;
             });
-
+            $("body").on("click", ".fotoRematri", function() {
+                var foto_id = $(this).data("id");
+                // console.log(foto_id);
+                var $div = $('.fotoDiv');
+                $.get("{{ route('sesi.index') }}" + "/" + foto_id + "/foto-rematri", function(data) {
+                    $("#modelHeadingFoto").html("Foto");
+                    $("#ajaxFoto").modal("show");
+                    var $img = $(
+                        '<img class="img-thumbnail rounded img-preview" width="120px"></img>');
+                    var url = "{{ url('storage/foto-sesi') }}" + "/" + data.foto;
+                    $img.attr('src', url)
+                    $div.append($img);
+                    $("#foto_id").val(data.id);
+                    $("#foto").val(data.foto);
+                });
+            });
         });
     </script>
 @endsection

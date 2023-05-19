@@ -73,23 +73,27 @@ class SesiController extends Controller
     {
         $menu = 'Sesi';
         $sesi = Sesi::where('id', $id)->first();
-        $kelas = $sesi->kelas_id;
-        $count = Rematri::where('kelas_id', $kelas)->count();
-        $rematri = Rematri::where('kelas_id', $kelas)->first();
+        $count = Rematri::where('kelas_id', $sesi->kelas_id)->count();
+        $rematri = Rematri::where('kelas_id', $sesi->kelas_id)->first();
         // $data = Rematri::where('rematri.kelas_id', $sesi->kelas_id)
-        //     ->join('foto_sesi', 'rematri.id', '=', 'foto_sesi.rematri_id')
+        //     ->leftJoin('foto_sesi', 'rematri.id', '=', 'foto_sesi.rematri_id')
+        //     ->select('rematri.*', 'foto_sesi.foto')
         //     ->get();
         // dd($data);
         if ($request->ajax()) {
-            // $data = Rematri::where('kelas_id', $sesi->kelas_id)
-            //     ->get();
             $data = Rematri::where('rematri.kelas_id', $sesi->kelas_id)
-                ->join('foto_sesi', 'rematri.id', '=', 'foto_sesi.rematri_id')
+                ->leftJoin('foto_sesi', 'rematri.id', '=', 'foto_sesi.rematri_id')
+                ->select('rematri.*', 'foto_sesi.foto')
                 ->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    return '<center><a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs absenRematri"><i class="fa fa-camera"></i></a></center>';
+                    if ($row->foto == null) {
+                        $btn = '<center><a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs absenRematri"><i class="fa fa-camera"></i></a></center>';
+                    } else {
+                        $btn = '<center><a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Lihat Foto" class="btn btn-success btn-xs fotoRematri"><i class="fa fa-images"></i> Lihat</a></center>';
+                    }
+                    return $btn;
                 })
                 ->rawColumns(['action'])
                 ->make(true);
@@ -129,5 +133,10 @@ class SesiController extends Controller
         ]);
         //redirect to index
         return redirect()->route('sesi.rematri', $request->sesi_id)->with(['status' => 'Foto uploaded successfully.']);
+    }
+    public function foto($id)
+    {
+        $foto = FotoSesi::find($id);
+        return response()->json($foto);
     }
 }
