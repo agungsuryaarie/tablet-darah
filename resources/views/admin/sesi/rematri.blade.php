@@ -116,14 +116,10 @@
     </div>
     {{-- Modal Foto --}}
     <div class="modal fade" id="ajaxFoto">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h6 class="modal-title" id="modelHeadingFoto">
-                        </h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
+                    <h4 class="modal-title" id="modelHeadingFoto"></h4>
                 </div>
                 <div class="modal-body">
                     <div class="alert alert-dismissible fade show" role="alert" style="display: none;">
@@ -133,14 +129,11 @@
                     </div>
                     <center>
                         <div class="fotoDiv"></div>
-                        <input type="text" name="foto_id" id="foto_id">
-                        <input type="text" name="foto" id="foto">
-                        {{-- <img src="{{ url('storage/foto-sesi/' . Auth::user()->foto) }}" alt="Image Profile"
-                            class="img-thumbnail rounded img-preview" width="120px"> --}}
                     </center>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Kembali</button>
+                    <button type="button" id="back" class="btn btn-secondary btn-sm"
+                        onclick="window.location.reload();">Kembali</button>
                 </div>
             </div>
         </div>
@@ -184,7 +177,6 @@
                     },
                 ],
             });
-
             $("body").on("click", ".absenRematri", function() {
                 var sesi_id = {{ $sesi->id }};
                 var rematri_id = $(this).data("id");
@@ -192,19 +184,16 @@
                 window.location = url;
             });
             $("body").on("click", ".fotoRematri", function() {
-                var foto_id = $(this).data("id");
-                // console.log(foto_id);
+                var rematri_id = $(this).data("id");
                 var $div = $('.fotoDiv');
-                $.get("{{ route('sesi.index') }}" + "/" + foto_id + "/foto-rematri", function(data) {
+                $.get("{{ route('sesi.index') }}" + "/" + rematri_id + "/foto-rematri", function(data) {
                     $("#modelHeadingFoto").html("Foto");
                     $("#ajaxFoto").modal("show");
                     var $img = $(
-                        '<img class="img-thumbnail rounded img-preview" width="120px"></img>');
+                        '<img class="img-thumbnail rounded img-preview" width="150px"></img>');
                     var url = "{{ url('storage/foto-sesi') }}" + "/" + data.foto;
                     $img.attr('src', url)
                     $div.append($img);
-                    $("#foto_id").val(data.id);
-                    $("#foto").val(data.foto);
                 });
             });
         });

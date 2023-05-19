@@ -136,7 +136,7 @@ class SesiController extends Controller
     }
     public function foto($id)
     {
-        $foto = FotoSesi::find($id);
+        $foto = FotoSesi::where('rematri_id', $id)->first();
         return response()->json($foto);
     }
 }
