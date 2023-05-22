@@ -29,9 +29,9 @@
                                 <thead>
                                     <tr>
                                         <th style="width:5%">No</th>
-                                        <th style="width:12%">Kelas</th>
-                                        <th style="width:12%">Jurusan</th>
-                                        <th style="width:12%">Ruangan</th>
+                                        <th>Kelas</th>
+                                        <th>Jurusan</th>
+                                        <th>Ruangan</th>
                                         <th class="text-center" style="width: 10%">Action</th>
                                     </tr>
                                 </thead>
