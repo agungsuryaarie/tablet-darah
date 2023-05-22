@@ -63,4 +63,8 @@ class Rematri extends Model
     // {
     //     return $this->belongsToMany(Sesi::class);
     // }
+    public function hb()
+    {
+        return $this->hasMany(HB::class);
+    }
 }

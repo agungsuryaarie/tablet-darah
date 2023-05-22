@@ -29,7 +29,7 @@
                                 <thead>
                                     <tr>
                                         <th style="width:5%">No</th>
-                                        <th style="width:12%">Jurusan</th>
+                                        <th>Jurusan</th>
                                         <th class="text-center" style="width: 10%">Action</th>
                                     </tr>
                                 </thead>
@@ -41,6 +41,9 @@
             </div>
         </div>
     </section>
+@endsection
+@section('modal')
+    {{-- Modal Add --}}
     <div class="modal fade" id="ajaxModel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -76,8 +79,6 @@
             </div>
         </div>
     </div>
-@endsection
-@section('modal')
     {{-- Modal Delete --}}
     <div class="modal fade" id="ajaxModelHps">
         <div class="modal-dialog">
@@ -149,7 +150,7 @@
             $("#createNewJurusan").click(function() {
                 $("#saveBtn").val("create-jurusan");
                 $("#jurusan_id").val("");
-                $("#jrusanForm").trigger("reset");
+                $("#jurusanForm").trigger("reset");
                 $("#modelHeading").html("Tambah Jurusan");
                 $("#ajaxModel").modal("show");
                 $("#deleteJurusan").modal("show");

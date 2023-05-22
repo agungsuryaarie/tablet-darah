@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Rematri;
 use App\Models\Kecamatan;
 use App\Models\Desa;
+use App\Models\HB;
 use App\Models\Jurusan;
 use App\Models\Kelas;
 use Illuminate\Http\Request;
@@ -28,7 +29,8 @@ class RematriController extends Controller
                 })
                 ->addColumn('action', function ($row) {
                     $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs editRematri"><i class="fas fa-edit"></i></a>';
-                    $btn = '<center>' . $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-xs deleteRematri"><i class="fas fa-trash"></i></a><center>';
+                    $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-xs mr-1 deleteRematri"><i class="fas fa-trash"></i></a>';
+                    $btn = '<center>' . $btn . '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="History HB" class="btn btn-warning btn-xs text-white hbRematri"><i class="fas fa-plus-circle"></i></a><center>';
                     return $btn;
                 })
                 ->rawColumns(['kecamatan', 'action'])
@@ -200,5 +202,74 @@ class RematriController extends Controller
     {
         Rematri::find($id)->delete();
         return response()->json(['success' => 'Rematri deleted successfully.']);
+    }
+    public function hb(Request $request, $id)
+    {
+        $menu = 'Data HB Rematri';
+        $rematri = Rematri::where('sekolah_id', Auth::user()->sekolah_id)->find($id);
+        if ($request->ajax()) {
+            $data = HB::where('rematri_id', $id)->get();
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('berat_badan', function ($data) {
+                    return '<center>' . $data->berat_badan . '<center>';
+                })
+                ->addColumn('panjang_badan', function ($data) {
+                    return '<center>' . $data->panjang_badan . '<center>';
+                })
+                ->addColumn('hb', function ($data) {
+                    return '<center>' . $data->hb . '<center>';
+                })
+                ->addColumn('action', function ($row) {
+                    return '<center><a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-xs deleteHB"><i class="fas fa-trash"></i></a><center>';
+                })
+                ->rawColumns(['berat_badan', 'panjang_badan', 'hb', 'action'])
+                ->make(true);
+        }
+
+        return view('admin.rematri-sekolah.hb', compact('menu', 'rematri'));
+    }
+    public function storehb(Request $request)
+    {
+        //Translate Bahasa Indonesia
+        $message = array(
+            'tgl_cek.required'          => 'Tanggal Pengecekan harus diisi.',
+            'berat_badan.required'      => 'Berat Badan harus diisi.',
+            'berat_badan.numeric'       => 'Berat Badan harus angka.',
+            'panjang_badan.required'    => 'Panjang Badan harus diisi.',
+            'panjang_badan.numeric'     => 'Panjang Badan harus angka.',
+            'hb.required'               => 'HB harus diisi.',
+            'hb.numeric'                => 'HB harus angka.',
+        );
+        $validator = Validator::make($request->all(), [
+            'tgl_cek'         => 'required',
+            'berat_badan'     => 'required|numeric',
+            'panjang_badan'   => 'required|numeric',
+            'hb'              => 'required|numeric',
+        ], $message);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()->all()]);
+        }
+        HB::updateOrCreate(
+            [
+                'id' => $request->hb_id
+            ],
+            [
+                'puskesmas_id' => Auth::user()->puskesmas_id,
+                'sekolah_id' => Auth::user()->sekolah_id,
+                'rematri_id' => $request->rematri_id,
+                'tgl_cek' => $request->tgl_cek,
+                'berat_badan' => $request->berat_badan,
+                'panjang_badan' => $request->panjang_badan,
+                'hb' => $request->hb,
+            ]
+        );
+        return response()->json(['success' => 'HB saved successfully.']);
+    }
+    public function destroyhb($id)
+    {
+        HB::find($id)->delete();
+        return response()->json(['success' => 'HB deleted successfully.']);
     }
 }

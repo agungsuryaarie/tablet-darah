@@ -26,11 +26,11 @@
                                 <thead>
                                     <tr>
                                         <th style="width:5%">No</th>
-                                        <th style="width:17%">NIK</th>
-                                        <th style="width:17%">Nama</th>
-                                        <th style="width:17%">Tgl Lahir</th>
-                                        <th style="width:17%">Nama Ortu</th>
-                                        <th>Kelas</th>
+                                        <th style="width:10%">NIK</th>
+                                        <th>Nama</th>
+                                        <th style="width:10%">Tgl Lahir</th>
+                                        <th style="width:25%">Nama Ortu</th>
+                                        <th style="width: 5%">Kelas</th>
                                         <th class="text-center" style="width: 10%">Action</th>
                                     </tr>
                                 </thead>
@@ -131,6 +131,11 @@
             $("body").on("click", ".editRematri", function() {
                 var rematri_id = $(this).data("id");
                 var url = "{{ url('rematri/edit') }}" + "/" + rematri_id;
+                window.location = url;
+            });
+            $("body").on("click", ".hbRematri", function() {
+                var rematri_id = $(this).data("id");
+                var url = "{{ url('rematri/hb') }}" + "/" + rematri_id;
                 window.location = url;
             });
 

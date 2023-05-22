@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('rematri', function (Blueprint $table) {
             $table->id();
-            $table->string('puskesmas_id');
-            $table->string('sekolah_id');
+            $table->unsignedBigInteger('puskesmas_id');
+            $table->unsignedBigInteger('sekolah_id');
             $table->integer('anak_ke');
             $table->string('tempat_lahir');
             $table->date('tgl_lahir');
