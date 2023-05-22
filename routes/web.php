@@ -134,7 +134,7 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
         Route::delete('rematri/{rematri}/destroy', [RematriController::class, 'destroy'])->name('rematri.destroy');
         Route::post('rematri/get-kelas', [RematriController::class, 'getKelas']);
         Route::post('rematri/get-desa', [RematriController::class, 'getDesa']);
-        Route::get('rematri/hb/{rematri}', [RematriController::class, 'hb'])->name('rematri.hb');
+        Route::get('rematri/{rematri}/hb', [RematriController::class, 'hb'])->name('rematri.hb');
         Route::post('rematri/hb', [RematriController::class, 'storehb'])->name('hb.store');
         Route::delete('rematri/{rematri}/destroyhb', [RematriController::class, 'destroyhb'])->name('rematri.destroyhb');
 

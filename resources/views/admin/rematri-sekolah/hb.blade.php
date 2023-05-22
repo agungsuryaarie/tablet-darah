@@ -224,7 +224,7 @@
                 lengthMenu: [10, 50, 100, 200, 500],
                 lengthChange: true,
                 autoWidth: false,
-                ajax: "{{ route('rematri.hb', $rematri->id) }}",
+                ajax: "{{ route('rematri.hb', Crypt::encryptString($rematri->id)) }}",
                 columns: [{
                         data: "DT_RowIndex",
                         name: "DT_RowIndex",

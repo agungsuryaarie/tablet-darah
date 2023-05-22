@@ -12,6 +12,7 @@ use App\Models\Kelas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Yajra\Datatables\Datatables;
 
 class RematriController extends Controller
@@ -30,7 +31,7 @@ class RematriController extends Controller
                 ->addColumn('action', function ($row) {
                     $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs editRematri"><i class="fas fa-edit"></i></a>';
                     $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-xs mr-1 deleteRematri"><i class="fas fa-trash"></i></a>';
-                    $btn = '<center>' . $btn . '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="History HB" class="btn btn-warning btn-xs text-white hbRematri"><i class="fas fa-plus-circle"></i></a><center>';
+                    $btn = '<center>' . $btn . '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . Crypt::encryptString($row->id) . '" data-original-title="History HB" class="btn btn-warning btn-xs text-white hbRematri"><i class="fas fa-plus-circle"></i></a><center>';
                     return $btn;
                 })
                 ->rawColumns(['kecamatan', 'action'])
@@ -206,9 +207,9 @@ class RematriController extends Controller
     public function hb(Request $request, $id)
     {
         $menu = 'Data HB Rematri';
-        $rematri = Rematri::where('sekolah_id', Auth::user()->sekolah_id)->find($id);
+        $rematri = Rematri::where('sekolah_id', Auth::user()->sekolah_id)->find(Crypt::decryptString($id));
         if ($request->ajax()) {
-            $data = HB::where('rematri_id', $id)->get();
+            $data = HB::where('rematri_id', Crypt::decryptString($id))->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('berat_badan', function ($data) {

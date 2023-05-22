@@ -135,7 +135,7 @@
             });
             $("body").on("click", ".hbRematri", function() {
                 var rematri_id = $(this).data("id");
-                var url = "{{ url('rematri/hb') }}" + "/" + rematri_id;
+                var url = "{{ url('rematri') }}" + "/" + rematri_id + "/hb";
                 window.location = url;
             });
 

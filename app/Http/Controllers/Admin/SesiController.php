@@ -99,7 +99,7 @@ class SesiController extends Controller
                 })
                 ->addColumn('action', function ($row) {
                     if ($row->foto == null) {
-                        $btn = '<center><a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs absenRematri"><i class="fa fa-camera"></i></a></center>';
+                        $btn = '<center><a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . Crypt::encryptString($row->id) . '" data-original-title="Edit" class="edit btn btn-primary btn-xs absenRematri"><i class="fa fa-camera"></i></a></center>';
                     } else {
                         $btn = '<center><span class="badge badge-success">selesai</span></center>';
                     }
@@ -113,7 +113,7 @@ class SesiController extends Controller
     public function ttd($id, $ids)
     {
         $menu = 'Foto';
-        $rematri = Rematri::where('id', $ids)->first();
+        $rematri = Rematri::where('id', Crypt::decryptString($ids))->first();
         $sesi = Sesi::where('id', $id)->first();
         return view('admin.sesi.ttd', compact('menu', 'rematri', 'sesi'));
     }
