@@ -83,7 +83,7 @@ class SesiController extends Controller
         // dd($data);
         if ($request->ajax()) {
             $data = Rematri::where('rematri.kelas_id', $sesi->kelas_id)
-                ->where('foto_sesi.sesi_id', $sesi->id)
+                // ->where('foto_sesi.sesi_id', $sesi->id)
                 ->leftJoin('foto_sesi', 'rematri.id', '=', 'foto_sesi.rematri_id')
                 ->select('rematri.*', 'foto_sesi.foto')
                 ->get();
