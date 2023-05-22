@@ -87,15 +87,23 @@ class SesiController extends Controller
                 ->get();
             return Datatables::of($data)
                 ->addIndexColumn()
+                ->addColumn('foto', function ($data) {
+                    if ($data->foto != null) {
+                        $foto = '<center><img src="' . url("storage/foto-sesi/" . $data->foto) . '" width="30px" class="img rounded"><center>';
+                    } else {
+                        $foto = '<center><span class="text-danger"><i>* belum foto</i></span></center>';
+                    }
+                    return $foto;
+                })
                 ->addColumn('action', function ($row) {
                     if ($row->foto == null) {
                         $btn = '<center><a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs absenRematri"><i class="fa fa-camera"></i></a></center>';
                     } else {
-                        $btn = '<center><a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Lihat Foto" class="btn btn-success btn-xs fotoRematri"><i class="fa fa-images"></i> Lihat</a></center>';
+                        $btn = '<center><span class="badge badge-success">selesai</span></center>';
                     }
                     return $btn;
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['foto', 'action'])
                 ->make(true);
         }
         return view('admin.sesi.rematri', compact('menu', 'sesi', 'rematri', 'count'));

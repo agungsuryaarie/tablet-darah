@@ -19,20 +19,20 @@
     <section class="content">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-header primary">
-                            <div class="float-left mb-0">
-                                <h6>Informasi Sesi</h6>
-                            </div>
-                        </div>
-                        <div class="table-responsive table-hover">
-                            <table class="table">
+                <div class="col-md-12">
+                    <div class="invoice p-3 mb-3">
+                        <div class="col-sm-4 invoice-col mt-4">
+                            <table>
                                 <tbody>
                                     <tr>
-                                        <td style="width: 40%">Judul Sesi</td>
-                                        <td style="width: 5%">:</td>
-                                        <td>{{ $sesi->nama }}</td>
+                                        <td>Tanggal</td>
+                                        <td>:</td>
+                                        <td>{{ $sesi->created_at->isoFormat('D MMMM Y') }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 25%">Judul Sesi</td>
+                                        <td style="width: 2%">:</td>
+                                        <td style="width: 40%">{{ $sesi->nama }}</td>
                                     </tr>
                                     <tr>
                                         <td>Jurusan</td>
@@ -46,11 +46,6 @@
                                             {{ $sesi->kelas->ruangan }}</td>
                                     </tr>
                                     <tr>
-                                        <td>Tanggal</td>
-                                        <td>:</td>
-                                        <td>{{ $sesi->created_at->isoFormat('D MMMM Y') }}</td>
-                                    </tr>
-                                    <tr>
                                         <td>Jumlah Rematri</td>
                                         <td>:</td>
                                         <td>{{ $count }} orang</td>
@@ -58,22 +53,24 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <table id="example1" class="table table-bordered table-striped data-table">
-                                <thead>
-                                    <tr>
-                                        <th style="width:5%">No</th>
-                                        <th style="width:15%">NIK</th>
-                                        <th>Nama</th>
-                                        <th class="text-center" style="width: 8%">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
+                        <hr class="mb-5">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <table id="example1" class="table table-bordered table-striped data-table">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:5%">No</th>
+                                                <th style="width:15%">NIK</th>
+                                                <th>Nama</th>
+                                                <th class="text-center" style="width:10%">Foto</th>
+                                                <th class="text-center" style="width: 8%">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -168,6 +165,10 @@
                     {
                         data: "nama",
                         name: "nama",
+                    },
+                    {
+                        data: "foto",
+                        name: "foto",
                     },
                     {
                         data: "action",

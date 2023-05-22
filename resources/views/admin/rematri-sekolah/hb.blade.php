@@ -25,7 +25,7 @@
                             <table>
                                 <tbody>
                                     <tr>
-                                        <td style="width: 20%">NIK</td>
+                                        <td style="width: 15%">NIK</td>
                                         <td style="width: 2%">:</td>
                                         <td style="width: 40%">{{ $rematri->nik }}</td>
                                     </tr>
