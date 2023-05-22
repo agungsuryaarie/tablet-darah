@@ -77,10 +77,10 @@
                                                 <th style="width:5%">No</th>
                                                 <th style="width:15%">Tgl Pengecekan</th>
                                                 <th class="text-center">
-                                                    Berat Badan
+                                                    Berat Badan (kg)
                                                 </th>
                                                 <th class="text-center">
-                                                    Panjang Badan
+                                                    Panjang Badan (cm)
                                                 </th>
                                                 <th class="text-center" style="width: 10%">
                                                     HB
@@ -119,7 +119,7 @@
                         <input type="hidden" name="rematri_id" value="{{ $rematri->id }}">
                         <div class="card-body">
                             <div class="form-group">
-                                <label for="text" class="col-sm-8 control-label">Tgl Pengecekan<span
+                                <label for="text" class="col-sm-8 control-label">Tgl Pengecekan (dd-mm-yyyy)<span
                                         class="text-danger">
                                         *</span></label>
                                 <div class="col-sm-12">
@@ -138,7 +138,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">Berat Badan<span class="text-danger">
+                                <label class="col-sm-8 control-label">Berat Badan (kg)<span class="text-danger">
                                         *</span></label>
                                 <div class="col-sm-12">
                                     <input type="number" class="form-control" id="berat_badan" name="berat_badan"
@@ -146,7 +146,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">Panjang Badan<span class="text-danger">
+                                <label class="col-sm-8 control-label">Panjang Badan (cm)<span class="text-danger">
                                         *</span></label>
                                 <div class="col-sm-12">
                                     <input type="number" class="form-control" id="panjang_badan" name="panjang_badan"
@@ -154,7 +154,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">HB<span class="text-danger">
+                                <label class="col-sm-8 control-label">HB<span class="text-danger">
                                         *</span></label>
                                 <div class="col-sm-12">
                                     <input type="number" class="form-control" id="hb" name="hb"
