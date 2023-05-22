@@ -153,7 +153,7 @@
                 lengthMenu: [10, 50, 100, 200, 500],
                 lengthChange: true,
                 autoWidth: false,
-                ajax: "{{ route('sesi.rematri', $sesi->id) }}",
+                ajax: "{{ route('sesi.rematri', Crypt::encryptString($sesi->id)) }}",
                 columns: [{
                         data: "DT_RowIndex",
                         name: "DT_RowIndex",
@@ -184,19 +184,19 @@
                 var url = "{{ url('sesi/ttd') }}" + "/" + sesi_id + "/" + rematri_id;
                 window.location = url;
             });
-            $("body").on("click", ".fotoRematri", function() {
-                var rematri_id = $(this).data("id");
-                var $div = $('.fotoDiv');
-                $.get("{{ route('sesi.index') }}" + "/" + rematri_id + "/foto-rematri", function(data) {
-                    $("#modelHeadingFoto").html("Foto");
-                    $("#ajaxFoto").modal("show");
-                    var $img = $(
-                        '<img class="img-thumbnail rounded img-preview" width="150px"></img>');
-                    var url = "{{ url('storage/foto-sesi') }}" + "/" + data.foto;
-                    $img.attr('src', url)
-                    $div.append($img);
-                });
-            });
+            // $("body").on("click", ".fotoRematri", function() {
+            //     var rematri_id = $(this).data("id");
+            //     var $div = $('.fotoDiv');
+            //     $.get("{{ route('sesi.index') }}" + "/" + rematri_id + "/foto-rematri", function(data) {
+            //         $("#modelHeadingFoto").html("Foto");
+            //         $("#ajaxFoto").modal("show");
+            //         var $img = $(
+            //             '<img class="img-thumbnail rounded img-preview" width="150px"></img>');
+            //         var url = "{{ url('storage/foto-sesi') }}" + "/" + data.foto;
+            //         $img.attr('src', url)
+            //         $div.append($img);
+            //     });
+            // });
         });
     </script>
 @endsection

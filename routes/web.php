@@ -139,7 +139,7 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
         Route::delete('rematri/{rematri}/destroyhb', [RematriController::class, 'destroyhb'])->name('rematri.destroyhb');
 
         Route::resource('sesi', SesiController::class);
-        Route::get('sesi/rematri/{id}', [SesiController::class, 'rematri'])->name('sesi.rematri');
+        Route::get('sesi/{id}/rematri', [SesiController::class, 'rematri'])->name('sesi.rematri');
         Route::get('sesi/ttd/{id}/{ids}', [SesiController::class, 'ttd'])->name('sesi.ttd');
         Route::post('sesi/upload', [SesiController::class, 'upload'])->name('sesi.uploadfoto');
         Route::get('sesi/{id}/foto-rematri', [SesiController::class, 'foto'])->name('sesi.foto');

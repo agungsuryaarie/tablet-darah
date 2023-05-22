@@ -31,7 +31,7 @@
                                     @foreach ($sesi as $item)
                                         <div class="col-sm-4 mb-3">
                                             @if (date('Y-m-d') < $item->created_at)
-                                                <a href="{{ route('sesi.rematri', $item->id) }}">
+                                                <a href="{{ route('sesi.rematri', Crypt::encryptString($item->id)) }}">
                                                 @else
                                                     <a href="#" class="SesiError">
                                             @endif

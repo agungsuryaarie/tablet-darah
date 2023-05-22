@@ -9,6 +9,7 @@ use App\Models\Sesi;
 use App\Models\SesiRematri;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Yajra\Datatables\Datatables;
 use Illuminate\Support\Facades\Validator;
 
@@ -72,7 +73,7 @@ class SesiController extends Controller
     public function rematri(Request $request, $id)
     {
         $menu = 'Sesi';
-        $sesi = Sesi::where('id', $id)->first();
+        $sesi = Sesi::where('id', Crypt::decryptString($id))->first();
         $count = Rematri::where('kelas_id', $sesi->kelas_id)->count();
         $rematri = Rematri::where('kelas_id', $sesi->kelas_id)->first();
         // $data = Rematri::where('rematri.kelas_id', $sesi->kelas_id)
@@ -82,6 +83,7 @@ class SesiController extends Controller
         // dd($data);
         if ($request->ajax()) {
             $data = Rematri::where('rematri.kelas_id', $sesi->kelas_id)
+                ->where('foto_sesi.sesi_id', $sesi->id)
                 ->leftJoin('foto_sesi', 'rematri.id', '=', 'foto_sesi.rematri_id')
                 ->select('rematri.*', 'foto_sesi.foto')
                 ->get();
