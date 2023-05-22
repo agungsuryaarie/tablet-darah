@@ -30,29 +30,41 @@
                                 @if ($sesi)
                                     @foreach ($sesi as $item)
                                         <div class="col-sm-4 mb-3">
-                                            <a href="{{ route('sesi.rematri', $item->id) }}">
-                                                <div class="position-relative p-3 bg-blue rounded" style="height: 180px">
+                                            @if (date('Y-m-d') < $item->created_at)
+                                                <a href="{{ route('sesi.rematri', $item->id) }}">
+                                                @else
+                                                    <a href="#" class="SesiError">
+                                            @endif
+                                            <div class="position-relative p-3 bg-blue rounded" style="height: 180px">
+                                                @if (date('Y-m-d') < $item->created_at)
                                                     <div class="ribbon-wrapper ribbon-lg">
                                                         <div class="ribbon bg-success">
                                                             Berlangsung
                                                         </div>
                                                     </div>
-                                                    <div class="row p-3">
-                                                        <div class="col-12 text-center">
-                                                            <h5>{{ $item->sekolah->sekolah }}</h5>
-                                                        </div>
-                                                        <div class="col-6 text-center text-sm mt-2">
-                                                            Kelas : {{ $item->kelas->nama }} {{ $item->jurusan->nama }}
-                                                            {{ $item->kelas->ruangan }}
-                                                        </div>
-                                                        <div class="col-6 text-center text-sm mt-2">
-                                                            Sesi : {{ $item->nama }}
-                                                        </div>
-                                                        <div class="col-12 text-center mt-2">
-                                                            <div>{{ $item->created_at->isoFormat('D MMMM Y') }}</div>
+                                                @else
+                                                    <div class="ribbon-wrapper ribbon-lg">
+                                                        <div class="ribbon bg-danger">
+                                                            Berakhir
                                                         </div>
                                                     </div>
+                                                @endif
+                                                <div class="row p-3">
+                                                    <div class="col-12 text-center">
+                                                        <h5>{{ $item->sekolah->sekolah }}</h5>
+                                                    </div>
+                                                    <div class="col-6 text-center text-sm mt-2">
+                                                        Kelas : {{ $item->kelas->nama }} {{ $item->jurusan->nama }}
+                                                        {{ $item->kelas->ruangan }}
+                                                    </div>
+                                                    <div class="col-6 text-center text-sm mt-2">
+                                                        Sesi : {{ $item->nama }}
+                                                    </div>
+                                                    <div class="col-12 text-center mt-2">
+                                                        <div>{{ $item->created_at->isoFormat('D MMMM Y') }}</div>
+                                                    </div>
                                                 </div>
+                                            </div>
                                             </a>
                                         </div>
                                     @endforeach
@@ -210,5 +222,8 @@
         $('.select2bs4').select2({
             theme: 'bootstrap4'
         })
+        $('.SesiError').click(function() {
+            toastr.error('Sesi sudah berakhir.')
+        });
     </script>
 @endsection
