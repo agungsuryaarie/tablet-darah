@@ -187,7 +187,7 @@
                 window.location = url;
             });
             // fecth foto with ajax
-            // ========================
+            // ====================
             // $("body").on("click", ".fotoRematri", function() {
             //     var rematri_id = $(this).data("id");
             //     var $div = $('.fotoDiv');
