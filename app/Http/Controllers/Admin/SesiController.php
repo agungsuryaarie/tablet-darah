@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\FotoSesi;
 use App\Models\Rematri;
 use App\Models\Sesi;
 use App\Models\SesiRematri;
@@ -53,19 +52,20 @@ class SesiController extends Controller
                 'kelas_id' => $request->kelas_id,
             ]
         );
-        // $rematri = Rematri::where('kelas_id', $request->kelas_id)->first();
+        $rematri = Rematri::where('kelas_id', $request->kelas_id)->get();
         $sesiid  = Sesi::orderBy('id', 'DESC')->first();
-        SesiRematri::updateOrCreate(
-            [
-                'id' => $request->sesi_id
-            ],
-            [
-
-                'sesi_id' => $sesiid->id,
-                'kelas_id' => $sesiid->kelas_id,
-            ]
-        );
-
+        // fecth rematri
+        foreach ($rematri as $r) {
+            $id_rematri = $r->id;
+            //simpan seluruh rematri dari kelas
+            SesiRematri::create(
+                [
+                    'sesi_id' => $sesiid->id,
+                    'kelas_id' => $sesiid->kelas_id,
+                    'rematri_id' => $id_rematri,
+                ]
+            );
+        }
         return response()->json(['success' => 'Sesi saved successfully.']);
     }
 
@@ -75,20 +75,32 @@ class SesiController extends Controller
         $menu = 'Sesi';
         $sesi = Sesi::where('id', Crypt::decryptString($id))->first();
         $count = Rematri::where('kelas_id', $sesi->kelas_id)->count();
-        $rematri = Rematri::where('kelas_id', $sesi->kelas_id)->first();
+        // $rematri = Rematri::where('kelas_id', $sesi->kelas_id)->first();
         // $data = Rematri::where('rematri.kelas_id', $sesi->kelas_id)
+        //     // ->where('foto_sesi.sesi_id', $sesi->id)
         //     ->leftJoin('foto_sesi', 'rematri.id', '=', 'foto_sesi.rematri_id')
         //     ->select('rematri.*', 'foto_sesi.foto')
         //     ->get();
+        // $data = SesiRematri::leftJoin('rematri', 'sesi_rematri.rematri_id', '=', 'rematri.id')
+        //     ->where('sesi_rematri.kelas_id', $sesi->kelas_id)
+        //     ->where('sesi_rematri.sesi_id', $sesi->id)
+        //     ->select('rematri.*', 'sesi_rematri.*', 'sesi_rematri.id')
+        //     ->first();
         // dd($data);
         if ($request->ajax()) {
-            $data = Rematri::where('rematri.kelas_id', $sesi->kelas_id)
-                // ->where('foto_sesi.sesi_id', $sesi->id)
-                ->leftJoin('foto_sesi', 'rematri.id', '=', 'foto_sesi.rematri_id')
-                ->select('rematri.*', 'foto_sesi.foto')
+            $data = SesiRematri::leftJoin('rematri', 'sesi_rematri.rematri_id', '=', 'rematri.id')
+                ->where('sesi_rematri.kelas_id', $sesi->kelas_id)
+                ->where('sesi_rematri.sesi_id', $sesi->id)
+                ->select('rematri.*', 'sesi_rematri.*', 'sesi_rematri.id')
                 ->get();
             return Datatables::of($data)
                 ->addIndexColumn()
+                ->addColumn('nik', function ($data) {
+                    return $data->nik;
+                })
+                ->addColumn('nama', function ($data) {
+                    return $data->nama;
+                })
                 ->addColumn('foto', function ($data) {
                     if ($data->foto != null) {
                         $foto = '<center><img src="' . url("storage/foto-sesi/" . $data->foto) . '" width="30px" class="img rounded"><center>';
@@ -99,7 +111,7 @@ class SesiController extends Controller
                 })
                 ->addColumn('action', function ($row) {
                     if ($row->foto == null) {
-                        $btn = '<center><a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . Crypt::encryptString($row->id) . '" data-original-title="Edit" class="edit btn btn-primary btn-xs absenRematri"><i class="fa fa-camera"></i></a></center>';
+                        $btn = '<center><a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . Crypt::encryptString($row->rematri_id) . '" data-original-title="Edit" class="edit btn btn-primary btn-xs absenRematri"><i class="fa fa-camera"></i></a></center>';
                     } else {
                         $btn = '<center><span class="badge badge-success">selesai</span></center>';
                     }
@@ -108,14 +120,15 @@ class SesiController extends Controller
                 ->rawColumns(['foto', 'action'])
                 ->make(true);
         }
-        return view('admin.sesi.rematri', compact('menu', 'sesi', 'rematri', 'count'));
+        return view('admin.sesi.rematri', compact('menu', 'sesi', 'count'));
     }
     public function ttd($id, $ids)
     {
         $menu = 'Foto';
         $rematri = Rematri::where('id', Crypt::decryptString($ids))->first();
         $sesi = Sesi::where('id', $id)->first();
-        return view('admin.sesi.ttd', compact('menu', 'rematri', 'sesi'));
+        $sesifoto = SesiRematri::find(Crypt::decryptString($ids));
+        return view('admin.sesi.ttd', compact('menu', 'rematri', 'sesi', 'sesifoto'));
     }
     public function upload(Request $request)
     {
@@ -142,7 +155,7 @@ class SesiController extends Controller
             'foto' => $img->hashName(),
         ]);
         //redirect to index
-        return redirect()->route('sesi.rematri', $request->sesi_id)->with(['status' => 'Foto uploaded successfully.']);
+        return redirect()->route('sesi.rematri', Crypt::encryptString($request->sesi_id))->with(['status' => 'Foto uploaded successfully.']);
     }
     public function foto($id)
     {

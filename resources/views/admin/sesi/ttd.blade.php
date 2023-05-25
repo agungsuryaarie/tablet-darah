@@ -33,6 +33,7 @@
                                         <input type="hidden" name="kelas_id" value="{{ $sesi->kelas_id }}">
                                         <input type="hidden" name="sesi_id" value="{{ $sesi->id }}">
                                         <input type="hidden" name="rematri_id" value="{{ $rematri->id }}">
+                                        {{-- <input type="text" name="foto_id" value="{{ $data->id }}"> --}}
                                         <div class="custom-file">
                                             <input type="file" id="foto" name="foto" class="custom-file-input"
                                                 id="foto" onchange="previewImg();" accept=".png, .jpg, .jpeg" required>
