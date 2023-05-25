@@ -111,7 +111,7 @@ class SesiController extends Controller
                 })
                 ->addColumn('action', function ($row) {
                     if ($row->foto == null) {
-                        $btn = '<center><a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . Crypt::encryptString($row->rematri_id) . '" data-original-title="Edit" class="edit btn btn-primary btn-xs absenRematri"><i class="fa fa-camera"></i></a></center>';
+                        $btn = '<center><a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . Crypt::encryptString($row->rematri_id) . '" data-ttd="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs absenRematri"><i class="fa fa-camera"></i></a></center>';
                     } else {
                         $btn = '<center><span class="badge badge-success">selesai</span></center>';
                     }
@@ -122,17 +122,18 @@ class SesiController extends Controller
         }
         return view('admin.sesi.rematri', compact('menu', 'sesi', 'count'));
     }
-    public function ttd($id, $ids)
+    public function ttd($id, $ids, $ttd)
     {
         $menu = 'Foto';
         $rematri = Rematri::where('id', Crypt::decryptString($ids))->first();
         $sesi = Sesi::where('id', $id)->first();
-        $sesifoto = SesiRematri::find(Crypt::decryptString($ids));
+        $sesifoto = SesiRematri::find($ttd);
         return view('admin.sesi.ttd', compact('menu', 'rematri', 'sesi', 'sesifoto'));
     }
     public function upload(Request $request)
     {
         // dd($request->all());
+        // $ttd = SesiRematri::find($request->ttd_id);
         //Translate Bahasa Indonesia
         $message = array(
             'foto.images' => 'File harus image.',
@@ -145,21 +146,20 @@ class SesiController extends Controller
         $img = $request->file('foto');
         $img->storeAs('public/foto-sesi/', $img->hashName());
 
-        FotoSesi::create([
-            'kecamatan_id' => Auth::user()->kecamatan_id,
-            'puskesmas_id' => Auth::user()->puskesmas_id,
-            'sekolah_id' => Auth::user()->sekolah_id,
-            'kelas_id' => $request->kelas_id,
-            'sesi_id' => $request->sesi_id,
-            'rematri_id' => $request->rematri_id,
-            'foto' => $img->hashName(),
-        ]);
+        SesiRematri::updateOrCreate(
+            ['id' => $request->ttd_id],
+            [
+                'foto' => $img->hashName(),
+            ]
+        );
         //redirect to index
         return redirect()->route('sesi.rematri', Crypt::encryptString($request->sesi_id))->with(['status' => 'Foto uploaded successfully.']);
     }
-    public function foto($id)
-    {
-        $foto = FotoSesi::where('rematri_id', $id)->first();
-        return response()->json($foto);
-    }
+    // fecth foto with ajax
+    // ====================
+    // public function foto($id)
+    // {
+    //     $foto = FotoSesi::where('rematri_id', $id)->first();
+    //     return response()->json($foto);
+    // }
 }

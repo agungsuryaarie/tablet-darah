@@ -27,7 +27,7 @@
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                @if ($sesi)
+                                @if (!$sesi->isEmpty())
                                     @foreach ($sesi as $item)
                                         <div class="col-sm-4 mb-3">
                                             @if (date('Y-m-d') < $item->created_at)
@@ -70,7 +70,8 @@
                                     @endforeach
                                 @else
                                     <div class="card-body text-center">
-                                        <h6>Sesi tidak ditemukan . . .</h6>
+                                        <h6><i class="text-danger fa fa-info-circle"></i>&nbsp;Sesi tidak ditemukan . . .
+                                        </h6>
                                     </div>
                                 @endif
                             </div>

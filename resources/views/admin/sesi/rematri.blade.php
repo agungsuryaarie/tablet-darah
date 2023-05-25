@@ -181,9 +181,13 @@
             $("body").on("click", ".absenRematri", function() {
                 var sesi_id = {{ $sesi->id }};
                 var rematri_id = $(this).data("id");
-                var url = "{{ url('sesi/ttd') }}" + "/" + sesi_id + "/" + rematri_id;
+                var ttd_id = $(this).data("ttd");
+                console.log(ttd_id);
+                var url = "{{ url('sesi/ttd') }}" + "/" + sesi_id + "/" + rematri_id + "/" + ttd_id;
                 window.location = url;
             });
+            // fecth foto with ajax
+            // ========================
             // $("body").on("click", ".fotoRematri", function() {
             //     var rematri_id = $(this).data("id");
             //     var $div = $('.fotoDiv');
