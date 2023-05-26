@@ -24,7 +24,7 @@
                                 <div class="input-group input-group-merge">
                                     <input name="email" type="email"
                                         class="form-control @error('email') is-invalid @enderror"
-                                        placeholder="Enter your email or username" autofocus />
+                                        placeholder="Masukkan email anda" autofocus required />
                                     <span class="input-group-text cursor-pointer"><i class="bx bx-envelope"></i></span>
                                 </div>
                                 @error('email')
@@ -34,15 +34,12 @@
                             <div class="mb-3 form-password-toggle">
                                 <div class="d-flex justify-content-between">
                                     <label class="form-label" for="password">Password</label>
-                                    <a href="auth-forgot-password-basic.html">
-                                        <small>Forgot Password?</small>
-                                    </a>
                                 </div>
                                 <div class="input-group input-group-merge">
                                     <input name="password" type="password"
                                         class="form-control  @error('password') is-invalid @enderror"
                                         placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                                        aria-describedby="password" />
+                                        aria-describedby="password" required />
                                     <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                                 </div>
                                 @error('password')
@@ -50,18 +47,8 @@
                                 @enderror
                             </div>
                             <div class="mb-3">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="remember-me" />
-                                    <div class="d-flex justify-content-between">
-                                        <label class="form-check-label" for="remember-me">
-                                            Remember Me
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mb-3">
                                 <button class="btn btn-primary d-grid w-100" type="submit">
-                                    Sign in
+                                    Masuk
                                 </button>
                             </div>
                         </form>
