@@ -163,7 +163,7 @@
                                                     {{ $item->nama }}</option>
                                             @endforeach
                                         </select>
-                                        @error('jurusan_id')
+                                        @error('kelas_id')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
@@ -173,13 +173,9 @@
                                         <label for="text" class="col-sm-2 col-form-label">Jurusan
                                             <small>(opsional)</small></label>
                                         <div class="col-sm-4">
-                                            <select
-                                                class="form-control select2 select2bs4 @error('jurusan_id') is-invalid @enderror"
-                                                name="jurusan_id" id="jurusan_id" style="width: 100%;">
+                                            <select class="form-control select2 select2bs4" name="jurusan_id"
+                                                id="jurusan_id" style="width: 100%;">
                                             </select>
-                                            @error('jurusan_id')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
                                         </div>
                                     </div>
                                 @endif

@@ -110,6 +110,7 @@ class RematriController extends Controller
         ]);
         $validatedData['puskesmas_id'] = Auth::user()->puskesmas_id;
         $validatedData['sekolah_id'] = Auth::user()->sekolah_id;
+        $validatedData['jurusan_id'] = $request->jurusan_id;
         $rematri = Rematri::create($validatedData);
 
         return redirect()->route('rematri.index')->with('success', json_encode(['success' => 'Rematri saved successfully.']));
@@ -118,10 +119,10 @@ class RematriController extends Controller
     public function edit($id)
     {
         $menu = 'Edit Data Rematri';
-        $jurusan = Jurusan::where('sekolah_id', Auth::user()->sekolah_id)->get();
+        $kelas = Kelas::where('sekolah_id', Auth::user()->sekolah_id)->get();
         $kecamatan = Kecamatan::get();
         $rematri = Rematri::find($id);
-        return view('admin.rematri-sekolah.edit', compact('menu', 'jurusan', 'kecamatan', 'rematri'));
+        return view('admin.rematri-sekolah.edit', compact('menu', 'kelas', 'kecamatan', 'rematri'));
     }
 
     public function update(Request $request, $id)
@@ -180,6 +181,7 @@ class RematriController extends Controller
         ]);
         $validatedData['puskesmas_id'] = Auth::user()->puskesmas_id;
         $validatedData['sekolah_id'] = Auth::user()->sekolah_id;
+        $validatedData['jurusan_id'] = $request->jurusan_id;
         $rematri = Rematri::find($id);
         $rematri->update($validatedData);
 

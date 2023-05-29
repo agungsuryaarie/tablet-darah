@@ -34,16 +34,24 @@
                                         <td style="width: 2%">:</td>
                                         <td style="width: 40%">{{ $sesi->nama }}</td>
                                     </tr>
-                                    <tr>
-                                        <td>Jurusan</td>
-                                        <td>:</td>
-                                        <td>{{ $sesi->jurusan->nama }}</td>
-                                    </tr>
+                                    @if ($sesi->jurusan_id != null)
+                                        <tr>
+                                            <td>Jurusan</td>
+                                            <td>:</td>
+                                            <td>{{ $sesi->jurusan->nama }}</td>
+                                        </tr>
+                                    @endif
                                     <tr>
                                         <td>Kelas</td>
                                         <td>:</td>
-                                        <td>{{ $sesi->kelas->nama }} {{ $sesi->jurusan->nama }}
-                                            {{ $sesi->kelas->ruangan }}</td>
+                                        <td>
+                                            @if ($sesi->jurusan_id == null)
+                                                {{ $sesi->kelas->nama }}
+                                            @else
+                                                {{ $sesi->kelas->nama }} {{ $sesi->jurusan->nama }}
+                                                {{ $sesi->jurusan->ruangan }}
+                                            @endif
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td>Jumlah Rematri</td>

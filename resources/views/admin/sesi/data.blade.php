@@ -54,8 +54,13 @@
                                                         <h5>{{ $item->sekolah->sekolah }}</h5>
                                                     </div>
                                                     <div class="col-6 text-center text-sm mt-2">
-                                                        Kelas : {{ $item->kelas->nama }} {{ $item->jurusan->nama }}
-                                                        {{ $item->kelas->ruangan }}
+                                                        Kelas :
+                                                        @if ($item->jurusan_id == null)
+                                                            {{ $item->kelas->nama }}
+                                                        @else
+                                                            {{ $item->kelas->nama }} {{ $item->jurusan->nama }}
+                                                            {{ $item->jurusan->ruangan }}
+                                                        @endif
                                                     </div>
                                                     <div class="col-6 text-center text-sm mt-2">
                                                         Sesi : {{ $item->nama }}
@@ -104,13 +109,16 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>Jurusan<span class="text-danger">*</span></label>
-                                <select class="browser-default custom-select select2bs4" name="jurusan_id" id="jurusan_id">
-                                </select>
+                        @if (Auth::user()->jenjang == 'SMA' or Auth::user()->jenjang == 'SMK')
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Jurusan<span class="text-danger">*</span></label>
+                                    <select class="browser-default custom-select select2bs4" name="jurusan_id"
+                                        id="jurusan_id">
+                                    </select>
+                                </div>
                             </div>
-                        </div>
+                        @endif
                         <div class="form-group">
                             <label class="col-sm-4 control-label">Nama Sesi<span class="text-danger"> *</span></label>
                             <div class="col-sm-12">

@@ -26,12 +26,10 @@ class SesiController extends Controller
         //Translate Bahasa Indonesia
         $message = array(
             'nama.required' => 'Nama Sesi harus diisi.',
-            'jurusan_id.required' => 'Jurusan harus dipilih.',
             'kelas_id.required' => 'Kelas harus dipilih.',
         );
         $validator = Validator::make($request->all(), [
             'nama' => 'required',
-            'jurusan_id' => 'required',
             'kelas_id' => 'required',
         ], $message);
 

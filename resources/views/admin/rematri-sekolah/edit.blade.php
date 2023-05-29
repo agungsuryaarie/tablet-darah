@@ -136,46 +136,35 @@
                                         @enderror
                                     </div>
                                 </div>
-                                @if (Auth::user()->jenjang == 'SMA' or Auth::user()->jenjang == 'SMK')
-                                    <div class="form-group row">
-                                        <label for="text" class="col-sm-2 col-form-label">Jurusan
-                                            <small>(opsional)</small></label>
-                                        <div class="col-sm-4">
-                                            <select
-                                                class="form-control select2 select2bs4 @error('jurusan_id') is-invalid @enderror"
-                                                name="jurusan_id" id="jurusan_id" style="width: 100%;">
-                                                <option value="">:::Pilih Jurusan:::</option>
-                                                @foreach ($jurusan as $item)
-                                                    <option value="{{ $item->id }}" @selected($item->id == $rematri->jurusan_id)>
-                                                        {{ $item->nama }}</option>
-                                                @endforeach
-                                            </select>
-                                            @error('jurusan_id')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                @endif
                                 <div class="form-group row">
                                     <label for="text" class="col-sm-2 col-form-label">Kelas</label>
                                     <div class="col-sm-4">
                                         <select
                                             class="form-control select2 select2bs4 @error('kelas_id') is-invalid @enderror"
                                             name="kelas_id" id="kelas_id" style="width: 100%;">
-                                            <option value="{{ $rematri->kelas_id }}">
-                                                @if ($rematri->jurusan_id == null)
-                                                    {{ $rematri->kelas->nama }}
-                                                @else
-                                                    {{ $rematri->kelas->nama }} {{ $rematri->jurusan->nama }}
-                                                    {{ $rematri->kelas->ruangan }}
-                                                @endif
-                                            </option>
+                                            <option value="">:::Pilih Kelas:::</option>
+                                            @foreach ($kelas as $item)
+                                                <option value="{{ $item->id }}"
+                                                    {{ $rematri->kelas_id == $item->id ? 'selected' : '' }}>
+                                                    {{ $item->nama }}</option>
+                                            @endforeach
                                         </select>
                                         @error('kelas_id')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
                                 </div>
+                                @if (Auth::user()->jenjang == 'SMA' or Auth::user()->jenjang == 'SMK')
+                                    <div class="form-group row">
+                                        <label for="text" class="col-sm-2 col-form-label">Jurusan
+                                            <small>(opsional)</small></label>
+                                        <div class="col-sm-4">
+                                            <select class="form-control select2 select2bs4" name="jurusan_id"
+                                                id="jurusan_id" style="width: 100%;">
+                                            </select>
+                                        </div>
+                                    </div>
+                                @endif
                                 <div class="form-group row">
                                     <label for="text" class="col-sm-2 col-form-label">Berat Badan (kg)<span
                                             class="text-danger">*</span></label>
@@ -307,22 +296,23 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-        $('#jurusan_id').on('change', function() {
-            var idJurusan = this.value;
-            $("#kelas_id").html('');
+        $('#kelas_id').on('change', function() {
+            var idKelas = this.value;
+            console.log(idKelas);
+            $("#jurusan_id").html('');
             $.ajax({
-                url: "{{ url('rematri/get-kelas') }}",
+                url: "{{ url('rematri/get-jurusan') }}",
                 type: "POST",
                 data: {
-                    jurusan_id: idJurusan,
+                    kelas_id: idKelas,
                     _token: '{{ csrf_token() }}'
                 },
                 dataType: 'json',
                 success: function(result) {
-                    $('#kelas_id').html('<option value="">:::Pilih Kelas:::</option>');
-                    $.each(result.kelas, function(key, value) {
-                        $("#kelas_id").append('<option value="' + value
-                            .id + '">' + value.nama + " " + value.jurusan.nama + " " +
+                    $('#jurusan_id').html('<option value="">:::Pilih Jurusan:::</option>');
+                    $.each(result.jurusan, function(key, value) {
+                        $("#jurusan_id").append('<option value="' + value
+                            .id + '">' + value.kelas.nama + " " + value.nama + " " +
                             value.ruangan + '</option>');
                     });
                 }
