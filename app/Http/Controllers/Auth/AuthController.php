@@ -66,6 +66,6 @@ class AuthController extends Controller
             $request->session()->regenerateToken();
             Auth::guard('admposyandu')->logout();
         }
-        return redirect('/login');
+        return redirect('/');
     }
 }

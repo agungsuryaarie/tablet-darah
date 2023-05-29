@@ -78,7 +78,7 @@ class RematriController extends Controller
         ], [
             'nama.required'             => 'Nama harus diisi.',
             'tempat_lahir.required'     => 'Tempat Lahir harus diisi.',
-            'tgl_lahir.required'        => 'Tempat Lahir harus diisi.',
+            'tgl_lahir.required'        => 'Tanggal Lahir harus diisi.',
             'nokk.required'             => 'Nomor KK harus diisi.',
             'nokk.numeric'              => 'Nomor KK harus angka.',
             'nokk.max'                  => 'Nomor KK maksimal 16 digit.',
@@ -104,8 +104,8 @@ class RematriController extends Controller
             'nik_ortu'                  => 'NIK Orang Tua harus diisi.',
             'tlp_ortu.required'         => 'Nomor Handphone Orang Tua harus diisi.',
             'tlp_ortu.numeric'          => 'Nomor Handphone Orang Tua harus angka.',
-            'kecamatan_id'              => 'Kecamatan harus diisi.',
-            'desa_id'                   => 'Desa harus diisi.',
+            'kecamatan_id'              => 'Kecamatan harus dipilih.',
+            'desa_id'                   => 'Desa harus dipilih.',
             'alamat'                    => 'Alamat harus diisi.',
         ]);
         $validatedData['puskesmas_id'] = Auth::user()->puskesmas_id;
@@ -149,7 +149,7 @@ class RematriController extends Controller
         ], [
             'nama.required'             => 'Nama harus diisi.',
             'tempat_lahir.required'     => 'Tempat Lahir harus diisi.',
-            'tgl_lahir.required'        => 'Tempat Lahir harus diisi.',
+            'tgl_lahir.required'        => 'Tanggal Lahir harus diisi.',
             'nokk.required'             => 'Nomor KK harus diisi.',
             'nokk.numeric'              => 'Nomor KK harus angka.',
             'nokk.max'                  => 'Nomor KK maksimal 16 digit.',

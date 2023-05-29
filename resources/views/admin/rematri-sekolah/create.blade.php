@@ -39,10 +39,8 @@
                                     <label for="text" class="col-sm-2 col-form-label">Tempat Lahir<span
                                             class="text-danger">*</span></label>
                                     <div class="col-sm-7">
-                                        <input type="text"
-                                            class="form-control @error('tempat_lahir') is-invalid @enderror"
-                                            id="tempat_lahir" name="tempat_lahir" placeholder="Tempat Lahir"
-                                            value="{{ old('tempat_lahir') }}">
+                                        <textarea type="text" class="form-control @error('tempat_lahir') is-invalid @enderror" id="tempat_lahir"
+                                            name="tempat_lahir" rows="3" placeholder="Enter ...">{{ old('tempat_lahir') }}</textarea>
                                         @error('tempat_lahir')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
@@ -51,7 +49,7 @@
                                 <div class="form-group row">
                                     <label for="text" class="col-sm-2 col-form-label">Tgl Lahir (dd-mm-yyyy)<span
                                             class="text-danger">*</span></label>
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-4">
                                         <div class="input-group date" id="reservationdate" data-target-input="nearest">
                                             <input type="text" id="tgl_lahir" name="tgl_lahir"
                                                 class="form-control datetimepicker-input @error('tgl_lahir') is-invalid @enderror"
@@ -60,10 +58,10 @@
                                                 data-toggle="datetimepicker">
                                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                             </div>
-                                            @error('tgl_lahir')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
                                         </div>
+                                        @error('tgl_lahir')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -92,7 +90,7 @@
                                 <div class="form-group row">
                                     <label for="text" class="col-sm-2 col-form-label">Anak ke berapa?<span
                                             class="text-danger">*</span></label>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-2">
                                         <input type="text" class="form-control @error('anak_ke') is-invalid @enderror"
                                             id="anak_ke" name="anak_ke" placeholder="Anak ke"
                                             value="{{ old('anak_ke') }}">
@@ -104,7 +102,7 @@
                                 <div class="form-group row">
                                     <label for="inputEmail3" class="col-sm-2 col-form-label">Email<span
                                             class="text-danger">*</span></label>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-4">
                                         <input type="email" class="form-control @error('email') is-invalid @enderror"
                                             id="email" name="email" placeholder="Email"
                                             value="{{ old('email') }}">
@@ -116,7 +114,7 @@
                                 <div class="form-group row">
                                     <label for="text" class="col-sm-2 col-form-label">Telp/HP<span
                                             class="text-danger">*</span></label>
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-2">
                                         <input type="text" class="form-control @error('nohp') is-invalid @enderror"
                                             id="nohp" name="nohp" placeholder="Telp/HP"
                                             value="{{ old('nohp') }}">
@@ -207,7 +205,7 @@
                                 <div class="form-group row">
                                     <label for="text" class="col-sm-2 col-form-label">Nama Orang Tua<span
                                             class="text-danger">*</span></label>
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-6">
                                         <input type="text"
                                             class="form-control @error('nama_ortu') is-invalid @enderror" id="nama_ortu"
                                             name="nama_ortu" placeholder="Nama Orang Tua"
@@ -218,9 +216,9 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="text" class="col-sm-2 col-form-label">Nik Orang Tua<span
+                                    <label for="text" class="col-sm-2 col-form-label">NIK Orang Tua<span
                                             class="text-danger">*</span></label>
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-6">
                                         <input type="text"
                                             class="form-control @error('nik_ortu') is-invalid @enderror" id="nik_ortu"
                                             name="nik_ortu" placeholder="Nik Orang Tua" value="{{ old('nik_ortu') }}">

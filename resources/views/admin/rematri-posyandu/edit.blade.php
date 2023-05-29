@@ -38,10 +38,8 @@
                                 <div class="form-group row">
                                     <label for="text" class="col-sm-2 col-form-label">Tempat Lahir</label>
                                     <div class="col-sm-7">
-                                        <input type="text"
-                                            class="form-control @error('tempat_lahir') is-invalid @enderror"
-                                            id="tempat_lahir" name="tempat_lahir" value="{{ $rematri->tempat_lahir }}"
-                                            placeholder="Tempat Lahir">
+                                        <textarea type="text" class="form-control @error('tempat_lahir') is-invalid @enderror" id="tempat_lahir"
+                                            name="tempat_lahir" rows="3" placeholder="Enter ...">{{ $rematri->tempat_lahir }}</textarea>
                                         @error('tempat_lahir')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
@@ -49,7 +47,7 @@
                                 </div>
                                 <div class="form-group row">
                                     <label for="text" class="col-sm-2 col-form-label">Tgl Lahir (dd-mm-yyyy)</label>
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-4">
                                         <div class="input-group date" id="reservationdate" data-target-input="nearest">
                                             <input type="text" id="tgl_lahir" name="tgl_lahir"
                                                 value="{{ $rematri->tgl_lahir }}"
@@ -59,10 +57,10 @@
                                                 data-toggle="datetimepicker">
                                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                             </div>
-                                            @error('tgl_lahir')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
                                         </div>
+                                        @error('tgl_lahir')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -88,7 +86,7 @@
                                 </div>
                                 <div class="form-group row">
                                     <label for="text" class="col-sm-2 col-form-label">Anak ke berapa?</label>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-2">
                                         <input type="text" class="form-control @error('anak_ke') is-invalid @enderror"
                                             id="anak_ke" name="anak_ke" value="{{ $rematri->anak_ke }}"
                                             placeholder="Anak ke">
@@ -99,7 +97,7 @@
                                 </div>
                                 <div class="form-group row">
                                     <label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-4">
                                         <input type="email" class="form-control @error('email') is-invalid @enderror"
                                             id="email" name="email" value="{{ $rematri->email }}"
                                             placeholder="Email">
@@ -110,7 +108,7 @@
                                 </div>
                                 <div class="form-group row">
                                     <label for="text" class="col-sm-2 col-form-label">Telp/HP</label>
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-2">
                                         <input type="text" class="form-control @error('nohp') is-invalid @enderror"
                                             id="nohp" name="nohp" value="{{ $rematri->nohp }}"
                                             placeholder="Telp/HP">
@@ -166,7 +164,7 @@
                                 <div class="form-group row">
                                     <label for="text" class="col-sm-2 col-form-label">Nama Orang Tua<span
                                             class="text-danger">*</span></label>
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-6">
                                         <input type="text"
                                             class="form-control @error('nama_ortu') is-invalid @enderror" id="nama_ortu"
                                             name="nama_ortu" value="{{ $rematri->nama_ortu }}"
@@ -177,9 +175,9 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="text" class="col-sm-2 col-form-label">Nik Orang Tua<span
+                                    <label for="text" class="col-sm-2 col-form-label">NIK Orang Tua<span
                                             class="text-danger">*</span></label>
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-6">
                                         <input type="text"
                                             class="form-control @error('nik_ortu') is-invalid @enderror" id="nik_ortu"
                                             name="nik_ortu" value="{{ $rematri->nik_ortu }}"
@@ -211,7 +209,7 @@
                                             name="kecamatan_id" id="kecamatan_id" style="width: 100%;">
                                             <option value="">:::Pilih Kecamatan:::</option>
                                             @foreach ($kecamatan as $item)
-                                                <option value="{{ $item->id }}" @selected($item->id == $rematri->id)>
+                                                <option value="{{ $item->id }}" @selected($item->id == $rematri->kecamatan_id)>
                                                     {{ $item->kecamatan }}</option>
                                             @endforeach
                                         </select>
@@ -237,7 +235,7 @@
                                 <div class="form-group row">
                                     <label for="text" class="col-sm-2 col-form-label">Alamat Lengkap<span
                                             class="text-danger">*</span></label>
-                                    <div class="col-sm-8">
+                                    <div class="col-sm-7">
                                         <textarea class="form-control @error('alamat') is-invalid @enderror" rows="3" id="alamat" name="alamat"
                                             placeholder="Enter ...">{{ $rematri->alamat }}</textarea>
                                         @error('alamat')
@@ -294,7 +292,7 @@
             var idKecamatan = this.value;
             $("#desa_id").html('');
             $.ajax({
-                url: "{{ url('rematri/get-desa') }}",
+                url: "{{ url('rematri-posyandu/get-desa') }}",
                 type: "POST",
                 data: {
                     kecamatan_id: idKecamatan,

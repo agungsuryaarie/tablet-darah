@@ -33,14 +33,10 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Route::controller(AuthController::class)->group(function () {
     // Login
-    Route::get('login', 'index')->name('login')->middleware('guest');
-    Route::post('login', 'login')->middleware('guest');
+    Route::get('/', 'index')->name('index')->middleware('guest');
+    Route::post('login', 'login')->name('login');
     Route::get('logout', 'logout')->name('logout');
 });
 
@@ -155,7 +151,7 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
         Route::get('rematri-posyandu/edit/{rematri}', [RematriPosyanduController::class, 'edit'])->name('rematri.posyandu.edit');
         Route::post('rematri-posyandu/update/{rematri}', [RematriPosyanduController::class, 'update'])->name('rematri.posyandu.update');
         Route::delete('rematri-posyandu/{rematri}/destroy', [RematriPosyanduController::class, 'destroy'])->name('rematri.posyandu.destroy');
-        Route::post('rematri-posyandu/get-desa', [RematriPosyanduController::class, 'getDesa']);
+        Route::post('rematri-posyandu/get-desa', [RematriPosyanduController::class, 'getDesaPos']);
         Route::get('rematri-posyandu/{rematri}/hb', [RematriPosyanduController::class, 'hb'])->name('rematri.posyandu.hb');
         Route::post('rematri-posyandu/hb', [RematriPosyanduController::class, 'storehb'])->name('hb.posyandu.store');
         Route::delete('rematri-posyandu/{rematri}/destroyhb', [RematriPosyanduController::class, 'destroyhb'])->name('rematri.posyandu.destroyhb');
