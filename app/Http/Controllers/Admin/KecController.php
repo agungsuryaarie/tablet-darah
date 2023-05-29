@@ -79,8 +79,8 @@ class KecController extends Controller
 
     public function getKecamatan()
     {
-        $data = Kecamatan::get(["kecamatan", "id"]);
-        return response()->json($data);
+        $kecamatan = Kecamatan::get(["kecamatan", "id"]);
+        return response()->json($kecamatan);
     }
 
     public function destroy($id)

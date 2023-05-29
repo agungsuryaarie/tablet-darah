@@ -25,7 +25,8 @@
                             @csrf
                             <div class="card-body">
                                 <div class="form-group row">
-                                    <label for="text" class="col-sm-2 col-form-label">Nama</label>
+                                    <label for="text" class="col-sm-2 col-form-label">Nama<span
+                                            class="text-danger">*</span></label>
                                     <div class="col-sm-6">
                                         <input type="text" class="form-control @error('nama') is-invalid @enderror"
                                             id="nama" name="nama" placeholder="Nama" value="{{ old('nama') }}">
@@ -35,7 +36,8 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="text" class="col-sm-2 col-form-label">Tempat Lahir</label>
+                                    <label for="text" class="col-sm-2 col-form-label">Tempat Lahir<span
+                                            class="text-danger">*</span></label>
                                     <div class="col-sm-7">
                                         <input type="text"
                                             class="form-control @error('tempat_lahir') is-invalid @enderror"
@@ -47,7 +49,8 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="text" class="col-sm-2 col-form-label">Tgl Lahir (dd-mm-yyyy)</label>
+                                    <label for="text" class="col-sm-2 col-form-label">Tgl Lahir (dd-mm-yyyy)<span
+                                            class="text-danger">*</span></label>
                                     <div class="col-sm-2">
                                         <div class="input-group date" id="reservationdate" data-target-input="nearest">
                                             <input type="text" id="tgl_lahir" name="tgl_lahir"
@@ -64,7 +67,8 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="text" class="col-sm-2 col-form-label">Nomor KK</label>
+                                    <label for="text" class="col-sm-2 col-form-label">Nomor KK<span
+                                            class="text-danger">*</span></label>
                                     <div class="col-sm-6">
                                         <input type="text" class="form-control @error('nokk') is-invalid @enderror"
                                             id="nokk" name="nokk" placeholder="Nomor KK"
@@ -75,7 +79,8 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="text" class="col-sm-2 col-form-label">NIK</label>
+                                    <label for="text" class="col-sm-2 col-form-label">NIK<span
+                                            class="text-danger">*</span></label>
                                     <div class="col-sm-6">
                                         <input type="text" class="form-control @error('nik') is-invalid @enderror"
                                             id="nik" name="nik" placeholder="NIK" value="{{ old('nik') }}">
@@ -85,7 +90,8 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="text" class="col-sm-2 col-form-label">Anak ke berapa?</label>
+                                    <label for="text" class="col-sm-2 col-form-label">Anak ke berapa?<span
+                                            class="text-danger">*</span></label>
                                     <div class="col-sm-3">
                                         <input type="text" class="form-control @error('anak_ke') is-invalid @enderror"
                                             id="anak_ke" name="anak_ke" placeholder="Anak ke"
@@ -96,7 +102,8 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
+                                    <label for="inputEmail3" class="col-sm-2 col-form-label">Email<span
+                                            class="text-danger">*</span></label>
                                     <div class="col-sm-3">
                                         <input type="email" class="form-control @error('email') is-invalid @enderror"
                                             id="email" name="email" placeholder="Email"
@@ -107,7 +114,8 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="text" class="col-sm-2 col-form-label">Telp/HP</label>
+                                    <label for="text" class="col-sm-2 col-form-label">Telp/HP<span
+                                            class="text-danger">*</span></label>
                                     <div class="col-sm-6">
                                         <input type="text" class="form-control @error('nohp') is-invalid @enderror"
                                             id="nohp" name="nohp" placeholder="Telp/HP"
@@ -118,7 +126,8 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="text" class="col-sm-2 col-form-label">Agama</label>
+                                    <label for="text" class="col-sm-2 col-form-label">Agama<span
+                                            class="text-danger">*</span></label>
                                     <div class="col-sm-4">
                                         <select
                                             class="form-control select2 select2bs4 @error('agama') is-invalid @enderror"
@@ -141,15 +150,16 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="text" class="col-sm-2 col-form-label">Jurusan</label>
+                                    <label for="text" class="col-sm-2 col-form-label">Kelas<span
+                                            class="text-danger">*</span></label>
                                     <div class="col-sm-4">
                                         <select
-                                            class="form-control select2 select2bs4 @error('jurusan_id') is-invalid @enderror"
-                                            name="jurusan_id" id="jurusan_id" style="width: 100%;">
-                                            <option value="">:::Pilih Jurusan:::</option>
-                                            @foreach ($jurusan as $item)
+                                            class="form-control select2 select2bs4 @error('kelas_id') is-invalid @enderror"
+                                            name="kelas_id" id="kelas_id" style="width: 100%;">
+                                            <option value="">:::Pilih Kelas:::</option>
+                                            @foreach ($kelas as $item)
                                                 <option value="{{ $item->id }}"
-                                                    {{ old('jurusan_id') == $item->id ? 'selected' : '' }}>
+                                                    {{ old('kelas_id') == $item->id ? 'selected' : '' }}>
                                                     {{ $item->nama }}</option>
                                             @endforeach
                                         </select>
@@ -158,18 +168,21 @@
                                         @enderror
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label for="text" class="col-sm-2 col-form-label">Kelas</label>
-                                    <div class="col-sm-4">
-                                        <select
-                                            class="form-control select2 select2bs4 @error('kelas_id') is-invalid @enderror"
-                                            name="kelas_id" id="kelas_id" style="width: 100%;">
-                                        </select>
-                                        @error('kelas_id')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
+                                @if (Auth::user()->jenjang == 'SMA' or Auth::user()->jenjang == 'SMK')
+                                    <div class="form-group row">
+                                        <label for="text" class="col-sm-2 col-form-label">Jurusan
+                                            <small>(opsional)</small></label>
+                                        <div class="col-sm-4">
+                                            <select
+                                                class="form-control select2 select2bs4 @error('jurusan_id') is-invalid @enderror"
+                                                name="jurusan_id" id="jurusan_id" style="width: 100%;">
+                                            </select>
+                                            @error('jurusan_id')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
                                     </div>
-                                </div>
+                                @endif
                                 <div class="form-group row">
                                     <label for="text" class="col-sm-2 col-form-label">Berat Badan (kg)<span
                                             class="text-danger">*</span></label>
@@ -300,22 +313,23 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-        $('#jurusan_id').on('change', function() {
-            var idJurusan = this.value;
-            $("#kelas_id").html('');
+        $('#kelas_id').on('change', function() {
+            var idKelas = this.value;
+            console.log(idKelas);
+            $("#jurusan_id").html('');
             $.ajax({
-                url: "{{ url('rematri/get-kelas') }}",
+                url: "{{ url('rematri/get-jurusan') }}",
                 type: "POST",
                 data: {
-                    jurusan_id: idJurusan,
+                    kelas_id: idKelas,
                     _token: '{{ csrf_token() }}'
                 },
                 dataType: 'json',
                 success: function(result) {
-                    $('#kelas_id').html('<option value="">:::Pilih Kelas:::</option>');
-                    $.each(result.kelas, function(key, value) {
-                        $("#kelas_id").append('<option value="' + value
-                            .id + '">' + value.nama + " " + value.jurusan.nama + " " +
+                    $('#jurusan_id').html('<option value="">:::Pilih Jurusan:::</option>');
+                    $.each(result.jurusan, function(key, value) {
+                        $("#jurusan_id").append('<option value="' + value
+                            .id + '">' + value.kelas.nama + " " + value.nama + " " +
                             value.ruangan + '</option>');
                     });
                 }

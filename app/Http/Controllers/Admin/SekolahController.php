@@ -106,7 +106,7 @@ class SekolahController extends Controller
 
     public function getSekolah(Request $request)
     {
-        $data = Sekolah::where('kecamatan_id', $request->kecamatan_id)->get(["sekolah", "id"]);
+        $data = Sekolah::where('kecamatan_id', $request->kecamatan_id)->get(["sekolah", "id", 'jenjang']);
         return response()->json($data);
     }
 
@@ -118,7 +118,14 @@ class SekolahController extends Controller
 
     public function getStatus()
     {
-        $data = Status::get(["kode", "status"]);
+        $data = Status::get(["status", "nama"]);
+        return response()->json($data);
+    }
+
+    public function getJenjangAuto(Request $request)
+    {
+        $data['jenjang'] = Sekolah::where("id", $request->sekolah_id)
+            ->get();
         return response()->json($data);
     }
 }

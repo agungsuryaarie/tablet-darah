@@ -47,10 +47,12 @@ class PosyanduBinaanController extends Controller
         //Translate Bahasa Indonesia
         $message = array(
             'desa_id.required' => 'Desa harus dipilih.',
+            'kode_posyandu.required' => 'Kode Desa harus diisi.',
             'nama_posyandu.required' => 'Nama Posyandu harus diisi.',
         );
         $validator = Validator::make($request->all(), [
             'desa_id' => 'required',
+            'kode_posyandu' => 'required',
             'nama_posyandu' => 'required',
         ], $message);
 

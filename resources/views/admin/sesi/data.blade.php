@@ -98,15 +98,16 @@
                         <input type="hidden" name="sesi_id" id="sesi_id">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label>Jurusan<span class="text-danger">*</span></label>
-                                <select class="browser-default custom-select select2bs4" name="jurusan_id" id="jurusan_id">
+                                <label>Kelas<span class="text-danger">*</span></label>
+                                <select class="form-control select2 select2bs4 @error('kelas_id') is-invalid @enderror"
+                                    name="kelas_id" id="kelas_id" style="width: 100%;">
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label>Kelas<span class="text-danger">*</span></label>
-                                <select class="browser-default custom-select select2bs4" name="kelas_id" id="kelas_id">
+                                <label>Jurusan<span class="text-danger">*</span></label>
+                                <select class="browser-default custom-select select2bs4" name="jurusan_id" id="jurusan_id">
                                 </select>
                             </div>
                         </div>
@@ -140,7 +141,7 @@
             $("#ajaxModel").modal("show");
             $("#deleteSesi").modal("show");
             $.ajax({
-                url: "{{ url('jurusan/get-jurusan') }}",
+                url: "{{ url('kelas/get-kelas') }}",
                 type: "POST",
                 data: {
                     sekolah_id: {{ Auth::user()->sekolah_id }},
@@ -148,10 +149,10 @@
                 },
                 dataType: 'json',
                 success: function(result) {
-                    $('#jurusan_id').html(
-                        '<option value="">:::Pilih Jurusan:::</option>');
+                    $('#kelas_id').html(
+                        '<option value="">:::Pilih Kelas:::</option>');
                     $.each(result, function(key, value) {
-                        $("#jurusan_id").append('<option value="' + value
+                        $("#kelas_id").append('<option value="' + value
                             .id + '">' + value.nama + '</option>');
                     });
                 }
@@ -159,26 +160,26 @@
         });
 
         $(document).ready(function() {
-            $('#jurusan_id').on('change', function() {
-                var idJurusan = this.value;
-                $("#kelas_id").html('');
+            $('#kelas_id').on('change', function() {
+                var idKelas = this.value;
+                $("#jurusan_id").html('');
                 $.ajax({
-                    url: "{{ url('kelas/get-kelas') }}",
+                    url: "{{ url('jurusan/get-jurusan') }}",
                     type: "POST",
                     data: {
-                        jurusan_id: idJurusan,
+                        kelas_id: idKelas,
                         _token: '{{ csrf_token() }}'
                     },
                     dataType: 'json',
                     success: function(result) {
-                        $('#kelas_id').html(
-                            '<option value="">::Pilih Kelas::</option>'
+                        $('#jurusan_id').html(
+                            '<option value="">::Pilih Jurusan::</option>'
                         );
                         $.each(result, function(key, value) {
-                            $("#kelas_id").append(
+                            $("#jurusan_id").append(
                                 '<option value="' + value
                                 .id + '">' + value
-                                .nama + ' ' + value.jurusan.nama + ' ' + value
+                                .kelas.nama + ' ' + value.nama + ' ' + value
                                 .ruangan +
                                 '</option>');
                         });

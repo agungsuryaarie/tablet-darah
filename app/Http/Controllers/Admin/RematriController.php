@@ -26,7 +26,12 @@ class RematriController extends Controller
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('kelas', function ($data) {
-                    return $data->kelas->nama . ' ' . $data->jurusan->nama . ' ' . $data->kelas->ruangan;
+                    if ($data->jurusan_id == null) {
+                        $kelas =  $data->kelas->nama;
+                    } else {
+                        $kelas =  $data->kelas->nama . ' ' . $data->jurusan->nama . ' ' . $data->jurusan->ruangan;
+                    }
+                    return $kelas;
                 })
                 ->addColumn('action', function ($row) {
                     $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs editRematri"><i class="fas fa-edit"></i></a>';
@@ -44,9 +49,9 @@ class RematriController extends Controller
     public function create()
     {
         $menu = 'Tambah Data Rematri';
-        $jurusan = Jurusan::where('sekolah_id', Auth::user()->sekolah_id)->get();
+        $kelas = Kelas::where('sekolah_id', Auth::user()->sekolah_id)->get();
         $kecamatan = Kecamatan::get();
-        return view('admin.rematri-sekolah.create', compact('menu', 'jurusan', 'kecamatan'));
+        return view('admin.rematri-sekolah.create', compact('menu', 'kelas', 'kecamatan'));
     }
 
     public function store(Request $request)
@@ -61,7 +66,6 @@ class RematriController extends Controller
             'email'             => 'required|email|unique:rematri,email',
             'nohp'              => 'required|numeric',
             'agama'             => 'required',
-            'jurusan_id'        => 'required',
             'kelas_id'          => 'required',
             'berat_badan'       => 'required|numeric',
             'panjang_badan'     => 'required|numeric',
@@ -91,7 +95,6 @@ class RematriController extends Controller
             'nohp.required'              => 'Nomor Handphone harus diisi.',
             'nohp.numeric'               => 'Nomor Handphone harus angka.',
             'agama.required'            => 'Agama harus diisi.',
-            'jurusan_id.required'       => 'Jurusan harus diisi.',
             'kelas_id.required'         => 'Kelas harus diisi.',
             'berat_badan.required'      => 'Berat Badan harus diisi.',
             'berat_badan.numeric'       => 'Berat Badan harus angka.',
@@ -133,7 +136,6 @@ class RematriController extends Controller
             'email'             => 'required|email',
             'nohp'              => 'required|numeric',
             'agama'             => 'required',
-            'jurusan_id'        => 'required',
             'kelas_id'          => 'required',
             'berat_badan'       => 'required|numeric',
             'panjang_badan'     => 'required|numeric',
@@ -163,7 +165,6 @@ class RematriController extends Controller
             'nohp.required'              => 'Nomor Handphone harus diisi.',
             'nohp.numeric'               => 'Nomor Handphone harus angka.',
             'agama.required'            => 'Agama harus diisi.',
-            'jurusan_id.required'       => 'Jurusan harus diisi.',
             'kelas_id.required'         => 'Kelas harus diisi.',
             'berat_badan.required'      => 'Berat Badan harus diisi.',
             'berat_badan.numeric'       => 'Berat Badan harus angka.',
@@ -185,13 +186,14 @@ class RematriController extends Controller
         return redirect()->route('rematri.index')->with('success', json_encode(['success' => 'Rematri update successfully.']));
     }
 
-    public function getKelas(Request $request)
+    public function getJurusan(Request $request)
     {
-        $data['kelas'] = Kelas::with('jurusan')->where("jurusan_id", $request->jurusan_id)
+        $data['jurusan'] = Jurusan::with('kelas')->where("kelas_id", $request->kelas_id)
             ->get();
 
         return response()->json($data);
     }
+
 
     public function getDesa(Request $request)
     {

@@ -71,6 +71,7 @@
                                     </div>
                                 </div>
                             </div>
+                            <input type="hidden" id="jenjang" name="jenjang">
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -249,15 +250,37 @@
                         });
                     }
                 });
+                $('#sekolah_id').on('change', function() {
+                    var idSekolah = this.value;
+                    console.log(idSekolah);
+                    $("#jenjang").html('');
+                    $.ajax({
+                        url: "{{ url('sekolah/get-jenjang-auto') }}",
+                        type: "POST",
+                        data: {
+                            sekolah_id: idSekolah,
+                            _token: '{{ csrf_token() }}'
+                        },
+                        dataType: 'json',
+                        success: function(result) {
+                            $.each(result.jenjang, function(key, value) {
+                                $("#jenjang").val(value.jenjang);
+                            });
+                        }
+                    });
+                });
             });
 
             $("body").on("click", ".editUsersekolah", function() {
                 var usersekolah_id = $(this).data("id");
+                console.log(usersekolah_id);
                 $.get("{{ route('usersekolah.index') }}" + "/" + usersekolah_id + "/edit", function(data) {
                     $("#modelHeading").html("Edit User Sekolah");
                     $("#saveBtn").val("edit-usersekolah");
                     $("#ajaxModel").modal("show");
                     $("#usersekolah_id").val(data.id);
+                    $("#jenjang").val(data.jenjang);
+                    $("#sekolah_id").val(data.sekolah_id);
                     $.ajax({
                         url: "{{ url('sekolah/get-sekolah') }}",
                         type: "POST",
@@ -280,6 +303,25 @@
                                         'selected', true);
                             });
                         }
+                    });
+                    $('#sekolah_id').on('change', function() {
+                        var idSekolah = this.value;
+                        console.log(idSekolah);
+                        $("#jenjang").html('');
+                        $.ajax({
+                            url: "{{ url('sekolah/get-jenjang-auto') }}",
+                            type: "POST",
+                            data: {
+                                sekolah_id: idSekolah,
+                                _token: '{{ csrf_token() }}'
+                            },
+                            dataType: 'json',
+                            success: function(result) {
+                                $.each(result.jenjang, function(key, value) {
+                                    $("#jenjang").val(value.jenjang);
+                                });
+                            }
+                        });
                     });
                     $("#nik").val(data.nik);
                     $("#nama").val(data.nama);

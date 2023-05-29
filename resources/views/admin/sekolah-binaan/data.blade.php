@@ -246,7 +246,7 @@
                             '<option value="">:::Pilih Status:::</option>');
                         $.each(result, function(key, value) {
                             $("#status").append('<option value="' + value
-                                .kode + '">' + value.status + '</option>');
+                                .status + '">' + value.nama + '</option>');
                         });
                     }
                 });
@@ -286,7 +286,7 @@
                                 '<option value="">:::Pilih Status:::</option>');
                             $.each(result, function(key, value) {
                                 $("#status").append('<option value="' + value
-                                    .kode + '">' + value.status +
+                                    .status + '">' + value.nama +
                                     '</option>');
                             });
                             $('#status option[value=' +

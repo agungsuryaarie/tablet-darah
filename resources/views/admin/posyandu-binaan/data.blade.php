@@ -29,7 +29,7 @@
                                 <thead>
                                     <tr>
                                         <th style="width:5%">No</th>
-                                        <th style="width:12%">Kode Posyandu</th>
+                                        <th style="width:12%">Kode</th>
                                         <th>Posyandu</th>
                                         <th>Puskesmas</th>
                                         <th style="width:12%">Desa/Kelurahan</th>
@@ -71,7 +71,7 @@
                             <label class="col-sm-4 control-label">Kode Posyandu<span class="text-danger"> *</span></label>
                             <div class="col-sm-12">
                                 <input type="text" class="form-control" id="kode_posyandu" name="kode_posyandu"
-                                    placeholder="Kode Posyandu">
+                                    placeholder="Kode Posyandu" onkeypress="return hanyaAngka(event)">
                             </div>
                         </div>
                         <div class="form-group">
@@ -129,6 +129,14 @@
 @endsection
 @section('script')
     <script>
+        // Fungsi hanyaAngka
+        function hanyaAngka(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+
+                return false;
+            return true;
+        }
         $(function() {
             $.ajaxSetup({
                 headers: {

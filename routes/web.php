@@ -82,13 +82,14 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
 
     Route::group(['middleware' => ['checkUser:2']], function () {
 
-        Route::post('kecamatan/get-kecamatan', [KecController::class, 'getKecamatan']);
-        Route::post('desa/get-desa', [DesaController::class, 'getDesa']);
-        Route::post('puskesmas/get-puskes', [PuskesController::class, 'getPuskes']);
+        // Route::post('kecamatan/get-kecamatan', [KecController::class, 'getKecamatan']);
+        // Route::post('desa/get-desa', [DesaController::class, 'getDesa']);
+        // Route::post('puskesmas/get-puskes', [PuskesController::class, 'getPuskes']);
         Route::post('posyandu/get-posyandu', [PosyanduController::class, 'getPosyandu']);
         Route::post('sekolah/get-sekolah', [SekolahController::class, 'getSekolah']);
         Route::post('sekolah/get-jenjang', [SekolahController::class, 'getJenjang']);
         Route::post('sekolah/get-status', [SekolahController::class, 'getStatus']);
+        Route::post('sekolah/get-jenjang-auto', [SekolahController::class, 'getJenjangAuto']);
 
 
         // Sekolah Binaan
@@ -102,6 +103,7 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
         Route::post('users-sekolah', [UserSekolahController::class, 'store'])->name('usersekolah.store');
         Route::get('users-sekolah/{id}/edit', [UserSekolahController::class, 'edit'])->name('usersekolah.edit');
         Route::delete('users-sekolah/{user}/destroy', [UserSekolahController::class, 'destroy'])->name('usersekolah.destroy');
+
 
         // Users Posyandu
         Route::get('users-posyandu', [UserPosyanduController::class, 'index'])->name('userposyandu.index');
@@ -132,12 +134,13 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
         Route::get('rematri/edit/{rematri}', [RematriController::class, 'edit'])->name('rematri.edit');
         Route::post('rematri/update/{rematri}', [RematriController::class, 'update'])->name('rematri.update');
         Route::delete('rematri/{rematri}/destroy', [RematriController::class, 'destroy'])->name('rematri.destroy');
-        Route::post('rematri/get-kelas', [RematriController::class, 'getKelas']);
+        Route::post('rematri/get-jurusan', [RematriController::class, 'getJurusan']);
         Route::post('rematri/get-desa', [RematriController::class, 'getDesa']);
         Route::get('rematri/{rematri}/hb', [RematriController::class, 'hb'])->name('rematri.hb');
         Route::post('rematri/hb', [RematriController::class, 'storehb'])->name('hb.store');
         Route::delete('rematri/{rematri}/destroyhb', [RematriController::class, 'destroyhb'])->name('rematri.destroyhb');
 
+        // Sesi
         Route::resource('sesi', SesiController::class);
         Route::get('sesi/{id}/rematri', [SesiController::class, 'rematri'])->name('sesi.rematri');
         Route::get('sesi/ttd/{id}/{ids}/{ttd}', [SesiController::class, 'ttd'])->name('sesi.ttd');

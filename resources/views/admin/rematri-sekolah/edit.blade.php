@@ -136,23 +136,26 @@
                                         @enderror
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label for="text" class="col-sm-2 col-form-label">Jurusan</label>
-                                    <div class="col-sm-4">
-                                        <select
-                                            class="form-control select2 select2bs4 @error('jurusan_id') is-invalid @enderror"
-                                            name="jurusan_id" id="jurusan_id" style="width: 100%;">
-                                            <option value="">:::Pilih Jurusan:::</option>
-                                            @foreach ($jurusan as $item)
-                                                <option value="{{ $item->id }}" @selected($item->id == $rematri->jurusan_id)>
-                                                    {{ $item->nama }}</option>
-                                            @endforeach
-                                        </select>
-                                        @error('jurusan_id')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
+                                @if (Auth::user()->jenjang == 'SMA' or Auth::user()->jenjang == 'SMK')
+                                    <div class="form-group row">
+                                        <label for="text" class="col-sm-2 col-form-label">Jurusan
+                                            <small>(opsional)</small></label>
+                                        <div class="col-sm-4">
+                                            <select
+                                                class="form-control select2 select2bs4 @error('jurusan_id') is-invalid @enderror"
+                                                name="jurusan_id" id="jurusan_id" style="width: 100%;">
+                                                <option value="">:::Pilih Jurusan:::</option>
+                                                @foreach ($jurusan as $item)
+                                                    <option value="{{ $item->id }}" @selected($item->id == $rematri->jurusan_id)>
+                                                        {{ $item->nama }}</option>
+                                                @endforeach
+                                            </select>
+                                            @error('jurusan_id')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
                                     </div>
-                                </div>
+                                @endif
                                 <div class="form-group row">
                                     <label for="text" class="col-sm-2 col-form-label">Kelas</label>
                                     <div class="col-sm-4">
@@ -160,8 +163,13 @@
                                             class="form-control select2 select2bs4 @error('kelas_id') is-invalid @enderror"
                                             name="kelas_id" id="kelas_id" style="width: 100%;">
                                             <option value="{{ $rematri->kelas_id }}">
-                                                {{ $rematri->kelas->nama }} {{ $rematri->jurusan->nama }}
-                                                {{ $rematri->kelas->ruangan }}</option>
+                                                @if ($rematri->jurusan_id == null)
+                                                    {{ $rematri->kelas->nama }}
+                                                @else
+                                                    {{ $rematri->kelas->nama }} {{ $rematri->jurusan->nama }}
+                                                    {{ $rematri->kelas->ruangan }}
+                                                @endif
+                                            </option>
                                         </select>
                                         @error('kelas_id')
                                             <span class="text-danger">{{ $message }}</span>
