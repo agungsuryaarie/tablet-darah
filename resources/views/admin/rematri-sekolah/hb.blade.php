@@ -37,8 +37,14 @@
                                     <tr>
                                         <td>Kelas</td>
                                         <td>:</td>
-                                        <td>{{ $rematri->kelas->nama }} {{ $rematri->jurusan->nama }}
-                                            {{ $rematri->kelas->ruangan }}</td>
+                                        <td>
+                                            @if ($rematri->jurusan_id == null)
+                                                {{ $rematri->kelas->nama }}
+                                            @else
+                                                {{ $rematri->kelas->nama }} {{ $rematri->jurusan->nama }}
+                                                {{ $rematri->jurusan->ruangan }}
+                                        </td>
+                                        @endif
                                     </tr>
                                     <tr>
                                         <td>Umur</td>

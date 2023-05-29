@@ -156,11 +156,14 @@
                                 </div>
                                 @if (Auth::user()->jenjang == 'SMA' or Auth::user()->jenjang == 'SMK')
                                     <div class="form-group row">
-                                        <label for="text" class="col-sm-2 col-form-label">Jurusan
-                                            <small>(opsional)</small></label>
+                                        <label for="text" class="col-sm-2 col-form-label">Jurusan</label>
                                         <div class="col-sm-4">
                                             <select class="form-control select2 select2bs4" name="jurusan_id"
                                                 id="jurusan_id" style="width: 100%;">
+                                                <option value="{{ $rematri->jurusan_id }}">{{ $rematri->kelas->nama }}
+                                                    {{ $rematri->jurusan->nama }}
+                                                    {{ $rematri->jurusan->ruangan }}
+                                                </option>
                                             </select>
                                         </div>
                                     </div>
@@ -239,7 +242,7 @@
                                             name="kecamatan_id" id="kecamatan_id" style="width: 100%;">
                                             <option value="">:::Pilih Kecamatan:::</option>
                                             @foreach ($kecamatan as $item)
-                                                <option value="{{ $item->id }}" @selected($item->id == $rematri->id)>
+                                                <option value="{{ $item->id }}" @selected($item->id == $rematri->kecamatan_id)>
                                                     {{ $item->kecamatan }}</option>
                                             @endforeach
                                         </select>

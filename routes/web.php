@@ -83,8 +83,8 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
     Route::group(['middleware' => ['checkUser:2']], function () {
 
         // Route::post('kecamatan/get-kecamatan', [KecController::class, 'getKecamatan']);
-        // Route::post('desa/get-desa', [DesaController::class, 'getDesa']);
         // Route::post('puskesmas/get-puskes', [PuskesController::class, 'getPuskes']);
+        Route::post('desa/get-desa', [DesaController::class, 'getDesa']);
         Route::post('posyandu/get-posyandu', [PosyanduController::class, 'getPosyandu']);
         Route::post('sekolah/get-sekolah', [SekolahController::class, 'getSekolah']);
         Route::post('sekolah/get-jenjang', [SekolahController::class, 'getJenjang']);

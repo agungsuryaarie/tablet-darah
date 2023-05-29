@@ -170,8 +170,7 @@
                                 </div>
                                 @if (Auth::user()->jenjang == 'SMA' or Auth::user()->jenjang == 'SMK')
                                     <div class="form-group row">
-                                        <label for="text" class="col-sm-2 col-form-label">Jurusan
-                                            <small>(opsional)</small></label>
+                                        <label for="text" class="col-sm-2 col-form-label">Jurusan</label>
                                         <div class="col-sm-4">
                                             <select class="form-control select2 select2bs4" name="jurusan_id"
                                                 id="jurusan_id" style="width: 100%;">
