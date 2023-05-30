@@ -22,6 +22,9 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
+                            <h6 class="float-left"><i class="fas fa-info-circle"></i> Sesi berakhir setiap jam 12 malam
+                                sejak sesi dibuat.
+                            </h6>
                             <a href="javascript:void(0)" id="createNewSesiP" class="btn btn-info btn-xs float-right">
                                 <i class="fas fa-plus-circle"></i> Tambah</a>
                         </div>
@@ -58,7 +61,11 @@
                                                         Sesi : {{ $item->nama }}
                                                     </div>
                                                     <div class="col-12 text-center mt-2">
-                                                        <div>{{ $item->created_at->isoFormat('D MMMM Y') }}</div>
+                                                        <div>{{ $item->created_at->isoFormat('D MMMM Y - H:mm:s') }}</div>
+                                                    </div>
+                                                    <div class="col-12 text-center mt-2">
+                                                        <span class="btn btn-danger btn-round btn-xs mr-2 ml-2"
+                                                            id="berakhir_{{ $loop->index }}"></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -163,5 +170,40 @@
         $('.SesiError').click(function() {
             toastr.error('Sesi sudah berakhir.')
         });
+        //waktu sesi
+        var data = {!! json_encode($sesip) !!};
+        // Fungsi countdown
+        function countdown() {
+            // Mendapatkan tanggal dan jam saat ini
+            var now = new Date();
+
+            // Mengakses setiap data tanggal dan jam dalam perulangan
+            data.forEach(function(item, index) {
+                console.log(item);
+                var targetDate = new Date(item.created_at);
+
+                // Menentukan target waktu tengah malam (jam 00:00)
+                var targetMidnight = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate
+                    .getDate() + 1,
+                    0, 0, 0);
+
+                // Menghitung selisih waktu antara sekarang dan tengah malam
+                var timeDiff = targetMidnight - now;
+
+                // Menghitung selisih waktu dalam satuan jam, menit, dan detik
+                var hours = Math.floor(timeDiff / (1000 * 60 * 60));
+                var minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+
+                // Menampilkan countdown pada elemen HTML
+                var countdownElement = document.getElementById('berakhir_' + index);
+                countdownElement.innerHTML = hours + ' jam, ' + minutes + ' menit, ' + seconds + ' detik';
+                if (timeDiff < 0) {
+                    document.getElementById("berakhir").innerHTML = "sesi berakhir";
+                }
+            });
+        }
+        // Memanggil fungsi countdown setiap detik
+        setInterval(countdown, 1000);
     </script>
 @endsection
