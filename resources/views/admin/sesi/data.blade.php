@@ -108,7 +108,10 @@
                     <form id="sesiForm" name="sesiForm" class="form-horizontal">
                         @csrf
                         <input type="hidden" name="sesi_id" id="sesi_id">
-                        <div class="col-md-12">
+                        <small class="mb-5"><i class="fas fa-info-circle"></i> Seluruh rematri yang ada di
+                            kelas terpilih otomatis masuk kedalam sesi.
+                        </small>
+                        <div class="col-md-12 mt-3">
                             <div class="form-group">
                                 <label>Kelas<span class="text-danger">*</span></label>
                                 <select class="form-control select2 select2bs4 @error('kelas_id') is-invalid @enderror"

@@ -100,6 +100,10 @@
                     <form id="sesipForm" name="sesipForm" class="form-horizontal">
                         @csrf
                         <input type="hidden" name="sesip_id" id="sesip_id">
+                        <small class="float-left mb-3"><i class="fas fa-info-circle"></i> Seluruh rematri yang ada di
+                            Posyandu
+                            otomatis masuk kedalam sesi.
+                        </small>
                         <div class="form-group">
                             <label class="col-sm-4 control-label">Nama Sesi<span class="text-danger"> *</span></label>
                             <div class="col-sm-12">
