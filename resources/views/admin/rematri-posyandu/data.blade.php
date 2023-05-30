@@ -134,7 +134,6 @@
                 var url = "{{ url('rematri-posyandu') }}" + "/" + rematri_id + "/hb";
                 window.location = url;
             });
-
             $("body").on("click", ".deleteRematri", function() {
                 var rematri_id = $(this).data("id");
                 $("#modelHeadingHps").html("Hapus");

@@ -11,14 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('foto_sesi', function (Blueprint $table) {
+        Schema::create('sesi_posyandu', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('kecamatan_id');
             $table->unsignedBigInteger('puskesmas_id');
-            $table->unsignedBigInteger('sekolah_id');
-            $table->unsignedBigInteger('kelas_id');
-            $table->unsignedBigInteger('sesi_id');
-            $table->string('foto');
+            $table->unsignedBigInteger('posyandu_id');
+            $table->string('nama');
             $table->timestamps();
         });
     }
@@ -28,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('foto_sesi');
+        Schema::dropIfExists('sesi_posyandu');
     }
 };

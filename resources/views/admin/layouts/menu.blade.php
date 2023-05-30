@@ -221,7 +221,8 @@
         </ul>
     </li>
     <li class="nav-item">
-        <a href="#" class="nav-link {{ request()->segment(1) == 'sesi-posyandu' ? 'active' : '' }}">
+        <a href="{{ route('sesi-posyandu.index') }}"
+            class="nav-link {{ request()->segment(1) == 'sesi-posyandu' ? 'active' : '' }}">
             <i class="nav-icon fas fa-capsules"></i>
             <p>
                 Sesi TTD

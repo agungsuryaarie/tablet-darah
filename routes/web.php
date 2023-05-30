@@ -20,6 +20,7 @@ use App\Http\Controllers\Admin\SekolahController;
 use App\Http\Controllers\Admin\SekolahBinaanController;
 use App\Http\Controllers\Admin\PosyanduBinaanController;
 use App\Http\Controllers\Admin\SesiController;
+use App\Http\Controllers\Admin\SesiPosyanduController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
@@ -155,5 +156,11 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
         Route::get('rematri-posyandu/{rematri}/hb', [RematriPosyanduController::class, 'hb'])->name('rematri.posyandu.hb');
         Route::post('rematri-posyandu/hb', [RematriPosyanduController::class, 'storehb'])->name('hb.posyandu.store');
         Route::delete('rematri-posyandu/{rematri}/destroyhb', [RematriPosyanduController::class, 'destroyhb'])->name('rematri.posyandu.destroyhb');
+
+        // Sesi
+        Route::resource('sesi-posyandu', SesiPosyanduController::class);
+        Route::get('sesi-posyandu/{id}/rematri', [SesiPosyanduController::class, 'rematri'])->name('sesi.posyandu.rematri');
+        Route::get('sesi-posyandu/ttd/{id}/{ids}/{ttd}', [SesiPosyanduController::class, 'ttd'])->name('sesi.posyandu.ttd');
+        Route::post('sesi-posyandu/upload', [SesiPosyanduController::class, 'upload'])->name('sesi.posyandu.uploadfoto');
     });
 });

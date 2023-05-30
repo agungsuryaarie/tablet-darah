@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('foto_sesi', function (Blueprint $table) {
-            $table->unsignedBigInteger('rematri_id')->after('sesi_id');
+        Schema::table('sesi_posyandu', function (Blueprint $table) {
+            $table->dropColumn(['kecamatan_id']);
         });
     }
 
@@ -21,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('foto_sesi', function (Blueprint $table) {
+        Schema::table('sesi_posyandu', function (Blueprint $table) {
             //
         });
     }

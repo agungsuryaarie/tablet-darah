@@ -22,16 +22,17 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <a href="javascript:void(0)" id="createNewSesi" class="btn btn-info btn-xs float-right">
+                            <a href="javascript:void(0)" id="createNewSesiP" class="btn btn-info btn-xs float-right">
                                 <i class="fas fa-plus-circle"></i> Tambah</a>
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                @if (!$sesi->isEmpty())
-                                    @foreach ($sesi as $item)
+                                @if (!$sesip->isEmpty())
+                                    @foreach ($sesip as $item)
                                         <div class="col-sm-4 mb-3">
                                             @if (date('Y-m-d') < $item->created_at)
-                                                <a href="{{ route('sesi.rematri', Crypt::encryptString($item->id)) }}">
+                                                <a
+                                                    href="{{ route('sesi.posyandu.rematri', Crypt::encryptString($item->id)) }}">
                                                 @else
                                                     <a href="#" class="SesiError">
                                             @endif
@@ -51,18 +52,9 @@
                                                 @endif
                                                 <div class="row p-3">
                                                     <div class="col-12 text-center">
-                                                        <h5>{{ $item->sekolah->sekolah }}</h5>
+                                                        <h5>{{ $item->posyandu->posyandu }}</h5>
                                                     </div>
-                                                    <div class="col-6 text-center text-sm mt-2">
-                                                        Kelas :
-                                                        @if ($item->jurusan_id == null)
-                                                            {{ $item->kelas->nama }}
-                                                        @else
-                                                            {{ $item->kelas->nama }} {{ $item->jurusan->nama }}
-                                                            {{ $item->jurusan->ruangan }}
-                                                        @endif
-                                                    </div>
-                                                    <div class="col-6 text-center text-sm mt-2">
+                                                    <div class="col-12 text-center text-sm mt-2">
                                                         Sesi : {{ $item->nama }}
                                                     </div>
                                                     <div class="col-12 text-center mt-2">
@@ -98,27 +90,9 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form id="sesiForm" name="sesiForm" class="form-horizontal">
+                    <form id="sesipForm" name="sesipForm" class="form-horizontal">
                         @csrf
-                        <input type="hidden" name="sesi_id" id="sesi_id">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>Kelas<span class="text-danger">*</span></label>
-                                <select class="form-control select2 select2bs4 @error('kelas_id') is-invalid @enderror"
-                                    name="kelas_id" id="kelas_id" style="width: 100%;">
-                                </select>
-                            </div>
-                        </div>
-                        @if (Auth::user()->jenjang == 'SMA' or Auth::user()->jenjang == 'SMK')
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label>Jurusan<span class="text-danger">*</span></label>
-                                    <select class="browser-default custom-select select2bs4" name="jurusan_id"
-                                        id="jurusan_id">
-                                    </select>
-                                </div>
-                            </div>
-                        @endif
+                        <input type="hidden" name="sesip_id" id="sesip_id">
                         <div class="form-group">
                             <label class="col-sm-4 control-label">Nama Sesi<span class="text-danger"> *</span></label>
                             <div class="col-sm-12">
@@ -141,59 +115,13 @@
 
 @section('script')
     <script>
-        $("#createNewSesi").click(function() {
-            $("#saveBtn").val("create-sesi-sekolah");
-            $("#sesi_id").val("");
+        $("#createNewSesiP").click(function() {
+            $("#saveBtn").val("create-sesi-posyandu");
+            $("#sesip_id").val("");
             $("#sesiForm").trigger("reset");
-            $("#modelHeading").html("Tambah Sesi");
+            $("#modelHeading").html("Tambah Sesi Posyandu");
             $("#ajaxModel").modal("show");
-            $("#deleteSesi").modal("show");
-            $.ajax({
-                url: "{{ url('kelas/get-kelas') }}",
-                type: "POST",
-                data: {
-                    sekolah_id: {{ Auth::user()->sekolah_id }},
-                    _token: '{{ csrf_token() }}'
-                },
-                dataType: 'json',
-                success: function(result) {
-                    $('#kelas_id').html(
-                        '<option value="">:::Pilih Kelas:::</option>');
-                    $.each(result, function(key, value) {
-                        $("#kelas_id").append('<option value="' + value
-                            .id + '">' + value.nama + '</option>');
-                    });
-                }
-            });
-        });
-
-        $(document).ready(function() {
-            $('#kelas_id').on('change', function() {
-                var idKelas = this.value;
-                $("#jurusan_id").html('');
-                $.ajax({
-                    url: "{{ url('jurusan/get-jurusan') }}",
-                    type: "POST",
-                    data: {
-                        kelas_id: idKelas,
-                        _token: '{{ csrf_token() }}'
-                    },
-                    dataType: 'json',
-                    success: function(result) {
-                        $('#jurusan_id').html(
-                            '<option value="">::Pilih Jurusan::</option>'
-                        );
-                        $.each(result, function(key, value) {
-                            $("#jurusan_id").append(
-                                '<option value="' + value
-                                .id + '">' + value
-                                .kelas.nama + ' ' + value.nama + ' ' + value
-                                .ruangan +
-                                '</option>');
-                        });
-                    }
-                });
-            });
+            $("#deleteSesiP").modal("show");
         });
 
         $("#saveBtn").click(function(e) {
@@ -203,8 +131,8 @@
             );
 
             $.ajax({
-                data: $("#sesiForm").serialize(),
-                url: "{{ route('sesi.store') }}",
+                data: $("#sesipForm").serialize(),
+                url: "{{ route('sesi-posyandu.store') }}",
                 type: "POST",
                 dataType: "json",
                 success: function(data) {
@@ -219,7 +147,7 @@
                             $("#saveBtn").html("Simpan");
                         });
                     } else {
-                        alertSuccess("Sesi saved successfully.");
+                        alertSuccess("Sesi Posyandu saved successfully.");
                         $("#saveBtn").html("Simpan");
                         $('#ajaxModel').modal('hide');
                         setTimeout(function() {

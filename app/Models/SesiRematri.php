@@ -17,8 +17,4 @@ class SesiRematri extends Model
     {
         return $this->belongsTo(Rematri::class);
     }
-    public function foto()
-    {
-        return $this->belongsTo(FotoSesi::class);
-    }
 }
