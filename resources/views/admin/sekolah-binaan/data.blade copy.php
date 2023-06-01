@@ -34,6 +34,7 @@
                                         <th style="width:12%">Jenjang</th>
                                         <th style="width:10%">Status</th>
                                         <th style="width:12%">Kecamatan</th>
+                                        <th style="width:15%">Puskesmas</th>
                                         <th class="text-center" style="width: 10%">Action</th>
                                     </tr>
                                 </thead>
@@ -60,14 +61,6 @@
                     <form id="sekolahForm" name="sekolahForm" class="form-horizontal">
                         @csrf
                         <input type="hidden" name="sekolah_id" id="sekolah_id">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>Kecamatan<span class="text-danger">*</span></label>
-                                <select class="browser-default custom-select select2bs4" name="kecamatan_id"
-                                    id="kecamatan_id">
-                                </select>
-                            </div>
-                        </div>
                         <div class="form-group">
                             <label class="col-sm-4 control-label">NPSN<span class="text-danger"> *</span></label>
                             <div class="col-sm-12">
@@ -136,7 +129,7 @@
                         <h6 class="text-muted">::KEPUTUSAN INI TIDAK DAPAT DIUBAH KEMBALI::</h6>
                     </center>
                     <center>
-                        <h6>Apakah anda yakin menghapus Sekolah ini ?</h6>
+                        <h6>Apakah anda yakin menghapus Sekolah Binaan ini ?</h6>
                     </center>
                 </div>
                 <div class="modal-footer justify-content-between">
@@ -173,7 +166,7 @@
                 lengthMenu: [10, 50, 100, 200, 500],
                 lengthChange: true,
                 autoWidth: false,
-                ajax: "{{ route('sekolah.index') }}",
+                ajax: "{{ route('sekolah-binaan.index') }}",
                 columns: [{
                         data: "DT_RowIndex",
                         name: "DT_RowIndex",
@@ -197,6 +190,10 @@
                     {
                         data: "kecamatan",
                         name: "kecamatan",
+                    },
+                    {
+                        data: "puskesmas",
+                        name: "puskesmas",
                     },
                     {
                         data: "action",
@@ -228,7 +225,7 @@
                     }
                 });
                 $.ajax({
-                    url: "{{ url('sekolah/get-jenjang') }}",
+                    url: "{{ url('sekolah/get-jenjang-puskes') }}",
                     type: "POST",
                     dataType: 'json',
                     success: function(result) {
@@ -241,7 +238,7 @@
                     }
                 });
                 $.ajax({
-                    url: "{{ url('sekolah/get-status') }}",
+                    url: "{{ url('sekolah/get-status-puskes') }}",
                     type: "POST",
                     dataType: 'json',
                     success: function(result) {
@@ -249,7 +246,7 @@
                             '<option value="">:::Pilih Status:::</option>');
                         $.each(result, function(key, value) {
                             $("#status").append('<option value="' + value
-                                .kode + '">' + value.status + '</option>');
+                                .status + '">' + value.nama + '</option>');
                         });
                     }
                 });
@@ -257,7 +254,7 @@
 
             $("body").on("click", ".editSekolah", function() {
                 var sekolah_id = $(this).data("id");
-                $.get("{{ route('sekolah.index') }}" + "/" + sekolah_id + "/edit", function(data) {
+                $.get("{{ route('sekolah-binaan.index') }}" + "/" + sekolah_id + "/edit", function(data) {
                     $("#modelHeading").html("Edit Sekolah");
                     $("#saveBtn").val("edit-sekolah");
                     $("#ajaxModel").modal("show");
@@ -265,7 +262,7 @@
                     $("#npsn").val(data.npsn);
                     $("#nama_sekolah").val(data.sekolah);
                     $.ajax({
-                        url: "{{ url('sekolah/get-jenjang') }}",
+                        url: "{{ url('sekolah/get-jenjang-puskes') }}",
                         type: "POST",
                         dataType: 'json',
                         success: function(result) {
@@ -281,7 +278,7 @@
                         }
                     });
                     $.ajax({
-                        url: "{{ url('sekolah/get-status') }}",
+                        url: "{{ url('sekolah/get-status-puskes') }}",
                         type: "POST",
                         dataType: 'json',
                         success: function(result) {
@@ -297,37 +294,6 @@
                                 'selected', true);
                         }
                     });
-                    // $(document).ready(function() {
-                    //     $.ajax({
-                    //         url: "{{ url('puskesmas/get-puskes') }}",
-                    //         type: "POST",
-                    //         data: {
-                    //             kecamatan_id: data.kecamatan_id,
-                    //             _token: '{{ csrf_token() }}'
-                    //         },
-                    //         dataType: 'json',
-                    //         success: function(result) {
-                    //             $('#puskesmas_id').html(
-                    //                 '<option value="">::Pilih Puskesmas::</option>'
-                    //             );
-                    //             $.each(result, function(key,
-                    //                 value) {
-                    //                 $("#puskesmas_id")
-                    //                     .append(
-                    //                         '<option value="' +
-                    //                         value
-                    //                         .id + '">' +
-                    //                         value
-                    //                         .puskesmas +
-                    //                         '</option>');
-                    //                 $('#puskesmas_id option[value=' +
-                    //                         data.puskesmas_id + ']')
-                    //                     .prop(
-                    //                         'selected', true);
-                    //             });
-                    //         }
-                    //     });
-                    // });
                     $("#alamat").val(data.alamat_jalan);
                     $.ajax({
                         url: "{{ url('kecamatan/get-kecamatan') }}",
@@ -346,8 +312,40 @@
                             });
                         }
                     });
+                    $(document).ready(function() {
+                        $.ajax({
+                            url: "{{ url('puskesmas/get-puskes') }}",
+                            type: "POST",
+                            data: {
+                                kecamatan_id: data.kecamatan_id,
+                                _token: '{{ csrf_token() }}'
+                            },
+                            dataType: 'json',
+                            success: function(result) {
+                                $('#puskesmas_id').html(
+                                    '<option value="">::Pilih Puskesmas::</option>'
+                                );
+                                $.each(result, function(key,
+                                    value) {
+                                    $("#puskesmas_id")
+                                        .append(
+                                            '<option value="' +
+                                            value
+                                            .id + '">' +
+                                            value
+                                            .puskesmas +
+                                            '</option>');
+                                    $('#puskesmas_id option[value=' +
+                                            data.puskesmas_id + ']')
+                                        .prop(
+                                            'selected', true);
+                                });
+                            }
+                        });
+                    });
                 });
             });
+
             $("#saveBtn").click(function(e) {
                 e.preventDefault();
                 $(this).html(
@@ -356,7 +354,7 @@
 
                 $.ajax({
                     data: $("#sekolahForm").serialize(),
-                    url: "{{ route('sekolah.store') }}",
+                    url: "{{ route('sekolah-binaan.store') }}",
                     type: "POST",
                     dataType: "json",
                     success: function(data) {
@@ -373,7 +371,7 @@
                             });
                         } else {
                             table.draw();
-                            alertSuccess("Sekolah saved successfully.");
+                            alertSuccess("Sekolah Binaan saved successfully.");
                             // $('#sekolahForm').trigger("reset");
                             $("#saveBtn").html("Simpan");
                             $('#ajaxModel').modal('hide');
@@ -381,7 +379,6 @@
                     },
                 });
             });
-
             $("body").on("click", ".deleteSekolah", function() {
                 var sekolah_id = $(this).data("id");
                 $("#modelHeadingHps").html("Hapus");
@@ -393,7 +390,7 @@
                     );
                     $.ajax({
                         type: "DELETE",
-                        url: "{{ route('sekolah.store') }}" + "/" + sekolah_id,
+                        url: "{{ route('sekolah-binaan.store') }}" + "/" + sekolah_id,
                         data: {
                             _token: "{!! csrf_token() !!}",
                         },
@@ -422,7 +419,6 @@
                     });
                 });
             });
-
             $('.select2bs4').select2({
                 theme: 'bootstrap4'
             })

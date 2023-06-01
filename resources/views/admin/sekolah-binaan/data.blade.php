@@ -34,8 +34,7 @@
                                         <th style="width:12%">Jenjang</th>
                                         <th style="width:10%">Status</th>
                                         <th style="width:12%">Kecamatan</th>
-                                        <th style="width:15%">Puskesmas</th>
-                                        <th class="text-center" style="width: 10%">Action</th>
+                                        <th class="text-center" style="width: 5%">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -46,8 +45,8 @@
             </div>
         </div>
     </section>
-    <div class="modal fade" id="ajaxModel" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade" id="ajaxModelSekolah" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title" id="modelHeading"></h4>
@@ -61,43 +60,36 @@
                     <form id="sekolahForm" name="sekolahForm" class="form-horizontal">
                         @csrf
                         <input type="hidden" name="sekolah_id" id="sekolah_id">
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label">NPSN<span class="text-danger"> *</span></label>
-                            <div class="col-sm-12">
-                                <input type="text" class="form-control" id="npsn" name="npsn" placeholder="NPSN"
-                                    onkeypress="return hanyaAngka(event)">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label">Nama Sekolah<span class="text-danger"> *</span></label>
-                            <div class="col-sm-12">
-                                <input type="text" class="form-control" id="nama_sekolah" name="nama_sekolah"
-                                    placeholder="Nama sekolah">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-12">
-                                <label>Jenjang<span class="text-danger">*</span></label>
-                                <select class="form-control select2bs4" id="jenjang" name="jenjang" style="width: 100%;">
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-12">
-                                <label>Status<span class="text-danger">*</span></label>
-                                <select class="form-control select2bs4" id="status" name="status" style="width: 100%;">
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-md-12">
-                                <label>Alamat</label>
-                                <textarea id="alamat" name="alamat" class="form-control rows="3"></textarea>
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="float-left"><i class="fas fa-info-circle"></i> Pilih sekolah berdasarkan
+                                        binaan dari puskesmas anda.
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <table class="table table-bordered table-striped data-table-sekolah">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:5%">No</th>
+                                                <th style="width:8%">NPSN</th>
+                                                <th>Sekolah</th>
+                                                <th style="width:12%">Jenjang</th>
+                                                <th style="width:10%">Status</th>
+                                                <th style="width:12%">Kecamatan</th>
+                                                <th class="text-center" style="width: 5%"><input type="checkbox"
+                                                        id="selectAll"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="card-footer">
-                                <button type="submit" class="btn btn-primary btn-sm" id="saveBtn" value="create">Simpan
+                                <button type="submit" class="btn btn-primary btn-sm" id="take"
+                                    value="create">Tambahkan
                                 </button>
                             </div>
                         </div>
@@ -192,10 +184,6 @@
                         name: "kecamatan",
                     },
                     {
-                        data: "puskesmas",
-                        name: "puskesmas",
-                    },
-                    {
                         data: "action",
                         name: "action",
                         orderable: false,
@@ -203,158 +191,65 @@
                     },
                 ],
             });
-
             $("#createNewSekolah").click(function() {
                 $("#saveBtn").val("create-sekolah");
                 $("#sekolah_id").val("");
                 $("#sekolahForm").trigger("reset");
-                $("#modelHeading").html("Tambah Sekolah");
-                $("#ajaxModel").modal("show");
-                $("#deleteSekolah").modal("show");
-                $.ajax({
-                    url: "{{ url('kecamatan/get-kecamatan') }}",
-                    type: "POST",
-                    dataType: 'json',
-                    success: function(result) {
-                        $('#kecamatan_id').html(
-                            '<option value="">:::Pilih Kecamatan:::</option>');
-                        $.each(result, function(key, value) {
-                            $("#kecamatan_id").append('<option value="' + value
-                                .id + '">' + value.kecamatan + '</option>');
-                        });
-                    }
-                });
-                $.ajax({
-                    url: "{{ url('sekolah/get-jenjang-puskes') }}",
-                    type: "POST",
-                    dataType: 'json',
-                    success: function(result) {
-                        $('#jenjang').html(
-                            '<option value="">:::Pilih Jenjang:::</option>');
-                        $.each(result, function(key, value) {
-                            $("#jenjang").append('<option value="' + value
-                                .nama + '">' + value.nama + '</option>');
-                        });
-                    }
-                });
-                $.ajax({
-                    url: "{{ url('sekolah/get-status-puskes') }}",
-                    type: "POST",
-                    dataType: 'json',
-                    success: function(result) {
-                        $('#status').html(
-                            '<option value="">:::Pilih Status:::</option>');
-                        $.each(result, function(key, value) {
-                            $("#status").append('<option value="' + value
-                                .status + '">' + value.nama + '</option>');
-                        });
-                    }
-                });
-            });
-
-            $("body").on("click", ".editSekolah", function() {
-                var sekolah_id = $(this).data("id");
-                $.get("{{ route('sekolah-binaan.index') }}" + "/" + sekolah_id + "/edit", function(data) {
-                    $("#modelHeading").html("Edit Sekolah");
-                    $("#saveBtn").val("edit-sekolah");
-                    $("#ajaxModel").modal("show");
-                    $("#sekolah_id").val(data.id);
-                    $("#npsn").val(data.npsn);
-                    $("#nama_sekolah").val(data.sekolah);
-                    $.ajax({
-                        url: "{{ url('sekolah/get-jenjang-puskes') }}",
-                        type: "POST",
-                        dataType: 'json',
-                        success: function(result) {
-                            $('#jenjang').html(
-                                '<option value="">:::Pilih Jenjang:::</option>');
-                            $.each(result, function(key, value) {
-                                $("#jenjang").append('<option value="' + value
-                                    .nama + '">' + value.nama + '</option>');
-                            });
-                            $('#jenjang option[value=' +
-                                data.jenjang + ']').prop(
-                                'selected', true);
-                        }
-                    });
-                    $.ajax({
-                        url: "{{ url('sekolah/get-status-puskes') }}",
-                        type: "POST",
-                        dataType: 'json',
-                        success: function(result) {
-                            $('#status').html(
-                                '<option value="">:::Pilih Status:::</option>');
-                            $.each(result, function(key, value) {
-                                $("#status").append('<option value="' + value
-                                    .status + '">' + value.nama +
-                                    '</option>');
-                            });
-                            $('#status option[value=' +
-                                data.status + ']').prop(
-                                'selected', true);
-                        }
-                    });
-                    $("#alamat").val(data.alamat_jalan);
-                    $.ajax({
-                        url: "{{ url('kecamatan/get-kecamatan') }}",
-                        type: "POST",
-                        dataType: 'json',
-                        success: function(result) {
-                            $('#kecamatan_id').html(
-                                '<option value="">:::Pilih Kecamatan:::</option>');
-                            $.each(result, function(key, value) {
-                                $("#kecamatan_id").append('<option value="' +
-                                    value.id + '">' + value.kecamatan +
-                                    '</option>');
-                                $('#kecamatan_id option[value=' +
-                                    data.kecamatan_id + ']').prop(
-                                    'selected', true);
-                            });
-                        }
-                    });
-                    $(document).ready(function() {
-                        $.ajax({
-                            url: "{{ url('puskesmas/get-puskes') }}",
-                            type: "POST",
-                            data: {
-                                kecamatan_id: data.kecamatan_id,
-                                _token: '{{ csrf_token() }}'
-                            },
-                            dataType: 'json',
-                            success: function(result) {
-                                $('#puskesmas_id').html(
-                                    '<option value="">::Pilih Puskesmas::</option>'
-                                );
-                                $.each(result, function(key,
-                                    value) {
-                                    $("#puskesmas_id")
-                                        .append(
-                                            '<option value="' +
-                                            value
-                                            .id + '">' +
-                                            value
-                                            .puskesmas +
-                                            '</option>');
-                                    $('#puskesmas_id option[value=' +
-                                            data.puskesmas_id + ']')
-                                        .prop(
-                                            'selected', true);
-                                });
-                            }
-                        });
-                    });
+                $("#modelHeading").html("Pilih Sekolah Binaan");
+                $("#ajaxModelSekolah").modal("show");
+                if ($.fn.DataTable.isDataTable('.data-table-sekolah')) {
+                    $('.data-table-sekolah').DataTable().destroy();
+                }
+                var tablesekolah = $(".data-table-sekolah").DataTable({
+                    processing: true,
+                    serverSide: true,
+                    responsive: true,
+                    pageLength: 10,
+                    lengthMenu: [10, 50, 100, 200, 500],
+                    lengthChange: true,
+                    autoWidth: false,
+                    ajax: "{{ route('sekolah-binaan.take') }}",
+                    columns: [{
+                            data: "DT_RowIndex",
+                            name: "DT_RowIndex",
+                        },
+                        {
+                            data: "npsn",
+                            name: "npsn",
+                        },
+                        {
+                            data: "sekolah",
+                            name: "sekolah",
+                        },
+                        {
+                            data: "jenjang",
+                            name: "jenjang",
+                        },
+                        {
+                            data: "status",
+                            name: "status",
+                        },
+                        {
+                            data: "kecamatan",
+                            name: "kecamatan",
+                        },
+                        {
+                            data: "action",
+                            name: "action",
+                            orderable: false,
+                            searchable: false,
+                        },
+                    ],
                 });
             });
-
-            $("#saveBtn").click(function(e) {
+            $("#take").click(function(e) {
                 e.preventDefault();
                 $(this).html(
-                    "<span class='spinner-border spinner-border-sm'></span><span class='visually-hidden'><i> menyimpan...</i></span>"
-                );
-
+                    "<span class='spinner-border spinner-border-sm'></span><span class='visually-hidden'><i> sedang diproses...</i></span>"
+                ).attr('disabled', 'disabled');
                 $.ajax({
                     data: $("#sekolahForm").serialize(),
-                    url: "{{ route('sekolah-binaan.store') }}",
+                    url: "{{ route('take.update') }}",
                     type: "POST",
                     dataType: "json",
                     success: function(data) {
@@ -366,15 +261,13 @@
                                     value +
                                     '</li></strong>');
                                 $(".alert-danger").fadeOut(5000);
-                                $("#saveBtn").html("Simpan");
-                                // $('#sekolahForm').trigger("reset");
+                                $("#take").html("Simpan").removeAttr("disabled");
                             });
                         } else {
                             table.draw();
-                            alertSuccess("Sekolah Binaan saved successfully.");
-                            // $('#sekolahForm').trigger("reset");
-                            $("#saveBtn").html("Simpan");
-                            $('#ajaxModel').modal('hide');
+                            alertSuccess(data.success);
+                            $("#take").html("Tambahkan").removeAttr("disabled");
+                            $('#ajaxModelSekolah').modal('hide');
                         }
                     },
                 });
@@ -387,7 +280,7 @@
                     e.preventDefault();
                     $(this).html(
                         "<span class='spinner-border spinner-border-sm'></span><span class='visually-hidden'><i> menghapus...</i></span>"
-                    );
+                    ).attr('disabled', 'disabled');;
                     $.ajax({
                         type: "DELETE",
                         url: "{{ route('sekolah-binaan.store') }}" + "/" + sekolah_id,
@@ -405,15 +298,15 @@
                                     $(".alert-danger").fadeOut(5000);
                                     $("#hapusBtn").html(
                                         "<i class='fa fa-trash'></i>Hapus"
-                                    );
+                                    ).removeAttr("disabled");
                                 });
                             } else {
                                 table.draw();
                                 alertSuccess(data.success);
                                 $("#hapusBtn").html(
-                                    "<i class='fa fa-trash'></i>Hapus");
+                                    "<i class='fa fa-trash'></i>Hapus").removeAttr(
+                                    "disabled");
                                 $('#ajaxModelHps').modal('hide');
-                                // $('#data-table').DataTable().ajax.reload();
                             }
                         },
                     });
@@ -422,6 +315,22 @@
             $('.select2bs4').select2({
                 theme: 'bootstrap4'
             })
+        });
+        //select all
+        $(document).ready(function() {
+            // Checkbox "Pilih Semua"
+            $('#selectAll').click(function() {
+                $('.itemCheckbox').prop('checked', $(this).prop('checked'));
+            });
+
+            // Periksa apakah checkbox "Pilih Semua" harus dicentang
+            $('.itemCheckbox').click(function() {
+                if ($('.itemCheckbox:checked').length === $('.itemCheckbox').length) {
+                    $('#selectAll').prop('checked', true);
+                } else {
+                    $('#selectAll').prop('checked', false);
+                }
+            });
         });
     </script>
 @endsection

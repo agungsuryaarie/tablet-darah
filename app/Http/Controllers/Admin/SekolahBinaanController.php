@@ -33,12 +33,8 @@ class SekolahBinaanController extends Controller
                 ->addColumn('kecamatan', function ($data) {
                     return $data->kecamatan->kecamatan;
                 })
-                ->addColumn('puskesmas', function ($data) {
-                    return $data->puskesmas->puskesmas;
-                })
                 ->addColumn('action', function ($row) {
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs editSekolah"><i class="fas fa-edit"></i></a>';
-                    $btn = '<center>' . $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-xs deleteSekolah"><i class="fas fa-trash"></i></a><center>';
+                    $btn = '<center><a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-xs deleteSekolah"><i class="fas fa-trash"></i></a><center>';
                     return $btn;
                 })
                 ->rawColumns(['kecamatan', 'action'])
@@ -47,57 +43,58 @@ class SekolahBinaanController extends Controller
 
         return view('admin.sekolah-binaan.data', compact('menu'));
     }
-
-    public function store(Request $request)
+    public function show(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = Sekolah::where('puskesmas_id', null)->where('kecamatan_id', Auth::user()->kecamatan_id)->latest()->get();
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('status', function ($data) {
+                    if ($data->status === 'N') {
+                        return 'Negeri';
+                    } else {
+                        return 'Swasta';
+                    }
+                })
+                ->addColumn('kecamatan', function ($data) {
+                    return $data->kecamatan->kecamatan;
+                })
+                ->addColumn('action', function ($row) {
+                    return '<center><input type="checkbox"class="itemCheckbox" name="selectedItems[]" value="' . $row->id . '"></center>';
+                })
+                ->rawColumns(['kecamatan', 'action'])
+                ->make(true);
+        }
+        return view('admin.sekolah-binaan.data');
+    }
+    public function take(Request $request)
     {
         //Translate Bahasa Indonesia
         $message = array(
-            'nama_sekolah.required' => 'Nama Sekolah harus diisi.',
-            'npsn.required' => 'NPSN harus diisi.',
-            'npsn.max' => 'NPSN maksimal 8 digit.',
-            'npsn.min' => 'NPSN minimal 8 digit.',
-            'jenjang.required' => 'Jenjang harus dipilih.',
-            'status.required' => 'Status harus dipilih.',
-            'alamat.required' => 'Alamat harus diisi.',
-            'alamat..max' => 'Alamat melebihi batas maksimal karakter.',
+            'selectedItems.required' => 'Silahkan pilih sekolah anda.',
         );
         $validator = Validator::make($request->all(), [
-            'npsn' => 'required|max:8|min:8',
-            'nama_sekolah' => 'required',
-            'jenjang' => 'required',
-            'status' => 'required',
-            'alamat' => 'required|max:255',
+            'selectedItems' => 'required',
         ], $message);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()->all()]);
         }
-        Sekolah::updateOrCreate(
-            [
-                'id' => $request->sekolah_id
-            ],
-            [
-                'kecamatan_id' => Auth::user()->kecamatan_id,
-                'puskesmas_id' => Auth::user()->puskesmas_id,
-                'npsn' => $request->npsn,
-                'sekolah' => $request->nama_sekolah,
-                'jenjang' => $request->jenjang,
-                'status' => $request->status,
-                'alamat_jalan' => $request->alamat,
-            ]
-        );
-        return response()->json(['success' => 'Sekolah Binaan saved successfully.']);
-    }
+        $selectedItems = $request->input('selectedItems', []);
+        // Menggunakan Model Eloquent untuk mengupdate data
+        Sekolah::whereIn('id', $selectedItems)->update([
+            'puskesmas_id' => Auth::user()->puskesmas_id,
+        ]);
 
-    public function edit($id)
-    {
-        $sekolahb = Sekolah::find($id);
-        return response()->json($sekolahb);
+        return response()->json(['success' => 'Sekolah Binaan saved successfully.']);
     }
 
     public function destroy($id)
     {
-        Sekolah::find($id)->delete();
+        $sekolah = Sekolah::find($id);
+        $sekolah->update([
+            'puskesmas_id' => null,
+        ]);
         return response()->json(['success' => 'Sekolah Binaan deleted successfully.']);
     }
 }

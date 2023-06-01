@@ -88,9 +88,11 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
         Route::post('sekolah/get-status-puskes', [SekolahController::class, 'getStatus']);
         Route::post('sekolah/get-jenjang-auto', [SekolahController::class, 'getJenjangAuto']);
 
-
         // Sekolah Binaan
         Route::resource('sekolah-binaan', SekolahBinaanController::class);
+        // Route::get('sekolah', [SekolahBinaanController::class, 'sekolah'])->name('sekolah.index');
+        Route::get('sekolah-binaan/sekolah', [SekolahBinaanController::class, 'show'])->name('sekolah-binaan.take');
+        Route::post('sekolah-binaan/take', [SekolahBinaanController::class, 'take'])->name('take.update');
 
         // Posyandu Binaan
         Route::resource('posyandu-binaan', PosyanduBinaanController::class);
@@ -101,17 +103,16 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
         Route::get('users-sekolah/{id}/edit', [UserSekolahController::class, 'edit'])->name('usersekolah.edit');
         Route::delete('users-sekolah/{user}/destroy', [UserSekolahController::class, 'destroy'])->name('usersekolah.destroy');
 
-
         // Users Posyandu
         Route::get('users-posyandu', [UserPosyanduController::class, 'index'])->name('userposyandu.index');
         Route::post('users-posyandu', [UserPosyanduController::class, 'store'])->name('userposyandu.store');
         Route::get('users-posyandu/{id}/edit', [UserPosyanduController::class, 'edit'])->name('userposyandu.edit');
         Route::delete('users-posyandu/{user}/destroy', [UserPosyanduController::class, 'destroy'])->name('userposyandu.destroy');
 
-        // Rematri
-        Route::get('rematri', [RematriController::class, 'index'])->name('rematri.index');
-        Route::get('rematri/create', [RematriController::class, 'create'])->name('rematri.create');
-        Route::get('rematri/edit', [RematriController::class, 'edit'])->name('rematri.edit');
+        // // Rematri
+        // Route::get('rematri', [RematriController::class, 'index'])->name('rematri.index');
+        // Route::get('rematri/create', [RematriController::class, 'create'])->name('rematri.create');
+        // Route::get('rematri/edit', [RematriController::class, 'edit'])->name('rematri.edit');
     });
 
     Route::group(['middleware' => ['checkUser:3']], function () {
