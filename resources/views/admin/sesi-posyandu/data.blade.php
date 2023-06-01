@@ -202,8 +202,10 @@
                 // Menampilkan countdown pada elemen HTML
                 var countdownElement = document.getElementById('berakhir_' + index);
                 countdownElement.innerHTML = hours + ' jam, ' + minutes + ' menit, ' + seconds + ' detik';
+
                 if (timeDiff < 0) {
-                    document.getElementById("berakhir").innerHTML = "sesi berakhir";
+                    var countdownElement = document.getElementById('berakhir_' + index);
+                    countdownElement.innerHTML = "sesi berakhir";
                 }
             });
         }
