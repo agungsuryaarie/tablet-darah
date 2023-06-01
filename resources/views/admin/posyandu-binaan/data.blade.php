@@ -31,10 +31,9 @@
                                         <th style="width:5%">No</th>
                                         <th style="width:12%">Kode</th>
                                         <th>Posyandu</th>
-                                        <th>Puskesmas</th>
                                         <th style="width:12%">Desa/Kelurahan</th>
                                         <th style="width:12%">Kecamatan</th>
-                                        <th class="text-center" style="width: 10%">Action</th>
+                                        <th class="text-center" style="width: 5%">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -45,8 +44,8 @@
             </div>
         </div>
     </section>
-    <div class="modal fade" id="ajaxModel" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade" id="ajaxModelPosyandu" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title" id="modelHeading"></h4>
@@ -60,30 +59,35 @@
                     <form id="posyanduForm" name="posyanduForm" class="form-horizontal">
                         @csrf
                         <input type="hidden" name="posyandu_id" id="posyandu_id">
-                        <div class="form-group">
-                            <div class="col-sm-12">
-                                <label>Desa<span class="text-danger">*</span></label>
-                                <select class="browser-default custom-select select2bs4" name="desa_id" id="desa_id">
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label">Kode Posyandu<span class="text-danger"> *</span></label>
-                            <div class="col-sm-12">
-                                <input type="text" class="form-control" id="kode_posyandu" name="kode_posyandu"
-                                    placeholder="Kode Posyandu" onkeypress="return hanyaAngka(event)">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label">Nama Posyandu<span class="text-danger"> *</span></label>
-                            <div class="col-sm-12">
-                                <input type="text" class="form-control" id="nama_posyandu" name="nama_posyandu"
-                                    placeholder="Nama Posyandu">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="float-left"><i class="fas fa-info-circle"></i> Pilih posyandu berdasarkan
+                                        binaan dari puskesmas anda.
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <table class="table table-bordered table-striped data-table-posyandu">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:5%">No</th>
+                                                <th style="width:12%">Kode</th>
+                                                <th>Posyandu</th>
+                                                <th style="width:12%">Desa/Kelurahan</th>
+                                                <th style="width:12%">Kecamatan</th>
+                                                <th class="text-center" style="width: 5%"><input type="checkbox"
+                                                        id="selectAll"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="card-footer">
-                                <button type="submit" class="btn btn-primary btn-sm" id="saveBtn" value="create">Simpan
+                                <button type="submit" class="btn btn-primary btn-sm" id="take"
+                                    value="create">Tambahkan
                                 </button>
                             </div>
                         </div>
@@ -166,10 +170,6 @@
                         name: "posyandu",
                     },
                     {
-                        data: "puskesmas",
-                        name: "puskesmas",
-                    },
-                    {
                         data: "desa",
                         name: "desa",
                     },
@@ -187,74 +187,61 @@
             });
 
             $("#createNewPosyandu").click(function() {
-                $("#saveBtn").val("create-posyandu");
+                $("#take").val("create-posyandu");
                 $("#posyandu_id").val("");
                 $("#posyanduForm").trigger("reset");
-                $("#modelHeading").html("Tambah Posyandu");
-                $("#ajaxModel").modal("show");
-                $("#deletePos").modal("show");
-                $.ajax({
-                    url: "{{ url('desa/get-desa') }}",
-                    type: "POST",
-                    data: {
-                        kecamatan_id: {{ Auth::user()->kecamatan_id }},
-                        _token: '{{ csrf_token() }}'
-                    },
-                    dataType: 'json',
-                    success: function(result) {
-                        $('#desa_id').html(
-                            '<option value="">:::Pilih Desa:::</option>');
-                        $.each(result, function(key, value) {
-                            $("#desa_id").append('<option value="' +
-                                value.id + '">' + value.desa +
-                                '</option>');
-                        });
-                    }
-                });
-            });
-
-            $("body").on("click", ".editPos", function() {
-                var posyandu_id = $(this).data("id");
-                $.get("{{ route('posyandu-binaan.index') }}" + "/" + posyandu_id + "/edit", function(data) {
-                    $("#modelHeading").html("Edit Posyandu");
-                    $("#saveBtn").val("edit-posyandu");
-                    $("#ajaxModel").modal("show");
-                    $("#kode_posyandu").val(data.kode_posyandu);
-                    $("#posyandu_id").val(data.id);
-                    $.ajax({
-                        url: "{{ url('desa/get-desa') }}",
-                        type: "POST",
-                        data: {
-                            kecamatan_id: data.kecamatan_id,
-                            _token: '{{ csrf_token() }}'
+                $("#modelHeading").html("Pilih Posyandu Binaan");
+                $("#ajaxModelPosyandu").modal("show");
+                if ($.fn.DataTable.isDataTable('.data-table-posyandu')) {
+                    $('.data-table-posyandu').DataTable().destroy();
+                }
+                var tablesekolah = $(".data-table-posyandu").DataTable({
+                    processing: true,
+                    serverSide: true,
+                    responsive: true,
+                    pageLength: 10,
+                    lengthMenu: [10, 50, 100, 200, 500],
+                    lengthChange: true,
+                    autoWidth: false,
+                    ajax: "{{ route('posyandu-binaan.take') }}",
+                    columns: [{
+                            data: "DT_RowIndex",
+                            name: "DT_RowIndex",
                         },
-                        dataType: 'json',
-                        success: function(result) {
-                            $('#desa_id').html(
-                                '<option value="">:::Pilih Desa:::</option>');
-                            $.each(result, function(key, value) {
-                                $("#desa_id").append('<option value="' +
-                                    value.id + '">' + value.desa +
-                                    '</option>');
-                                $('#desa_id option[value=' +
-                                    data.desa_id + ']').prop(
-                                    'selected', true);
-                            });
-                        }
-                    });
-                    $("#nama_posyandu").val(data.posyandu);
+                        {
+                            data: "kode_posyandu",
+                            name: "kode_posyandu",
+                        },
+                        {
+                            data: "posyandu",
+                            name: "posyandu",
+                        },
+                        {
+                            data: "desa",
+                            name: "desa",
+                        },
+                        {
+                            data: "kecamatan",
+                            name: "kecamatan",
+                        },
+                        {
+                            data: "action",
+                            name: "action",
+                            orderable: false,
+                            searchable: false,
+                        },
+                    ],
                 });
             });
-
-            $("#saveBtn").click(function(e) {
+            $("#take").click(function(e) {
                 e.preventDefault();
                 $(this).html(
-                    "<span class='spinner-border spinner-border-sm'></span><span class='visually-hidden'><i> menyimpan...</i></span>"
-                );
+                    "<span class='spinner-border spinner-border-sm'></span><span class='visually-hidden'><i> sedang diproses...</i></span>"
+                ).attr('disabled', 'disabled');
 
                 $.ajax({
                     data: $("#posyanduForm").serialize(),
-                    url: "{{ route('posyandu-binaan.store') }}",
+                    url: "{{ route('take.posyandu.update') }}",
                     type: "POST",
                     dataType: "json",
                     success: function(data) {
@@ -266,15 +253,13 @@
                                     value +
                                     '</li></strong>');
                                 $(".alert-danger").fadeOut(5000);
-                                $("#saveBtn").html("Simpan");
-                                // $('#posyanduForm').trigger("reset");
+                                $("#take").html("Tambahkan").removeAttr("disabled");
                             });
                         } else {
                             table.draw();
-                            alertSuccess("Posyandu berhasil ditambah");
-                            // $('#posyanduForm').trigger("reset");
-                            $("#saveBtn").html("Simpan");
-                            $('#ajaxModel').modal('hide');
+                            alertSuccess("Posyandu Binaan berhasil ditambah");
+                            $("#take").html("Tambahkan").removeAttr("disabled");
+                            $('#ajaxModelPosyandu').modal('hide');
                         }
                     },
                 });
@@ -313,7 +298,6 @@
                                 $("#hapusBtn").html(
                                     "<i class='fa fa-trash'></i>Hapus");
                                 $('#ajaxModelHps').modal('hide');
-                                // $('#data-table').DataTable().ajax.reload();
                             }
                         },
                     });
@@ -322,6 +306,22 @@
             $('.select2bs4').select2({
                 theme: 'bootstrap4'
             })
+            //select all
+            $(document).ready(function() {
+                // Checkbox "Pilih Semua"
+                $('#selectAll').click(function() {
+                    $('.itemCheckbox').prop('checked', $(this).prop('checked'));
+                });
+
+                // Periksa apakah checkbox "Pilih Semua" harus dicentang
+                $('.itemCheckbox').click(function() {
+                    if ($('.itemCheckbox:checked').length === $('.itemCheckbox').length) {
+                        $('#selectAll').prop('checked', true);
+                    } else {
+                        $('#selectAll').prop('checked', false);
+                    }
+                });
+            });
         });
     </script>
 @endsection

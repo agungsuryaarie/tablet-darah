@@ -79,9 +79,6 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
 
     Route::group(['middleware' => ['checkUser:2']], function () {
 
-        // Route::post('kecamatan/get-kecamatan', [KecController::class, 'getKecamatan']);
-        // Route::post('puskesmas/get-puskes', [PuskesController::class, 'getPuskes']);
-        Route::post('desa/get-desa', [DesaController::class, 'getDesa']);
         Route::post('posyandu/get-posyandu', [PosyanduController::class, 'getPosyandu']);
         Route::post('sekolah/get-sekolah', [SekolahController::class, 'getSekolah']);
         Route::post('sekolah/get-jenjang-puskes', [SekolahController::class, 'getJenjang']);
@@ -90,12 +87,13 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
 
         // Sekolah Binaan
         Route::resource('sekolah-binaan', SekolahBinaanController::class);
-        // Route::get('sekolah', [SekolahBinaanController::class, 'sekolah'])->name('sekolah.index');
         Route::get('sekolah-binaan/sekolah', [SekolahBinaanController::class, 'show'])->name('sekolah-binaan.take');
         Route::post('sekolah-binaan/take', [SekolahBinaanController::class, 'take'])->name('take.update');
 
         // Posyandu Binaan
         Route::resource('posyandu-binaan', PosyanduBinaanController::class);
+        Route::get('posyandu-binaan/sekolah', [PosyanduBinaanController::class, 'show'])->name('posyandu-binaan.take');
+        Route::post('posyandu-binaan/take', [PosyanduBinaanController::class, 'take'])->name('take.posyandu.update');
 
         // Users Sekolah
         Route::get('users-sekolah', [UserSekolahController::class, 'index'])->name('usersekolah.index');

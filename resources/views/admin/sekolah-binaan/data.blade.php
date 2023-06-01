@@ -261,7 +261,7 @@
                                     value +
                                     '</li></strong>');
                                 $(".alert-danger").fadeOut(5000);
-                                $("#take").html("Simpan").removeAttr("disabled");
+                                $("#take").html("Tambahkan").removeAttr("disabled");
                             });
                         } else {
                             table.draw();

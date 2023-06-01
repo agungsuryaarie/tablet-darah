@@ -21,9 +21,6 @@ class PosyanduController extends Controller
             $data = Posyandu::get();
             return Datatables::of($data)
                 ->addIndexColumn()
-                ->addColumn('puskesmas', function ($data) {
-                    return $data->puskesmas->puskesmas;
-                })
                 ->addColumn('desa', function ($data) {
                     return $data->desa->desa;
                 })
@@ -47,7 +44,6 @@ class PosyanduController extends Controller
         $message = array(
             'kecamatan_id.required' => 'Kecamatan harus dipilih.',
             'desa_id.required' => 'Desa harus dipilih.',
-            'puskesmas_id.required' => 'Puskesmas harus dipilih.',
             'kode_posyandu.required' => 'Kode Posyandu harus diisi.',
             'nama_posyandu.required' => 'Nama Posyandu harus diisi.',
         );
@@ -55,7 +51,6 @@ class PosyanduController extends Controller
             'kecamatan_id' => 'required',
             'desa_id' => 'required',
             'kode_posyandu' => 'required',
-            'puskesmas_id' => 'required',
             'nama_posyandu' => 'required',
         ], $message);
 
@@ -70,7 +65,6 @@ class PosyanduController extends Controller
                 'kecamatan_id' => $request->kecamatan_id,
                 'desa_id' => $request->desa_id,
                 'kode_posyandu' => $request->kode_posyandu,
-                'puskesmas_id' => $request->puskesmas_id,
                 'posyandu' => $request->nama_posyandu,
             ]
         );

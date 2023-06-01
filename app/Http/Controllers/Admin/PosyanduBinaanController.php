@@ -32,9 +32,7 @@ class PosyanduBinaanController extends Controller
                     return $data->kecamatan->kecamatan;
                 })
                 ->addColumn('action', function ($row) {
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs editPos"><i class="fas fa-edit"></i></a>';
-                    $btn = '<center>' . $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-xs deletePos"><i class="fas fa-trash"></i></a><center>';
-                    return $btn;
+                    return '<center><a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-xs deletePos"><i class="fas fa-trash"></i></a><center>';
                 })
                 ->rawColumns(['posyandu', 'puskesmas', 'desa', 'kecamatan', 'action'])
                 ->make(true);
@@ -42,47 +40,54 @@ class PosyanduBinaanController extends Controller
 
         return view('admin.posyandu-binaan.data', compact('menu', 'kecamatan', 'desa'));
     }
-    public function store(Request $request)
+    public function show(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = Posyandu::where('puskesmas_id', null)->where('kecamatan_id', Auth::user()->kecamatan_id)->latest()->get();
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('desa', function ($data) {
+                    return $data->desa->desa;
+                })
+                ->addColumn('kecamatan', function ($data) {
+                    return $data->kecamatan->kecamatan;
+                })
+                ->addColumn('action', function ($row) {
+                    return '<center><input type="checkbox"class="itemCheckbox" name="selectedItems[]" value="' . $row->id . '"></center>';
+                })
+                ->rawColumns(['kecamatan', 'desa', 'action'])
+                ->make(true);
+        }
+        return view('admin.sekolah-binaan.data');
+    }
+    public function take(Request $request)
     {
         //Translate Bahasa Indonesia
         $message = array(
-            'desa_id.required' => 'Desa harus dipilih.',
-            'kode_posyandu.required' => 'Kode Desa harus diisi.',
-            'nama_posyandu.required' => 'Nama Posyandu harus diisi.',
+            'selectedItems.required' => 'Silahkan pilih posyandu anda.',
         );
         $validator = Validator::make($request->all(), [
-            'desa_id' => 'required',
-            'kode_posyandu' => 'required',
-            'nama_posyandu' => 'required',
+            'selectedItems' => 'required',
         ], $message);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()->all()]);
         }
-        Posyandu::updateOrCreate(
-            [
-                'id' => $request->posyandu_id
-            ],
-            [
-                'kecamatan_id' => Auth::user()->kecamatan_id,
-                'desa_id' => $request->desa_id,
-                'puskesmas_id' => Auth::user()->puskesmas_id,
-                'kode_posyandu' => $request->kode_posyandu,
-                'posyandu' => $request->nama_posyandu,
-            ]
-        );
-        return response()->json(['success' => 'Posyandu Binaan saved successfully.']);
-    }
+        $selectedItems = $request->input('selectedItems', []);
+        // Menggunakan Model Eloquent untuk mengupdate data
+        Posyandu::whereIn('id', $selectedItems)->update([
+            'puskesmas_id' => Auth::user()->puskesmas_id,
+        ]);
 
-    public function edit($id)
-    {
-        $posyandub = Posyandu::find($id);
-        return response()->json($posyandub);
+        return response()->json(['success' => 'Posyandu Binaan saved successfully.']);
     }
 
     public function destroy($id)
     {
-        Posyandu::find($id)->delete();
+        $posyandu = Posyandu::find($id);
+        $posyandu->update([
+            'puskesmas_id' => null,
+        ]);
         return response()->json(['success' => 'Posyandu Binaan deleted successfully.']);
     }
 }
