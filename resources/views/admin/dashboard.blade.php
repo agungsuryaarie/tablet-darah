@@ -42,7 +42,7 @@
                         </div>
                     @endif
                     <div class="col-lg-3 col-6">
-                        <div class="small-box bg-info">
+                        <div class="small-box {{ Auth::user()->role == 1 ? 'bg-success' : 'bg-info' }}">
                             <div class="inner">
                                 @if (Auth::user()->role == 1)
                                     <h3>{{ $sekolah }}</h3>
@@ -64,7 +64,7 @@
                         </div>
                     </div>
                     <div class="col-lg-3 col-6">
-                        <div class="small-box bg-info">
+                        <div class="small-box  {{ Auth::user()->role == 1 ? 'bg-warning' : 'bg-success' }} ">
                             <div class="inner">
                                 @if (Auth::user()->role == 1)
                                     <h3>{{ $posyandu }}</h3>
@@ -87,7 +87,7 @@
                     </div>
                     @if (Auth::user()->role == 1)
                         <div class="col-lg-3 col-6">
-                            <div class="small-box bg-info">
+                            <div class="small-box bg-danger">
                                 <div class="inner">
                                     <h3>{{ $user_puskes }}</h3>
                                     <p>User Puskesmas</p>
@@ -102,7 +102,7 @@
                     @endif
                     @if (Auth::user()->role == 2)
                         <div class="col-lg-3 col-6">
-                            <div class="small-box bg-info">
+                            <div class="small-box bg-warning">
                                 <div class="inner">
                                     <h3>{{ $usersekolah_puskes }}</h3>
                                     <p>User Sekolah</p>
@@ -115,7 +115,7 @@
                             </div>
                         </div>
                         <div class="col-lg-3 col-6">
-                            <div class="small-box bg-info">
+                            <div class="small-box bg-danger">
                                 <div class="inner">
                                     <h3>{{ $userposyandu_puskes }}</h3>
                                     <p>User Posyandu</p>

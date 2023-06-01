@@ -225,7 +225,7 @@
                     }
                 });
                 $.ajax({
-                    url: "{{ url('sekolah/get-jenjang') }}",
+                    url: "{{ url('sekolah/get-jenjang-puskes') }}",
                     type: "POST",
                     dataType: 'json',
                     success: function(result) {
@@ -238,7 +238,7 @@
                     }
                 });
                 $.ajax({
-                    url: "{{ url('sekolah/get-status') }}",
+                    url: "{{ url('sekolah/get-status-puskes') }}",
                     type: "POST",
                     dataType: 'json',
                     success: function(result) {
@@ -262,7 +262,7 @@
                     $("#npsn").val(data.npsn);
                     $("#nama_sekolah").val(data.sekolah);
                     $.ajax({
-                        url: "{{ url('sekolah/get-jenjang') }}",
+                        url: "{{ url('sekolah/get-jenjang-puskes') }}",
                         type: "POST",
                         dataType: 'json',
                         success: function(result) {
@@ -278,7 +278,7 @@
                         }
                     });
                     $.ajax({
-                        url: "{{ url('sekolah/get-status') }}",
+                        url: "{{ url('sekolah/get-status-puskes') }}",
                         type: "POST",
                         dataType: 'json',
                         success: function(result) {

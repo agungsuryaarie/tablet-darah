@@ -22,7 +22,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h6 class="float-left"><i class="fas fa-info-circle"></i>Sesi otomatis berakhir 1 minggu
+                            <h6 class="float-left"><i class="fas fa-info-circle"></i> Sesi otomatis berakhir 1 minggu
                                 setelah sesi dibuat.
                             </h6>
                             <a href="javascript:void(0)" id="createNewSesi" class="btn btn-info btn-xs float-right">

@@ -84,8 +84,8 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
         Route::post('desa/get-desa', [DesaController::class, 'getDesa']);
         Route::post('posyandu/get-posyandu', [PosyanduController::class, 'getPosyandu']);
         Route::post('sekolah/get-sekolah', [SekolahController::class, 'getSekolah']);
-        Route::post('sekolah/get-jenjang', [SekolahController::class, 'getJenjang']);
-        Route::post('sekolah/get-status', [SekolahController::class, 'getStatus']);
+        Route::post('sekolah/get-jenjang-puskes', [SekolahController::class, 'getJenjang']);
+        Route::post('sekolah/get-status-puskes', [SekolahController::class, 'getStatus']);
         Route::post('sekolah/get-jenjang-auto', [SekolahController::class, 'getJenjangAuto']);
 
 
