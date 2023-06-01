@@ -32,9 +32,6 @@ class SekolahController extends Controller
                 ->addColumn('kecamatan', function ($data) {
                     return $data->kecamatan->kecamatan;
                 })
-                ->addColumn('puskesmas', function ($data) {
-                    return $data->puskesmas->puskesmas;
-                })
                 ->addColumn('action', function ($row) {
                     $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs editSekolah"><i class="fas fa-edit"></i></a>';
                     $btn = '<center>' . $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-xs deleteSekolah"><i class="fas fa-trash"></i></a><center>';
@@ -52,7 +49,6 @@ class SekolahController extends Controller
         //Translate Bahasa Indonesia
         $message = array(
             'kecamatan_id.required' => 'Kecamatan harus dipilih.',
-            'puskesmas_id.required' => 'Puskesmas harus dipilih.',
             'nama_sekolah.required' => 'Nama Sekolah harus diisi.',
             'npsn.required' => 'NPSN harus diisi.',
             'npsn.max' => 'NPSN maksimal 8 digit.',
@@ -64,7 +60,6 @@ class SekolahController extends Controller
         );
         $validator = Validator::make($request->all(), [
             'kecamatan_id' => 'required',
-            'puskesmas_id' => 'required',
             'npsn' => 'required|max:8|min:8',
             'nama_sekolah' => 'required',
             'jenjang' => 'required',
@@ -81,7 +76,7 @@ class SekolahController extends Controller
             ],
             [
                 'kecamatan_id' => $request->kecamatan_id,
-                'puskesmas_id' => $request->puskesmas_id,
+                'puskesmas_id' => null,
                 'npsn' => $request->npsn,
                 'sekolah' => $request->nama_sekolah,
                 'jenjang' => $request->jenjang,
@@ -106,7 +101,7 @@ class SekolahController extends Controller
 
     public function getSekolah(Request $request)
     {
-        $data = Sekolah::where('kecamatan_id', $request->kecamatan_id)->get(["sekolah", "id"]);
+        $data = Sekolah::where('kecamatan_id', $request->kecamatan_id)->get(["sekolah", "id", 'jenjang']);
         return response()->json($data);
     }
 
@@ -118,7 +113,14 @@ class SekolahController extends Controller
 
     public function getStatus()
     {
-        $data = Status::get(["kode", "status"]);
+        $data = Status::get(["status", "nama"]);
+        return response()->json($data);
+    }
+
+    public function getJenjangAuto(Request $request)
+    {
+        $data['jenjang'] = Sekolah::where("id", $request->sekolah_id)
+            ->get();
         return response()->json($data);
     }
 }

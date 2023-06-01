@@ -23,6 +23,7 @@ class UserSekolah extends Authenticatable
         'kecamatan_id',
         'puskesmas_id',
         'sekolah_id',
+        'jenjang',
         'nik',
         'nama',
         'nohp',

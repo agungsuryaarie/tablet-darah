@@ -31,7 +31,6 @@
                                         <th style="width:5%">No</th>
                                         <th style="width:12%">Kode Posyandu</th>
                                         <th>Posyandu</th>
-                                        <th>Puskesmas</th>
                                         <th style="width:12%">Desa/Kelurahan</th>
                                         <th style="width:12%">Kecamatan</th>
                                         <th class="text-center" style="width: 10%">Action</th>
@@ -73,14 +72,6 @@
                             <div class="form-group">
                                 <label>Desa/Keluarahan<span class="text-danger">*</span></label>
                                 <select class="browser-default custom-select select2bs4" name="desa_id" id="desa_id">
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>Puskesmas<span class="text-danger">*</span></label>
-                                <select class="browser-default custom-select select2bs4" name="puskesmas_id"
-                                    id="puskesmas_id">
                                 </select>
                             </div>
                         </div>
@@ -175,10 +166,6 @@
                         name: "posyandu",
                     },
                     {
-                        data: "puskesmas",
-                        name: "puskesmas",
-                    },
-                    {
                         data: "desa",
                         name: "desa",
                     },
@@ -224,7 +211,6 @@
                     $("#saveBtn").val("edit-posyandu");
                     $("#ajaxModel").modal("show");
                     $("#posyandu_id").val(data.id);
-                    $("#puskesmas_id").val(data.puskesmas_id);
                     $.ajax({
                         url: "{{ url('kecamatan/get-kecamatan') }}",
                         type: "POST",
@@ -263,42 +249,10 @@
                             });
                         }
                     });
-                    $(document).ready(function() {
-                        $.ajax({
-                            url: "{{ url('puskesmas/get-puskes') }}",
-                            type: "POST",
-                            data: {
-                                kecamatan_id: data.kecamatan_id,
-                                _token: '{{ csrf_token() }}'
-                            },
-                            dataType: 'json',
-                            success: function(result) {
-                                $('#puskesmas_id').html(
-                                    '<option value="">::Pilih Puskesmas::</option>'
-                                );
-                                $.each(result, function(key,
-                                    value) {
-                                    $("#puskesmas_id")
-                                        .append(
-                                            '<option value="' +
-                                            value
-                                            .id + '">' +
-                                            value
-                                            .puskesmas +
-                                            '</option>');
-                                    $('#puskesmas_id option[value=' +
-                                            data.puskesmas_id + ']')
-                                        .prop(
-                                            'selected', true);
-                                });
-                            }
-                        });
-                    });
                     $("#kode_posyandu").val(data.kode_posyandu);
                     $("#nama_posyandu").val(data.posyandu);
                 });
             });
-
             $("#saveBtn").click(function(e) {
                 e.preventDefault();
                 $(this).html(
@@ -396,33 +350,6 @@
                         });
                     }
                 });
-            });
-
-            $(document).ready(function() {
-                $('#kecamatan_id').on('change', function() {
-                    var idKec = this.value;
-                    $("#puskesmas_id").html('');
-                    $.ajax({
-                        url: "{{ url('puskesmas/get-puskes') }}",
-                        type: "POST",
-                        data: {
-                            kecamatan_id: idKec,
-                            _token: '{{ csrf_token() }}'
-                        },
-                        dataType: 'json',
-                        success: function(result) {
-                            $('#puskesmas_id').html(
-                                '<option value="">::Pilih Puskesmas::</option>');
-                            $.each(result, function(key, value) {
-                                $("#puskesmas_id").append('<option value="' +
-                                    value
-                                    .id + '">' + value.puskesmas +
-                                    '</option>');
-                            });
-                        }
-                    });
-                });
-
             });
         });
     </script>

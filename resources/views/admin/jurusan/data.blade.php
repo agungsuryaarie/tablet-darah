@@ -29,7 +29,9 @@
                                 <thead>
                                     <tr>
                                         <th style="width:5%">No</th>
-                                        <th style="width:12%">Jurusan</th>
+                                        <th>Jurusan</th>
+                                        <th style="width: 8%">Kelas</th>
+                                        <th style="width: 5%">Ruangan</th>
                                         <th class="text-center" style="width: 10%">Action</th>
                                     </tr>
                                 </thead>
@@ -41,6 +43,9 @@
             </div>
         </div>
     </section>
+@endsection
+@section('modal')
+    {{-- Modal Add --}}
     <div class="modal fade" id="ajaxModel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -56,13 +61,25 @@
                     <form id="jurusanForm" name="jurusanForm" class="form-horizontal">
                         @csrf
                         <input type="hidden" name="jurusan_id" id="jurusan_id">
-                        <input type="hidden" name="sekolah_id" value="{{ Auth::user()->sekolah_id }}">
-
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <label>Kelas<span class="text-danger">*</span></label>
+                                <select class="browser-default custom-select select2bs4" name="kelas_id" id="kelas_id">
+                                </select>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label class="col-sm-4 control-label">Nama Jurusan<span class="text-danger"> *</span></label>
                             <div class="col-sm-12">
                                 <input type="text" class="form-control" id="nama" name="nama"
                                     placeholder="Nama Jurusan">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Ruangan<span class="text-danger"></span></label>
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control" id="ruangan" name="ruangan"
+                                    placeholder="Ruang Kelas">
                             </div>
                         </div>
                         <div class="form-group">
@@ -76,8 +93,6 @@
             </div>
         </div>
     </div>
-@endsection
-@section('modal')
     {{-- Modal Delete --}}
     <div class="modal fade" id="ajaxModelHps">
         <div class="modal-dialog">
@@ -138,6 +153,14 @@
                         name: "nama",
                     },
                     {
+                        data: "kelas",
+                        name: "kelas",
+                    },
+                    {
+                        data: "ruangan",
+                        name: "ruangan",
+                    },
+                    {
                         data: "action",
                         name: "action",
                         orderable: false,
@@ -149,10 +172,27 @@
             $("#createNewJurusan").click(function() {
                 $("#saveBtn").val("create-jurusan");
                 $("#jurusan_id").val("");
-                $("#jrusanForm").trigger("reset");
+                $("#jurusanForm").trigger("reset");
                 $("#modelHeading").html("Tambah Jurusan");
                 $("#ajaxModel").modal("show");
                 $("#deleteJurusan").modal("show");
+                $.ajax({
+                    url: "{{ url('kelas/get-kelas') }}",
+                    type: "POST",
+                    data: {
+                        sekolah_id: {{ Auth::user()->sekolah_id }},
+                        _token: '{{ csrf_token() }}'
+                    },
+                    dataType: 'json',
+                    success: function(result) {
+                        $('#kelas_id').html(
+                            '<option value="">:::Pilih Kelas:::</option>');
+                        $.each(result, function(key, value) {
+                            $("#kelas_id").append('<option value="' + value
+                                .id + '">' + value.nama + '</option>');
+                        });
+                    }
+                });
             });
 
             $("body").on("click", ".editJurusan", function() {
@@ -161,8 +201,27 @@
                     $("#modelHeading").html("Edit Jurusan");
                     $("#saveBtn").val("edit-jurusan");
                     $("#ajaxModel").modal("show");
+                    $("#kelas_id").val(data.kelas_id);
                     $("#jurusan_id").val(data.id);
+                    $("#ruangan").val(data.ruangan);
                     $("#nama").val(data.nama);
+                    $.ajax({
+                        url: "{{ url('kelas/get-kelas') }}",
+                        type: "POST",
+                        data: {
+                            sekolah_id: {{ Auth::user()->sekolah_id }},
+                            _token: '{{ csrf_token() }}'
+                        },
+                        dataType: 'json',
+                        success: function(result) {
+                            $('#kelas_id').html(
+                                '<option value="">:::Pilih Kelas:::</option>');
+                            $.each(result, function(key, value) {
+                                $("#kelas_id").append('<option value="' + value
+                                    .id + '">' + value.nama + '</option>');
+                            });
+                        }
+                    });
                 });
             });
 

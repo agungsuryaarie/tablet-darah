@@ -107,6 +107,7 @@ class UserSekolahController extends Controller
                 'kecamatan_id' => Auth::user()->kecamatan_id,
                 'puskesmas_id' => Auth::user()->puskesmas_id,
                 'sekolah_id' => $request->sekolah_id,
+                'jenjang' => $request->jenjang,
                 'nik' => $request->nik,
                 'nama' => $request->nama,
                 'nohp' => $request->nohp,

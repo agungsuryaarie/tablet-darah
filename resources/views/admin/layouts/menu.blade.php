@@ -140,19 +140,21 @@
         </a>
         <ul class="nav nav-treeview">
             <li class="nav-item">
-                <a href="{{ route('jurusan.index') }}"
-                    class="nav-link {{ request()->segment(1) == 'jurusan' ? 'active' : '' }}">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Jurusan</p>
-                </a>
-            </li>
-            <li class="nav-item">
                 <a href="{{ route('kelas.index') }}"
                     class="nav-link {{ request()->segment(1) == 'kelas' ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Kelas</p>
                 </a>
             </li>
+            @if (Auth::user()->jenjang == 'SMA' or Auth::user()->jenjang == 'SMK')
+                <li class="nav-item">
+                    <a href="{{ route('jurusan.index') }}"
+                        class="nav-link {{ request()->segment(1) == 'jurusan' ? 'active' : '' }}">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Jurusan</p>
+                    </a>
+                </li>
+            @endif
         </ul>
     </li>
     <li
@@ -217,6 +219,15 @@
                 </a>
             </li>
         </ul>
+    </li>
+    <li class="nav-item">
+        <a href="{{ route('sesi-posyandu.index') }}"
+            class="nav-link {{ request()->segment(1) == 'sesi-posyandu' ? 'active' : '' }}">
+            <i class="nav-icon fas fa-capsules"></i>
+            <p>
+                Sesi TTD
+            </p>
+        </a>
     </li>
 @endif
 <div class="user-panel mt-3">

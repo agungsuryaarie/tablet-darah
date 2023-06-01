@@ -10,5 +10,10 @@ class Jurusan extends Model
     use HasFactory;
 
     protected $table = "jurusan";
-    protected $fillable = ['nama', 'sekolah_id'];
+    protected $fillable = ['sekolah_id', 'kelas_id', 'nama', 'ruangan'];
+
+    public function kelas()
+    {
+        return $this->belongsTo(Kelas::class);
+    }
 }
