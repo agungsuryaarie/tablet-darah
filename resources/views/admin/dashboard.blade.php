@@ -137,7 +137,7 @@
                 <div class="content-header">
                     <div class="container-fluid">
                         <div class="row mb-2">
-                            <div class="col-sm-6">
+                            <div class="col-sm-12">
                                 <h4 class="text-white pb-2 fw-bold">Dashboard
                                     @if (Auth::user()->role == 3)
                                         {{ Auth::user()->sekolah->sekolah }}
