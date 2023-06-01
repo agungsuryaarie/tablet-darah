@@ -22,8 +22,8 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h6 class="float-left"><i class="fas fa-info-circle"></i> Sesi berakhir setiap jam 12 malam
-                                sejak sesi dibuat.
+                            <h6 class="float-left"><i class="fas fa-info-circle"></i> Sesi otomatis berakhir 1 minggu
+                                setelah sesi dibuat.
                             </h6>
                             <a href="javascript:void(0)" id="createNewSesiP" class="btn btn-info btn-xs float-right">
                                 <i class="fas fa-plus-circle"></i> Tambah</a>
@@ -33,14 +33,18 @@
                                 @if (!$sesip->isEmpty())
                                     @foreach ($sesip as $item)
                                         <div class="col-sm-4 mb-3">
-                                            @if (date('Y-m-d') < $item->created_at)
+                                            @php
+                                                $createdDate = \Carbon\Carbon::parse($item->created_at)->addWeek();
+                                                $today = \Carbon\Carbon::now();
+                                            @endphp
+                                            @if ($today->lessThan($createdDate))
                                                 <a
                                                     href="{{ route('sesi.posyandu.rematri', Crypt::encryptString($item->id)) }}">
                                                 @else
                                                     <a href="#" class="SesiError">
                                             @endif
                                             <div class="position-relative p-3 bg-blue rounded" style="height: 180px">
-                                                @if (date('Y-m-d') < $item->created_at)
+                                                @if ($today->lessThan($createdDate))
                                                     <div class="ribbon-wrapper ribbon-lg">
                                                         <div class="ribbon bg-success">
                                                             Berlangsung
@@ -174,42 +178,57 @@
         $('.SesiError').click(function() {
             toastr.error('Sesi sudah berakhir.')
         });
+
         //waktu sesi
+        // Dapatkan tanggal dari database
         var data = {!! json_encode($sesip) !!};
-        // Fungsi countdown
-        function countdown() {
-            // Mendapatkan tanggal dan jam saat ini
-            var now = new Date();
+        // Mengakses setiap data tanggal dan jam dalam perulangan
+        data.forEach(function(item, index) {
 
-            // Mengakses setiap data tanggal dan jam dalam perulangan
-            data.forEach(function(item, index) {
-                console.log(item);
-                var targetDate = new Date(item.created_at);
+            // Ubah tanggal database menjadi objek Date
+            var targetDate = new Date(item.created_at);
 
-                // Menentukan target waktu tengah malam (jam 00:00)
-                var targetMidnight = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate
-                    .getDate() + 1,
-                    0, 0, 0);
+            // Tambahkan 7 hari ke tanggal target
+            targetDate.setDate(targetDate.getDate() + 7);
 
-                // Menghitung selisih waktu antara sekarang dan tengah malam
-                var timeDiff = targetMidnight - now;
+            // Hitung selisih waktu antara tanggal target dan tanggal saat ini
+            var timeDiff = targetDate.getTime() - new Date().getTime();
 
-                // Menghitung selisih waktu dalam satuan jam, menit, dan detik
-                var hours = Math.floor(timeDiff / (1000 * 60 * 60));
-                var minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-                var seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+            // Hitung jumlah hari, jam, menit, dan detik yang tersisa
+            var days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
 
-                // Menampilkan countdown pada elemen HTML
+            // Tampilkan countdown pada elemen HTML
+            document.getElementById('berakhir_' + index).innerHTML = days + " hari, " + hours + " jam, " + minutes +
+                " menit, " +
+                seconds + " detik";
+
+            if (timeDiff < 0) {
                 var countdownElement = document.getElementById('berakhir_' + index);
-                countdownElement.innerHTML = hours + ' jam, ' + minutes + ' menit, ' + seconds + ' detik';
+                countdownElement.innerHTML = "sesi berakhir";
+            }
+
+            // Update berakhir setiap detik
+            setInterval(function() {
+                timeDiff = targetDate.getTime() - new Date().getTime();
+                days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+                hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+                seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+
+                document.getElementById('berakhir_' + index).innerHTML = days + " hari, " + hours +
+                    " jam, " +
+                    minutes +
+                    " menit, " + seconds + " detik";
 
                 if (timeDiff < 0) {
                     var countdownElement = document.getElementById('berakhir_' + index);
                     countdownElement.innerHTML = "sesi berakhir";
                 }
-            });
-        }
-        // Memanggil fungsi countdown setiap detik
-        setInterval(countdown, 1000);
+
+            }, 1000);
+        })
     </script>
 @endsection
