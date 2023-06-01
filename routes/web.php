@@ -20,6 +20,7 @@ use App\Http\Controllers\Admin\SekolahController;
 use App\Http\Controllers\Admin\SekolahBinaanController;
 use App\Http\Controllers\Admin\PosyanduBinaanController;
 use App\Http\Controllers\Admin\SesiController;
+use App\Http\Controllers\Admin\SesiPosyanduController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
@@ -33,14 +34,10 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Route::controller(AuthController::class)->group(function () {
     // Login
-    Route::get('login', 'index')->name('login')->middleware('guest');
-    Route::post('login', 'login')->middleware('guest');
+    Route::get('/', 'index')->name('index')->middleware('guest');
+    Route::post('login', 'login')->name('login');
     Route::get('logout', 'logout')->name('logout');
 });
 
@@ -82,20 +79,21 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
 
     Route::group(['middleware' => ['checkUser:2']], function () {
 
-        Route::post('kecamatan/get-kecamatan', [KecController::class, 'getKecamatan']);
-        Route::post('desa/get-desa', [DesaController::class, 'getDesa']);
-        Route::post('puskesmas/get-puskes', [PuskesController::class, 'getPuskes']);
         Route::post('posyandu/get-posyandu', [PosyanduController::class, 'getPosyandu']);
         Route::post('sekolah/get-sekolah', [SekolahController::class, 'getSekolah']);
-        Route::post('sekolah/get-jenjang', [SekolahController::class, 'getJenjang']);
-        Route::post('sekolah/get-status', [SekolahController::class, 'getStatus']);
-
+        Route::post('sekolah/get-jenjang-puskes', [SekolahController::class, 'getJenjang']);
+        Route::post('sekolah/get-status-puskes', [SekolahController::class, 'getStatus']);
+        Route::post('sekolah/get-jenjang-auto', [SekolahController::class, 'getJenjangAuto']);
 
         // Sekolah Binaan
         Route::resource('sekolah-binaan', SekolahBinaanController::class);
+        Route::get('sekolah-binaan/sekolah', [SekolahBinaanController::class, 'show'])->name('sekolah-binaan.take');
+        Route::post('sekolah-binaan/take', [SekolahBinaanController::class, 'take'])->name('take.update');
 
         // Posyandu Binaan
         Route::resource('posyandu-binaan', PosyanduBinaanController::class);
+        Route::get('posyandu-binaan/sekolah', [PosyanduBinaanController::class, 'show'])->name('posyandu-binaan.take');
+        Route::post('posyandu-binaan/take', [PosyanduBinaanController::class, 'take'])->name('take.posyandu.update');
 
         // Users Sekolah
         Route::get('users-sekolah', [UserSekolahController::class, 'index'])->name('usersekolah.index');
@@ -109,10 +107,10 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
         Route::get('users-posyandu/{id}/edit', [UserPosyanduController::class, 'edit'])->name('userposyandu.edit');
         Route::delete('users-posyandu/{user}/destroy', [UserPosyanduController::class, 'destroy'])->name('userposyandu.destroy');
 
-        // Rematri
-        Route::get('rematri', [RematriController::class, 'index'])->name('rematri.index');
-        Route::get('rematri/create', [RematriController::class, 'create'])->name('rematri.create');
-        Route::get('rematri/edit', [RematriController::class, 'edit'])->name('rematri.edit');
+        // // Rematri
+        // Route::get('rematri', [RematriController::class, 'index'])->name('rematri.index');
+        // Route::get('rematri/create', [RematriController::class, 'create'])->name('rematri.create');
+        // Route::get('rematri/edit', [RematriController::class, 'edit'])->name('rematri.edit');
     });
 
     Route::group(['middleware' => ['checkUser:3']], function () {
@@ -132,17 +130,20 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
         Route::get('rematri/edit/{rematri}', [RematriController::class, 'edit'])->name('rematri.edit');
         Route::post('rematri/update/{rematri}', [RematriController::class, 'update'])->name('rematri.update');
         Route::delete('rematri/{rematri}/destroy', [RematriController::class, 'destroy'])->name('rematri.destroy');
-        Route::post('rematri/get-kelas', [RematriController::class, 'getKelas']);
+        Route::post('rematri/get-jurusan', [RematriController::class, 'getJurusan']);
         Route::post('rematri/get-desa', [RematriController::class, 'getDesa']);
+        Route::get('rematri/{rematri}/hb', [RematriController::class, 'hb'])->name('rematri.hb');
+        Route::post('rematri/hb', [RematriController::class, 'storehb'])->name('hb.store');
+        Route::delete('rematri/{rematri}/destroyhb', [RematriController::class, 'destroyhb'])->name('rematri.destroyhb');
 
+        // Sesi
         Route::resource('sesi', SesiController::class);
-        Route::get('sesi/rematri/{id}', [SesiController::class, 'rematri'])->name('sesi.rematri');
-        Route::get('sesi/ttd/{id}/{ids}', [SesiController::class, 'ttd'])->name('sesi.ttd');
+        Route::get('sesi/{id}/rematri', [SesiController::class, 'rematri'])->name('sesi.rematri');
+        Route::get('sesi/ttd/{id}/{ids}/{ttd}', [SesiController::class, 'ttd'])->name('sesi.ttd');
         Route::post('sesi/upload', [SesiController::class, 'upload'])->name('sesi.uploadfoto');
+        Route::get('sesi/{id}/foto-rematri', [SesiController::class, 'foto'])->name('sesi.foto');
     });
-
     Route::group(['middleware' => ['checkUser:4']], function () {
-
         // Rematri
         Route::get('rematri-posyandu', [RematriPosyanduController::class, 'index'])->name('rematri.posyandu.index');
         Route::get('rematri-posyandu-create', [RematriPosyanduController::class, 'create'])->name('rematri.posyandu.create');
@@ -150,6 +151,15 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
         Route::get('rematri-posyandu/edit/{rematri}', [RematriPosyanduController::class, 'edit'])->name('rematri.posyandu.edit');
         Route::post('rematri-posyandu/update/{rematri}', [RematriPosyanduController::class, 'update'])->name('rematri.posyandu.update');
         Route::delete('rematri-posyandu/{rematri}/destroy', [RematriPosyanduController::class, 'destroy'])->name('rematri.posyandu.destroy');
-        Route::post('rematri-posyandu/get-desa', [RematriPosyanduController::class, 'getDesa']);
+        Route::post('rematri-posyandu/get-desa', [RematriPosyanduController::class, 'getDesaPos']);
+        Route::get('rematri-posyandu/{rematri}/hb', [RematriPosyanduController::class, 'hb'])->name('rematri.posyandu.hb');
+        Route::post('rematri-posyandu/hb', [RematriPosyanduController::class, 'storehb'])->name('hb.posyandu.store');
+        Route::delete('rematri-posyandu/{rematri}/destroyhb', [RematriPosyanduController::class, 'destroyhb'])->name('rematri.posyandu.destroyhb');
+
+        // Sesi
+        Route::resource('sesi-posyandu', SesiPosyanduController::class);
+        Route::get('sesi-posyandu/{id}/rematri', [SesiPosyanduController::class, 'rematri'])->name('sesi.posyandu.rematri');
+        Route::get('sesi-posyandu/ttd/{id}/{ids}/{ttd}', [SesiPosyanduController::class, 'ttd'])->name('sesi.posyandu.ttd');
+        Route::post('sesi-posyandu/upload', [SesiPosyanduController::class, 'upload'])->name('sesi.posyandu.uploadfoto');
     });
 });

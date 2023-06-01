@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\FotoSesi;
 use App\Models\Rematri;
 use App\Models\Sesi;
 use App\Models\SesiRematri;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Yajra\Datatables\Datatables;
 use Illuminate\Support\Facades\Validator;
 
@@ -26,12 +26,10 @@ class SesiController extends Controller
         //Translate Bahasa Indonesia
         $message = array(
             'nama.required' => 'Nama Sesi harus diisi.',
-            'jurusan_id.required' => 'Jurusan harus dipilih.',
             'kelas_id.required' => 'Kelas harus dipilih.',
         );
         $validator = Validator::make($request->all(), [
             'nama' => 'required',
-            'jurusan_id' => 'required',
             'kelas_id' => 'required',
         ], $message);
 
@@ -52,19 +50,20 @@ class SesiController extends Controller
                 'kelas_id' => $request->kelas_id,
             ]
         );
-        // $rematri = Rematri::where('kelas_id', $request->kelas_id)->first();
+        $rematri = Rematri::where('kelas_id', $request->kelas_id)->get();
         $sesiid  = Sesi::orderBy('id', 'DESC')->first();
-        SesiRematri::updateOrCreate(
-            [
-                'id' => $request->sesi_id
-            ],
-            [
-
-                'sesi_id' => $sesiid->id,
-                'kelas_id' => $sesiid->kelas_id,
-            ]
-        );
-
+        // fecth rematri
+        foreach ($rematri as $r) {
+            $id_rematri = $r->id;
+            //simpan seluruh rematri dari kelas
+            SesiRematri::create(
+                [
+                    'sesi_id' => $sesiid->id,
+                    'kelas_id' => $sesiid->kelas_id,
+                    'rematri_id' => $id_rematri,
+                ]
+            );
+        }
         return response()->json(['success' => 'Sesi saved successfully.']);
     }
 
@@ -72,40 +71,67 @@ class SesiController extends Controller
     public function rematri(Request $request, $id)
     {
         $menu = 'Sesi';
-        $sesi = Sesi::where('id', $id)->first();
-        $kelas = $sesi->kelas_id;
-        $count = Rematri::where('kelas_id', $kelas)->count();
-        $rematri = Rematri::where('kelas_id', $kelas)->first();
+        $sesi = Sesi::where('id', Crypt::decryptString($id))->first();
+        $count = Rematri::where('kelas_id', $sesi->kelas_id)->count();
+        // $rematri = Rematri::where('kelas_id', $sesi->kelas_id)->first();
         // $data = Rematri::where('rematri.kelas_id', $sesi->kelas_id)
-        //     ->join('foto_sesi', 'rematri.id', '=', 'foto_sesi.rematri_id')
+        //     // ->where('foto_sesi.sesi_id', $sesi->id)
+        //     ->leftJoin('foto_sesi', 'rematri.id', '=', 'foto_sesi.rematri_id')
+        //     ->select('rematri.*', 'foto_sesi.foto')
         //     ->get();
+        // $data = SesiRematri::leftJoin('rematri', 'sesi_rematri.rematri_id', '=', 'rematri.id')
+        //     ->where('sesi_rematri.kelas_id', $sesi->kelas_id)
+        //     ->where('sesi_rematri.sesi_id', $sesi->id)
+        //     ->select('rematri.*', 'sesi_rematri.*', 'sesi_rematri.id')
+        //     ->first();
         // dd($data);
         if ($request->ajax()) {
-            // $data = Rematri::where('kelas_id', $sesi->kelas_id)
-            //     ->get();
-            $data = Rematri::where('rematri.kelas_id', $sesi->kelas_id)
-                ->join('foto_sesi', 'rematri.id', '=', 'foto_sesi.rematri_id')
+            $data = SesiRematri::leftJoin('rematri', 'sesi_rematri.rematri_id', '=', 'rematri.id')
+                ->where('sesi_rematri.kelas_id', $sesi->kelas_id)
+                ->where('sesi_rematri.sesi_id', $sesi->id)
+                ->select('rematri.*', 'sesi_rematri.*', 'sesi_rematri.id')
                 ->get();
             return Datatables::of($data)
                 ->addIndexColumn()
-                ->addColumn('action', function ($row) {
-                    return '<center><a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs absenRematri"><i class="fa fa-camera"></i></a></center>';
+                ->addColumn('nik', function ($data) {
+                    return $data->nik;
                 })
-                ->rawColumns(['action'])
+                ->addColumn('nama', function ($data) {
+                    return $data->nama;
+                })
+                ->addColumn('foto', function ($data) {
+                    if ($data->foto != null) {
+                        $foto = '<center><img src="' . url("storage/foto-sesi/" . $data->foto) . '" width="30px" class="img rounded"><center>';
+                    } else {
+                        $foto = '<center><span class="text-danger"><i>* belum foto</i></span></center>';
+                    }
+                    return $foto;
+                })
+                ->addColumn('action', function ($row) {
+                    if ($row->foto == null) {
+                        $btn = '<center><a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . Crypt::encryptString($row->rematri_id) . '" data-ttd="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs absenRematri"><i class="fa fa-camera"></i></a></center>';
+                    } else {
+                        $btn = '<center><span class="badge badge-success">selesai</span></center>';
+                    }
+                    return $btn;
+                })
+                ->rawColumns(['foto', 'action'])
                 ->make(true);
         }
-        return view('admin.sesi.rematri', compact('menu', 'sesi', 'rematri', 'count'));
+        return view('admin.sesi.rematri', compact('menu', 'sesi', 'count'));
     }
-    public function ttd($id, $ids)
+    public function ttd($id, $ids, $ttd)
     {
         $menu = 'Foto';
-        $rematri = Rematri::where('id', $ids)->first();
+        $rematri = Rematri::where('id', Crypt::decryptString($ids))->first();
         $sesi = Sesi::where('id', $id)->first();
-        return view('admin.sesi.ttd', compact('menu', 'rematri', 'sesi'));
+        $sesifoto = SesiRematri::find($ttd);
+        return view('admin.sesi.ttd', compact('menu', 'rematri', 'sesi', 'sesifoto'));
     }
     public function upload(Request $request)
     {
         // dd($request->all());
+        // $ttd = SesiRematri::find($request->ttd_id);
         //Translate Bahasa Indonesia
         $message = array(
             'foto.images' => 'File harus image.',
@@ -118,16 +144,20 @@ class SesiController extends Controller
         $img = $request->file('foto');
         $img->storeAs('public/foto-sesi/', $img->hashName());
 
-        FotoSesi::create([
-            'kecamatan_id' => Auth::user()->kecamatan_id,
-            'puskesmas_id' => Auth::user()->puskesmas_id,
-            'sekolah_id' => Auth::user()->sekolah_id,
-            'kelas_id' => $request->kelas_id,
-            'sesi_id' => $request->sesi_id,
-            'rematri_id' => $request->rematri_id,
-            'foto' => $img->hashName(),
-        ]);
+        SesiRematri::updateOrCreate(
+            ['id' => $request->ttd_id],
+            [
+                'foto' => $img->hashName(),
+            ]
+        );
         //redirect to index
-        return redirect()->route('sesi.rematri', $request->sesi_id)->with(['status' => 'Foto uploaded successfully.']);
+        return redirect()->route('sesi.rematri', Crypt::encryptString($request->sesi_id))->with(['status' => 'Foto uploaded successfully.']);
     }
+    // fecth foto with ajax
+    // ====================
+    // public function foto($id)
+    // {
+    //     $foto = FotoSesi::where('rematri_id', $id)->first();
+    //     return response()->json($foto);
+    // }
 }

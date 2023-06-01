@@ -11,5 +11,10 @@ class SesiRematri extends Model
 
     protected $table = "sesi_rematri";
 
-    protected $fillable = ['sesi_id', 'kelas_id'];
+    protected $fillable = ['sesi_id', 'kelas_id', 'rematri_id', 'foto'];
+
+    public function rematri()
+    {
+        return $this->belongsTo(Rematri::class);
+    }
 }

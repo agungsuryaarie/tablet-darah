@@ -25,8 +25,8 @@ class Rematri extends Model
         'berat_badan',
         'panjang_badan',
         'agama',
-        'jurusan_id',
         'kelas_id',
+        'jurusan_id',
         'nama_ortu',
         'nik_ortu',
         'tlp_ortu',
@@ -63,4 +63,8 @@ class Rematri extends Model
     // {
     //     return $this->belongsToMany(Sesi::class);
     // }
+    public function hb()
+    {
+        return $this->hasMany(HB::class);
+    }
 }
