@@ -10,7 +10,7 @@
                             @if (Auth::user()->role == 1)
                                 Administrator
                             @elseif(Auth::user()->role == 2)
-                                Admin Puskesmas
+                                {{ Auth::user()->puskesmas->puskesmas }}
                             @endif
                         </h1>
                     </div>
@@ -139,14 +139,10 @@
                         <div class="row mb-2">
                             <div class="col-sm-6">
                                 <h4 class="text-white pb-2 fw-bold">Dashboard
-                                    @if (Auth::user()->role == 1)
-                                        Administrator
-                                    @elseif(Auth::user()->role == 2)
-                                        Admin puskesmas
-                                    @elseif(Auth::user()->role == 3)
-                                        Admin sekolah
+                                    @if (Auth::user()->role == 3)
+                                        {{ Auth::user()->sekolah->sekolah }}
                                     @elseif(Auth::user()->role == 4)
-                                        Admin posyandu
+                                        {{ Auth::user()->posyandu->posyandu }}
                                     @endif
                                     <h5 class="text-white op-7 mb-2">Aplikasi Tablet Tambah Darah</h5>
                             </div>
