@@ -240,8 +240,15 @@
                     },
                     dataType: 'json',
                     success: function(result) {
-                        $('#posyandu_id').html(
-                            '<option value="">::Pilih Posyandu::</option>');
+                        if (result == "") {
+                            $('#posyandu_id').html(
+                                '<option disable>Tambahkan Posyandu Binaan Terlebih dahulu</option>'
+                            );
+                        } else {
+                            $('#posyandu_id').html(
+                                '<option value="">:::Pilih Posyandu:::</option>'
+                            );
+                        }
                         $.each(result, function(key, value) {
                             $("#posyandu_id").append('<option value="' +
                                 value
@@ -269,8 +276,15 @@
                         },
                         dataType: 'json',
                         success: function(result) {
-                            $('#posyandu_id').html(
-                                '<option value="">::Pilih Posyandu::</option>');
+                            if (result == "") {
+                                $('#posyandu_id').html(
+                                    '<option disable>Tambahkan Posyandu Binaan Terlebih dahulu</option>'
+                                );
+                            } else {
+                                $('#posyandu_id').html(
+                                    '<option value="">:::Pilih Posyandu:::</option>'
+                                );
+                            }
                             $.each(result, function(key, value) {
                                 $("#posyandu_id").append('<option value="' +
                                     value

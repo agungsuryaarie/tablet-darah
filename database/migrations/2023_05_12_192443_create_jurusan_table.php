@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('jurusan', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('kelas_id');
+            $table->string('ruangan');
+            $table->string('sekolah_id');
             $table->string('nama');
             $table->timestamps();
         });

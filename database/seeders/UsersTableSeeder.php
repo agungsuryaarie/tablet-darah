@@ -19,7 +19,7 @@ class UsersTableSeeder extends Seeder
             'nik' => "1219000000",
             'nohp' => "081300000000",
             'email'    => 'admin@gmail.com',
-            'password'    => bcrypt('secret123'),
+            'password'    => bcrypt('admin123'),
             'role' => "1",
             'foto' => "",
         ]);

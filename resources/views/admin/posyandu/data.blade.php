@@ -253,6 +253,7 @@
                     $("#nama_posyandu").val(data.posyandu);
                 });
             });
+
             $("#saveBtn").click(function(e) {
                 e.preventDefault();
                 $(this).html(
@@ -286,6 +287,7 @@
                     },
                 });
             });
+            
             $("body").on("click", ".deletePos", function() {
                 var posyandu_id = $(this).data("id");
                 $("#modelHeadingHps").html("Hapus");

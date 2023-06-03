@@ -15,12 +15,12 @@ class StatusTableSeeder extends Seeder
     {
         $data = [
             [
-                'kode' => 'N',
-                'status' => 'Negeri',
+                'status' => 'N',
+                'nama' => 'Negeri',
             ],
             [
-                'kode' => 'S',
-                'status' => 'Swasta',
+                'status' => 'S',
+                'nama' => 'Swasta',
             ],
         ];
         Status::insert($data);

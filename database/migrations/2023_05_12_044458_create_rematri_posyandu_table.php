@@ -13,22 +13,26 @@ return new class extends Migration
     {
         Schema::create('rematri_posyandu', function (Blueprint $table) {
             $table->id();
+            $table->string('kecamatan_id');
+            $table->string('desa_id');
             $table->string('puskesmas_id');
+
             $table->string('posyandu_id');
-            $table->integer('anak_ke');
-            $table->string('tempat_lahir');
-            $table->date('tgl_lahir');
+
             $table->string('nokk');
             $table->string('nik')->unique();
             $table->string('nama');
+            $table->string('nohp');
+            $table->string('email')->unique();
+            $table->string('tempat_lahir');
+            $table->string('tgl_lahir');
+            $table->integer('anak_ke');
             $table->integer('berat_badan');
             $table->integer('panjang_badan');
-            $table->integer('hb')->nullable();
+            $table->string('agama');
             $table->string('nama_ortu');
             $table->string('nik_ortu');
             $table->string('tlp_ortu');
-            $table->string('kecamatan_id');
-            $table->string('desa_id');
             $table->string('alamat');
             $table->timestamps();
         });

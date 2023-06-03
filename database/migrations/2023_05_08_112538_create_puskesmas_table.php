@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('puskesmas', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('kecamatan_id');
+            $table->string('kode_puskesmas')->nullable();
             $table->string('puskesmas');
             $table->timestamps();
         });
