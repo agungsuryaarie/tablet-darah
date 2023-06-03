@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="{{ url('plugins/dropzone/min/dropzone.min.css') }}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ url('dist/css/adminlte.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('dist/assets/css/custom.css') }}" />
     {{-- <link rel="stylesheet" href="{{ url('dist/css/custom.css') }}"> --}}
     <!-- summernote -->
     <link rel="stylesheet" href="{{ url('plugins/summernote/summernote-bs4.min.css') }}">

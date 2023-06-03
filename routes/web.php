@@ -81,6 +81,7 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
 
         Route::post('posyandu/get-posyandu', [PosyanduController::class, 'getPosyandu']);
         Route::post('sekolah/get-sekolah', [SekolahController::class, 'getSekolah']);
+        Route::post('sekolah/get-sekolah-puskes', [SekolahController::class, 'getSekolahPuskes']);
         Route::post('sekolah/get-jenjang-puskes', [SekolahController::class, 'getJenjang']);
         Route::post('sekolah/get-status-puskes', [SekolahController::class, 'getStatus']);
         Route::post('sekolah/get-jenjang-auto', [SekolahController::class, 'getJenjangAuto']);
@@ -94,6 +95,9 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
         Route::resource('posyandu-binaan', PosyanduBinaanController::class);
         Route::get('posyandu-binaan/sekolah', [PosyanduBinaanController::class, 'show'])->name('posyandu-binaan.take');
         Route::post('posyandu-binaan/take', [PosyanduBinaanController::class, 'take'])->name('take.posyandu.update');
+        Route::post('posyandu-binaan/get-kecamatan', [KecController::class, 'getKecamatan']);
+        Route::post('posyandu-binaan/get-desa', [DesaController::class, 'getDesa']);
+        Route::post('posyandu-binaan/save', [PosyanduController::class, 'store']);
 
         // Users Sekolah
         Route::get('users-sekolah', [UserSekolahController::class, 'index'])->name('usersekolah.index');
@@ -107,7 +111,6 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
         Route::get('users-posyandu/{id}/edit', [UserPosyanduController::class, 'edit'])->name('userposyandu.edit');
         Route::delete('users-posyandu/{user}/destroy', [UserPosyanduController::class, 'destroy'])->name('userposyandu.destroy');
 
-        // // Rematri
         // Route::get('rematri', [RematriController::class, 'index'])->name('rematri.index');
         // Route::get('rematri/create', [RematriController::class, 'create'])->name('rematri.create');
         // Route::get('rematri/edit', [RematriController::class, 'edit'])->name('rematri.edit');

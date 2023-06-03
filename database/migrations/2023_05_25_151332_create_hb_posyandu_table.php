@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('puskesmas_id');
             $table->unsignedBigInteger('posyandu_id');
+            $table->unsignedBigInteger('rematri_id');
             $table->string('tgl_cek');
             $table->integer('berat_badan');
             $table->integer('panjang_badan');

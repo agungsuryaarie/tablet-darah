@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('kecamatan_id');
             $table->unsignedBigInteger('puskesmas_id');
             $table->unsignedBigInteger('sekolah_id');
-            $table->unsignedBigInteger('jurusan_id');
+            $table->string('jurusan_id')->nullable();
             $table->unsignedBigInteger('kelas_id');
             $table->string('nama');
             $table->timestamps();

@@ -20,7 +20,7 @@ class SekolahTableSeeder extends Seeder
             if (!$firstline) {
                 Sekolah::create([
                     'kecamatan_id' => $data['0'],
-                    'puskesmas_id' => $data['1'],
+                    // 'puskesmas_id' => $data['1'],
                     'npsn' => $data['2'],
                     'sekolah' => $data['3'],
                     'jenjang' => $data['4'],

@@ -132,12 +132,12 @@
             </div>
         </section>
     @else
-        <div class="panel-header bg-secondary">
+        <div class="panel-header bg-maroon">
             <div class="page-inner py-4">
                 <div class="content-header">
                     <div class="container-fluid">
                         <div class="row mb-2">
-                            <div class="col-sm-12">
+                            <div class="col-sm-12 ml-4">
                                 <h4 class="text-white pb-2 fw-bold">Dashboard
                                     @if (Auth::user()->role == 3)
                                         {{ Auth::user()->sekolah->sekolah }}

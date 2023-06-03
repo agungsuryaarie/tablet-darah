@@ -232,16 +232,23 @@
                 $("#ajaxModel").modal("show");
                 $("#deleteUsersekolah").modal("show");
                 $.ajax({
-                    url: "{{ url('sekolah/get-sekolah') }}",
+                    url: "{{ url('sekolah/get-sekolah-puskes') }}",
                     type: "POST",
                     data: {
                         kecamatan_id: {{ Auth::user()->kecamatan_id }},
+                        puskesmas_id: {{ Auth::user()->puskesmas_id }},
                         _token: '{{ csrf_token() }}'
                     },
                     dataType: 'json',
                     success: function(result) {
-                        $('#sekolah_id').html(
-                            '<option value="">:::Pilih Sekolah:::</option>');
+                        if (result == "") {
+                            $('#sekolah_id').html(
+                                '<option disable>Pilih Sekolah Binaan Terlebih dahulu</option>'
+                            );
+                        } else {
+                            $('#sekolah_id').html(
+                                '<option value="">:::Pilih Sekolah:::</option>');
+                        }
                         $.each(result, function(key, value) {
                             $("#sekolah_id").append('<option value="' +
                                 value

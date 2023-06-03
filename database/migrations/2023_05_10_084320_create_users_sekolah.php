@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('users_sekolah', function (Blueprint $table) {
             $table->id();
+            $table->integer('kecamatan_id');
             $table->unsignedBigInteger('puskesmas_id');
             $table->unsignedBigInteger('sekolah_id');
+            $table->string('jenjang');
             $table->string('nik')->unique();
             $table->string('nama');
             $table->string('nohp');

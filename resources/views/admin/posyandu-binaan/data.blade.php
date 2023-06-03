@@ -21,7 +21,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <a href="javascript:void(0)" id="createNewPosyandu" class="btn btn-info btn-xs float-right">
+                            <a href="javascript:void(0)" id="choosePosyandu" class="btn btn-info btn-xs float-right">
                                 <i class="fas fa-plus-circle"></i> Tambah</a>
                         </div>
                         <div class="card-body">
@@ -65,6 +65,9 @@
                                     <h6 class="float-left"><i class="fas fa-info-circle"></i> Pilih posyandu berdasarkan
                                         binaan dari puskesmas anda.
                                     </h6>
+                                    <a href="javascript:void(0)" id="createNewPosyandu"
+                                        class="btn btn-info btn-xs float-right">
+                                        <i class="fas fa-plus-circle"></i> Tambah</a>
                                 </div>
                                 <div class="card-body">
                                     <table class="table table-bordered table-striped data-table-posyandu">
@@ -98,6 +101,56 @@
     </div>
 @endsection
 @section('modal')
+    <div class="modal fade" id="ajaxModel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="modelHeading"></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert" style="display: none;">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form id="NewposyanduForm" name="NewposyanduForm" class="form-horizontal">
+                        @csrf
+                        <input type="hidden" name="posyandu_id" id="posyandu_id">
+                        <input type="hidden" name="kecamatan_id" value="{{ Auth::user()->kecamatan_id }}"
+                            id="kecamatan_id">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Desa/Keluarahan<span class="text-danger">*</span></label>
+                                <select class="browser-default custom-select select2bs4" name="desa_id" id="desa_id">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Kode Posyandu<span class="text-danger"> *</span></label>
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control" id="kode_posyandu" name="kode_posyandu"
+                                    placeholder="Kode Posyandu">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Nama Posyandu<span class="text-danger"> *</span></label>
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control" id="nama_posyandu" name="nama_posyandu"
+                                    placeholder="Nama Posyandu">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary btn-sm" id="saveBtn"
+                                    value="create">Simpan
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     {{-- Modal Delete --}}
     <div class="modal fade" id="ajaxModelHps">
         <div class="modal-dialog">
@@ -186,7 +239,7 @@
                 ],
             });
 
-            $("#createNewPosyandu").click(function() {
+            $("#choosePosyandu").click(function() {
                 $("#take").val("create-posyandu");
                 $("#posyandu_id").val("");
                 $("#posyanduForm").trigger("reset");
@@ -195,7 +248,7 @@
                 if ($.fn.DataTable.isDataTable('.data-table-posyandu')) {
                     $('.data-table-posyandu').DataTable().destroy();
                 }
-                var tablesekolah = $(".data-table-posyandu").DataTable({
+                var tablePosyandu = $(".data-table-posyandu").DataTable({
                     processing: true,
                     serverSide: true,
                     responsive: true,
@@ -232,6 +285,41 @@
                         },
                     ],
                 });
+
+                $("#saveBtn").click(function(e) {
+                    e.preventDefault();
+                    $(this).html(
+                        "<span class='spinner-border spinner-border-sm'></span><span class='visually-hidden'><i> menyimpan...</i></span>"
+                    );
+
+                    $.ajax({
+                        data: $("#NewposyanduForm").serialize(),
+                        url: "{{ url('posyandu-binaan/save') }}",
+                        type: "POST",
+                        dataType: "json",
+                        success: function(data) {
+                            if (data.errors) {
+                                $('.alert-danger').html('');
+                                $.each(data.errors, function(key, value) {
+                                    $('.alert-danger').show();
+                                    $('.alert-danger').append('<strong><li>' +
+                                        value +
+                                        '</li></strong>');
+                                    $(".alert-danger").fadeOut(5000);
+                                    $("#saveBtn").html("Simpan");
+                                    // $('#posyanduForm').trigger("reset");
+                                });
+                            } else {
+                                tablePosyandu.draw();
+                                alertSuccess("Posyandu berhasil ditambah");
+                                // $('#posyanduForm').trigger("reset");
+                                $("#saveBtn").html("Simpan");
+                                $('#ajaxModel').modal('hide');
+                            }
+                        },
+                    });
+                });
+
             });
             $("#take").click(function(e) {
                 e.preventDefault();
@@ -264,6 +352,34 @@
                     },
                 });
             });
+
+            $("#createNewPosyandu").click(function() {
+                $("#saveBtn").val("create-posyandu");
+                $("#posyandu_id").val("");
+                $("#NewposyanduForm").trigger("reset");
+                $("#modelHeading").html("Tambah Posyandu");
+                $("#ajaxModel").modal("show");
+                $("#deletePos").modal("show");
+                var idKec = $("#kecamatan_id").val();
+                $.ajax({
+                    url: "{{ url('posyandu-binaan/get-desa') }}",
+                    type: "POST",
+                    data: {
+                        kecamatan_id: idKec,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    dataType: 'json',
+                    success: function(result) {
+                        $('#desa_id').html(
+                            '<option value="">::Pilih Desa::</option>');
+                        $.each(result, function(key, value) {
+                            $("#desa_id").append('<option value="' + value
+                                .id + '">' + value.desa + '</option>');
+                        });
+                    }
+                });
+            });
+
             $("body").on("click", ".deletePos", function() {
                 var posyandu_id = $(this).data("id");
                 $("#modelHeadingHps").html("Hapus");

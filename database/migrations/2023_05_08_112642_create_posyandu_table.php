@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('posyandu', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('kecamatan_id');
+            $table->unsignedBigInteger('puskesmas_id')->nullable();
             $table->unsignedBigInteger('desa_id');
-            $table->unsignedBigInteger('puskesmas_id');
+            $table->string('kode_posyandu');
             $table->string('posyandu');
             $table->timestamps();
         });

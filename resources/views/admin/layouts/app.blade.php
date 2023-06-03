@@ -6,7 +6,7 @@
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
         @include('admin.layouts.navbar')
-        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+        <aside class="main-sidebar sidebar-light-maroon elevation-4">
             <a href="{{ route('dashboard') }}" class="brand-link">
                 <img src="{{ url('dist/img/logo-ttd.png') }}" alt="AdminLTE Logo"
                     class="brand-image img-circle elevation-3" style="opacity: .8">
@@ -52,8 +52,8 @@
                     </div>
                 </div>
                 <nav class="mt-2">
-                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
-                        data-accordion="false">
+                    <ul class="nav nav-pills nav-sidebar nav-child-indent flex-column" data-widget="treeview"
+                        role="menu" data-accordion="false">
 
                         @include('admin.layouts.menu')
                     </ul>

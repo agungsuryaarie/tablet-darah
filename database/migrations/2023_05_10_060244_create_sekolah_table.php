@@ -19,6 +19,9 @@ return new class extends Migration
             $table->string('sekolah');
             $table->string('jenjang');
             $table->string('status');
+            $table->string('alamat_jalan');
+            $table->string('lintang');
+            $table->string('bujur');
             $table->timestamps();
         });
     }

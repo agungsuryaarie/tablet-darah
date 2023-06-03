@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('sesi_id');
             $table->unsignedBigInteger('kelas_id');
+            $table->unsignedBigInteger('rematri_id');
+            $table->string('foto')->nullable();
             $table->foreign('sesi_id')->references('id')->on('sesi');
             $table->timestamps();
         });
