@@ -9,7 +9,9 @@
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="{{ route('sesi.posyandu.rematri', $sesip->id) }}">Sesi</a></li>
+                        <li class="breadcrumb-item"><a
+                                href="{{ route('sesi.posyandu.rematri', Crypt::encryptString($sesip->id)) }}">Detail Sesi</a>
+                        </li>
                         <li class="breadcrumb-item active">{{ $menu }}</li>
                     </ol>
                 </div>

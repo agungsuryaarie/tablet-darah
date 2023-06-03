@@ -235,7 +235,7 @@
                     url: "{{ url('sekolah/get-sekolah') }}",
                     type: "POST",
                     data: {
-                        kecamatan_id: {{ Auth::user()->kecamatan_id }},
+                        puskesmas_id: {{ Auth::user()->puskesmas_id }},
                         _token: '{{ csrf_token() }}'
                     },
                     dataType: 'json',

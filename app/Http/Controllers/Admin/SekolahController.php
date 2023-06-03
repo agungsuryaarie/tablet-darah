@@ -101,7 +101,7 @@ class SekolahController extends Controller
 
     public function getSekolah(Request $request)
     {
-        $data = Sekolah::where('kecamatan_id', $request->kecamatan_id)->get(["sekolah", "id", 'jenjang']);
+        $data = Sekolah::where('puskesmas_id', $request->puskesmas_id)->get(["sekolah", "id", 'jenjang']);
         return response()->json($data);
     }
 
