@@ -12,8 +12,6 @@ class Rematri extends Model
     protected $table = "rematri";
 
     protected $fillable = [
-        'puskesmas_id',
-        'sekolah_id',
         'anak_ke',
         'email',
         'tempat_lahir',
@@ -58,11 +56,6 @@ class Rematri extends Model
     {
         return $this->belongsTo(Desa::class);
     }
-
-    // public function sesi()
-    // {
-    //     return $this->belongsToMany(Sesi::class);
-    // }
     public function hb()
     {
         return $this->hasMany(HB::class);

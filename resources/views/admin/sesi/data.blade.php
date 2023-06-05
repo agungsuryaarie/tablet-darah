@@ -42,7 +42,7 @@
                                                 @else
                                                     <a href="#" class="SesiError">
                                             @endif
-                                            <div class="position-relative p-3 bg-blue rounded" style="height: 200px">
+                                            <div class="position-relative p-3 bg-info rounded shadow" style="height: 200px">
                                                 @if ($today->lessThan($createdDate))
                                                     <div class="ribbon-wrapper ribbon-lg">
                                                         <div class="ribbon bg-success">
@@ -73,7 +73,7 @@
                                                         Sesi : {{ $item->nama }}
                                                     </div>
                                                     <div class="col-12 text-center mt-2">
-                                                        <div>{{ $item->created_at->isoFormat('D MMMM Y') }}</div>
+                                                        <div>{{ $item->created_at->isoFormat('D MMMM Y - H:mm:s') }}</div>
                                                     </div>
                                                     <div class="col-12 text-center mt-3">
                                                         <span class="btn btn-danger btn-round btn-xs mr-2 ml-2"

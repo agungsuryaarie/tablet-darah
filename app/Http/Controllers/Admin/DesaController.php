@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Kecamatan;
 use App\Models\Desa;
-use Yajra\Datatables\Datatables;
+use App\Models\Kecamatan;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Yajra\DataTables\DataTables;
 
 class DesaController extends Controller
 {
@@ -17,7 +17,7 @@ class DesaController extends Controller
         $kecamatan = Kecamatan::get();
         if ($request->ajax()) {
             $data = Desa::get();
-            return Datatables::of($data)
+            return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('kode_wilayah', function ($data) {
                     return $data->kode_wilayah;
@@ -77,15 +77,15 @@ class DesaController extends Controller
         return response()->json($desa);
     }
 
-    public function getDesa(Request $request)
-    {
-        $data = Desa::where("kecamatan_id", $request->kecamatan_id)->get(["desa", "id"]);
-        return response()->json($data);
-    }
-
     public function destroy($id)
     {
         Desa::find($id)->delete();
         return response()->json(['success' => 'Desa deleted successfully.']);
+    }
+
+    public function getDesa(Request $request)
+    {
+        $data = Desa::where("kecamatan_id", $request->kecamatan_id)->get(["desa", "id"]);
+        return response()->json($data);
     }
 }

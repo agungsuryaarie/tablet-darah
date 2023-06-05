@@ -65,9 +65,6 @@
                                     <h6 class="float-left"><i class="fas fa-info-circle"></i> Pilih posyandu berdasarkan
                                         binaan dari puskesmas anda.
                                     </h6>
-                                    <a href="javascript:void(0)" id="createNewPosyandu"
-                                        class="btn btn-info btn-xs float-right">
-                                        <i class="fas fa-plus-circle"></i> Tambah</a>
                                 </div>
                                 <div class="card-body">
                                     <table class="table table-bordered table-striped data-table-posyandu">

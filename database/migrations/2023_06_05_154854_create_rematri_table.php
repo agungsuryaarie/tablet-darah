@@ -13,14 +13,8 @@ return new class extends Migration
     {
         Schema::create('rematri', function (Blueprint $table) {
             $table->id();
-            $table->string('kecamatan_id');
-            $table->string('desa_id');
-            $table->unsignedBigInteger('puskesmas_id');
-
-            $table->unsignedBigInteger('sekolah_id');
-            $table->string('jurusan_id')->nullable();
-            $table->string('kelas_id');
-
+            $table->unsignedBigInteger('kecamatan_id');
+            $table->unsignedBigInteger('desa_id');
             $table->string('nokk');
             $table->string('nik')->unique();
             $table->string('nama');
@@ -37,6 +31,9 @@ return new class extends Migration
             $table->string('tlp_ortu');
             $table->string('alamat');
             $table->timestamps();
+
+            $table->foreign('kecamatan_id')->references('id')->on('kecamatan');
+            $table->foreign('desa_id')->references('id')->on('desa');
         });
     }
 
@@ -45,6 +42,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('rematris');
+        Schema::dropIfExists('rematri');
     }
 };

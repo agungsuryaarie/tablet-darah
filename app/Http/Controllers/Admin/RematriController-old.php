@@ -9,7 +9,6 @@ use App\Models\Desa;
 use App\Models\HB;
 use App\Models\Jurusan;
 use App\Models\Kelas;
-use App\Models\RematriSekolah;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -22,24 +21,10 @@ class RematriController extends Controller
     {
         $menu = 'Rematri';
         $kecamatan = Kecamatan::get();
-        $data = RematriSekolah::where('sekolah_id', '=', Auth::user()->sekolah_id)->get();
-        // dd($data);
         if ($request->ajax()) {
-            $data = RematriSekolah::where('sekolah_id', '=', Auth::user()->sekolah_id)->get();
+            $data = Rematri::where('sekolah_id', '=', Auth::user()->sekolah_id)->get();
             return Datatables::of($data)
                 ->addIndexColumn()
-                ->addColumn('nik', function ($data) {
-                    return $data->rematri->nik;
-                })
-                ->addColumn('nama', function ($data) {
-                    return $data->rematri->nama;
-                })
-                ->addColumn('tgl_lahir', function ($data) {
-                    return $data->rematri->tgl_lahir;
-                })
-                ->addColumn('nama_ortu', function ($data) {
-                    return $data->rematri->nama_ortu;
-                })
                 ->addColumn('kelas', function ($data) {
                     if ($data->jurusan_id == null) {
                         $kelas =  $data->kelas->nama;
@@ -49,9 +34,9 @@ class RematriController extends Controller
                     return $kelas;
                 })
                 ->addColumn('action', function ($row) {
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->rematri_id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs editRematri"><i class="fas fa-edit"></i></a>';
-                    $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->rematri_id . '" data-original-title="Delete" class="btn btn-danger btn-xs mr-1 deleteRematri"><i class="fas fa-trash"></i></a>';
-                    $btn = '<center>' . $btn . '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . Crypt::encryptString($row->rematri_id) . '" data-original-title="History HB" class="btn btn-warning btn-xs text-white hbRematri"><i class="fas fa-plus-circle"></i></a><center>';
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs editRematri"><i class="fas fa-edit"></i></a>';
+                    $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-xs mr-1 deleteRematri"><i class="fas fa-trash"></i></a>';
+                    $btn = '<center>' . $btn . '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . Crypt::encryptString($row->id) . '" data-original-title="History HB" class="btn btn-warning btn-xs text-white hbRematri"><i class="fas fa-plus-circle"></i></a><center>';
                     return $btn;
                 })
                 ->rawColumns(['kecamatan', 'action'])
@@ -81,7 +66,7 @@ class RematriController extends Controller
             'email'             => 'required|email|unique:rematri,email',
             'nohp'              => 'required|numeric',
             'agama'             => 'required',
-            // 'kelas_id'          => 'required',
+            'kelas_id'          => 'required',
             'berat_badan'       => 'required|numeric',
             'panjang_badan'     => 'required|numeric',
             'nama_ortu'         => 'required|max:255',
@@ -110,7 +95,7 @@ class RematriController extends Controller
             'nohp.required'              => 'Nomor Handphone harus diisi.',
             'nohp.numeric'               => 'Nomor Handphone harus angka.',
             'agama.required'            => 'Agama harus diisi.',
-            // 'kelas_id.required'         => 'Kelas harus diisi.',
+            'kelas_id.required'         => 'Kelas harus diisi.',
             'berat_badan.required'      => 'Berat Badan harus diisi.',
             'berat_badan.numeric'       => 'Berat Badan harus angka.',
             'panjang_badan.required'    => 'Panjang Badan harus diisi.',
@@ -123,17 +108,10 @@ class RematriController extends Controller
             'desa_id'                   => 'Desa harus dipilih.',
             'alamat'                    => 'Alamat harus diisi.',
         ]);
-
+        $validatedData['puskesmas_id'] = Auth::user()->puskesmas_id;
+        $validatedData['sekolah_id'] = Auth::user()->sekolah_id;
+        $validatedData['jurusan_id'] = $request->jurusan_id;
         $rematri = Rematri::create($validatedData);
-
-
-        $sekolah = new RematriSekolah;
-        $sekolah->rematri_id = $rematri->id;
-        $sekolah->puskesmas_id = Auth::user()->puskesmas_id;
-        $sekolah->sekolah_id = Auth::user()->sekolah_id;
-        $sekolah->kelas_id = $request->kelas_id;
-        $sekolah->jurusan_id = $request->jurusan_id;
-        $sekolah->save();
 
         return redirect()->route('rematri.index')->with('success', json_encode(['success' => 'Rematri saved successfully.']));
     }
@@ -143,8 +121,8 @@ class RematriController extends Controller
         $menu = 'Edit Data Rematri';
         $kelas = Kelas::where('sekolah_id', Auth::user()->sekolah_id)->get();
         $kecamatan = Kecamatan::get();
-        $data = RematriSekolah::where('rematri_id', $id)->first();
-        return view('admin.rematri-sekolah.edit', compact('menu', 'kelas', 'kecamatan', 'data'));
+        $rematri = Rematri::find($id);
+        return view('admin.rematri-sekolah.edit', compact('menu', 'kelas', 'kecamatan', 'rematri'));
     }
 
     public function update(Request $request, $id)
@@ -159,7 +137,7 @@ class RematriController extends Controller
             'email'             => 'required|email',
             'nohp'              => 'required|numeric',
             'agama'             => 'required',
-            // 'kelas_id'          => 'required',
+            'kelas_id'          => 'required',
             'berat_badan'       => 'required|numeric',
             'panjang_badan'     => 'required|numeric',
             'nama_ortu'         => 'required|max:255',
@@ -188,7 +166,7 @@ class RematriController extends Controller
             'nohp.required'              => 'Nomor Handphone harus diisi.',
             'nohp.numeric'               => 'Nomor Handphone harus angka.',
             'agama.required'            => 'Agama harus diisi.',
-            // 'kelas_id.required'         => 'Kelas harus diisi.',
+            'kelas_id.required'         => 'Kelas harus diisi.',
             'berat_badan.required'      => 'Berat Badan harus diisi.',
             'berat_badan.numeric'       => 'Berat Badan harus angka.',
             'panjang_badan.required'    => 'Panjang Badan harus diisi.',
@@ -202,14 +180,10 @@ class RematriController extends Controller
             'alamat'                    => 'Alamat harus diisi.',
         ]);
         $validatedData['puskesmas_id'] = Auth::user()->puskesmas_id;
+        $validatedData['sekolah_id'] = Auth::user()->sekolah_id;
+        $validatedData['jurusan_id'] = $request->jurusan_id;
         $rematri = Rematri::find($id);
         $rematri->update($validatedData);
-
-        $sekolah = RematriSekolah::where('rematri_id', $rematri->id)->first();
-        $sekolah->sekolah_id = Auth::user()->sekolah_id;
-        $sekolah->kelas_id = $request->kelas_id;
-        $sekolah->jurusan_id = $request->jurusan_id;
-        $sekolah->save();
 
         return redirect()->route('rematri.index')->with('success', json_encode(['success' => 'Rematri update successfully.']));
     }

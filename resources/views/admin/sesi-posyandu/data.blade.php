@@ -43,7 +43,7 @@
                                                 @else
                                                     <a href="#" class="SesiError">
                                             @endif
-                                            <div class="position-relative p-3 bg-blue rounded" style="height: 180px">
+                                            <div class="position-relative p-3 bg-info rounded" style="height: 180px">
                                                 @if ($today->lessThan($createdDate))
                                                     <div class="ribbon-wrapper ribbon-lg">
                                                         <div class="ribbon bg-success">
