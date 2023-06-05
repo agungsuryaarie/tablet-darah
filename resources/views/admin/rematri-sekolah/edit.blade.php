@@ -21,14 +21,16 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card card-info">
-                        <form method="POST" action="{{ route('rematri.update', $rematri->id) }}" class="form-horizontal">
+                        <form method="POST" action="{{ route('rematri.update', $data->rematri->id) }}"
+                            class="form-horizontal">
                             @csrf
                             <div class="card-body">
                                 <div class="form-group row">
                                     <label for="text" class="col-sm-2 col-form-label">Nama</label>
                                     <div class="col-sm-6">
                                         <input type="text" class="form-control @error('nama') is-invalid @enderror"
-                                            id="nama" name="nama" value="{{ $rematri->nama }}" placeholder="Nama">
+                                            id="nama" name="nama" value="{{ $data->rematri->nama }}"
+                                            placeholder="Nama">
                                         @error('nama')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
@@ -38,7 +40,7 @@
                                     <label for="text" class="col-sm-2 col-form-label">Tempat Lahir</label>
                                     <div class="col-sm-7">
                                         <textarea type="text" class="form-control @error('tempat_lahir') is-invalid @enderror" id="tempat_lahir"
-                                            name="tempat_lahir" rows="3" placeholder="Enter ...">{{ $rematri->tempat_lahir }}</textarea>
+                                            name="tempat_lahir" rows="3" placeholder="Enter ...">{{ $data->rematri->tempat_lahir }}</textarea>
                                         @error('tempat_lahir')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
@@ -49,7 +51,7 @@
                                     <div class="col-sm-4">
                                         <div class="input-group date" id="reservationdate" data-target-input="nearest">
                                             <input type="text" id="tgl_lahir" name="tgl_lahir"
-                                                value="{{ $rematri->tgl_lahir }}"
+                                                value="{{ $data->rematri->tgl_lahir }}"
                                                 class="form-control datetimepicker-input @error('tgl_lahir') is-invalid @enderror"
                                                 data-target="#reservationdate">
                                             <div class="input-group-append" data-target="#reservationdate"
@@ -66,7 +68,7 @@
                                     <label for="text" class="col-sm-2 col-form-label">Nomor KK</label>
                                     <div class="col-sm-4">
                                         <input type="text" class="form-control @error('nokk') is-invalid @enderror"
-                                            id="nokk" name="nokk" value="{{ $rematri->nokk }}"
+                                            id="nokk" name="nokk" value="{{ $data->rematri->nokk }}"
                                             placeholder="Nomor KK">
                                         @error('nokk')
                                             <span class="text-danger">{{ $message }}</span>
@@ -77,7 +79,8 @@
                                     <label for="text" class="col-sm-2 col-form-label">NIK</label>
                                     <div class="col-sm-6">
                                         <input type="text" class="form-control @error('nik') is-invalid @enderror"
-                                            id="nik" name="nik" value="{{ $rematri->nik }}" placeholder="NIK">
+                                            id="nik" name="nik" value="{{ $data->rematri->nik }}"
+                                            placeholder="NIK">
                                         @error('nik')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
@@ -87,7 +90,7 @@
                                     <label for="text" class="col-sm-2 col-form-label">Anak ke berapa?</label>
                                     <div class="col-sm-2">
                                         <input type="text" class="form-control @error('anak_ke') is-invalid @enderror"
-                                            id="anak_ke" name="anak_ke" value="{{ $rematri->anak_ke }}"
+                                            id="anak_ke" name="anak_ke" value="{{ $data->rematri->anak_ke }}"
                                             placeholder="Anak ke">
                                         @error('anak_ke')
                                             <span class="text-danger">{{ $message }}</span>
@@ -98,7 +101,7 @@
                                     <label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
                                     <div class="col-sm-4">
                                         <input type="email" class="form-control @error('email') is-invalid @enderror"
-                                            id="email" name="email" value="{{ $rematri->email }}"
+                                            id="email" name="email" value="{{ $data->rematri->email }}"
                                             placeholder="Email">
                                         @error('email')
                                             <span class="text-danger">{{ $message }}</span>
@@ -109,7 +112,7 @@
                                     <label for="text" class="col-sm-2 col-form-label">Telp/HP</label>
                                     <div class="col-sm-2">
                                         <input type="text" class="form-control @error('nohp') is-invalid @enderror"
-                                            id="nohp" name="nohp" value="{{ $rematri->nohp }}"
+                                            id="nohp" name="nohp" value="{{ $data->rematri->nohp }}"
                                             placeholder="Telp/HP">
                                         @error('nohp')
                                             <span class="text-danger">{{ $message }}</span>
@@ -123,11 +126,11 @@
                                             class="form-control select2 select2bs4 @error('agama') is-invalid @enderror"
                                             id="agama" name="agama" style="width: 100%;">
                                             <option value="">:::Pilih Agama:::</option>
-                                            <option value="1" @selected($rematri->agama == '1')>Islam</option>
-                                            <option value="2" @selected($rematri->agama == '2')>Kristen </option>
-                                            <option value="3" @selected($rematri->agama == '3')>Hindu</option>
-                                            <option value="4" @selected($rematri->agama == '4')>Buddha</option>
-                                            <option value="5" @selected($rematri->agama == '5')>Khonghucu</option>
+                                            <option value="1" @selected($data->rematri->agama == '1')>Islam</option>
+                                            <option value="2" @selected($data->rematri->agama == '2')>Kristen </option>
+                                            <option value="3" @selected($data->rematri->agama == '3')>Hindu</option>
+                                            <option value="4" @selected($data->rematri->agama == '4')>Buddha</option>
+                                            <option value="5" @selected($data->rematri->agama == '5')>Khonghucu</option>
                                         </select>
                                         @error('agama')
                                             <span class="text-danger">{{ $message }}</span>
@@ -143,7 +146,7 @@
                                             <option value="">:::Pilih Kelas:::</option>
                                             @foreach ($kelas as $item)
                                                 <option value="{{ $item->id }}"
-                                                    {{ $rematri->kelas_id == $item->id ? 'selected' : '' }}>
+                                                    {{ $data->kelas_id == $item->id ? 'selected' : '' }}>
                                                     {{ $item->nama }}</option>
                                             @endforeach
                                         </select>
@@ -158,9 +161,10 @@
                                         <div class="col-sm-4">
                                             <select class="form-control select2 select2bs4" name="jurusan_id"
                                                 id="jurusan_id" style="width: 100%;">
-                                                <option value="{{ $rematri->jurusan_id }}">{{ $rematri->kelas->nama }}
-                                                    {{ $rematri->jurusan->nama }}
-                                                    {{ $rematri->jurusan->ruangan }}
+                                                <option value="{{ $data->jurusan_id }}">
+                                                    {{ $data->kelas->nama }}
+                                                    {{ $data->jurusan->nama }}
+                                                    {{ $data->jurusan->ruangan }}
                                                 </option>
                                             </select>
                                         </div>
@@ -172,8 +176,8 @@
                                     <div class="col-sm-2">
                                         <input type="text"
                                             class="form-control @error('berat_badan') is-invalid @enderror"
-                                            id="berat_badan" name="berat_badan" value="{{ $rematri->berat_badan }}"
-                                            placeholder="Berat Badan">
+                                            id="berat_badan" name="berat_badan"
+                                            value="{{ $data->rematri->berat_badan }}" placeholder="Berat Badan">
                                         @error('berat_badan')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
@@ -186,7 +190,7 @@
                                         <input type="text"
                                             class="form-control @error('panjang_badan') is-invalid @enderror"
                                             id="panjang_badan" name="panjang_badan"
-                                            value="{{ $rematri->panjang_badan }}" placeholder="Tinggi badan">
+                                            value="{{ $data->rematri->panjang_badan }}" placeholder="Tinggi badan">
                                         @error('panjang_badan')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
@@ -198,7 +202,7 @@
                                     <div class="col-sm-6">
                                         <input type="text"
                                             class="form-control @error('nama_ortu') is-invalid @enderror" id="nama_ortu"
-                                            name="nama_ortu" value="{{ $rematri->nama_ortu }}"
+                                            name="nama_ortu" value="{{ $data->rematri->nama_ortu }}"
                                             placeholder="Nama Orang Tua">
                                         @error('nama_ortu')
                                             <span class="text-danger">{{ $message }}</span>
@@ -211,7 +215,7 @@
                                     <div class="col-sm-6">
                                         <input type="text"
                                             class="form-control @error('nik_ortu') is-invalid @enderror" id="nik_ortu"
-                                            name="nik_ortu" value="{{ $rematri->nik_ortu }}"
+                                            name="nik_ortu" value="{{ $data->rematri->nik_ortu }}"
                                             placeholder="Nik Orang Tua">
                                         @error('nik_ortu')
                                             <span class="text-danger">{{ $message }}</span>
@@ -224,7 +228,7 @@
                                     <div class="col-sm-2">
                                         <input type="text"
                                             class="form-control @error('tlp_ortu') is-invalid @enderror" id="tlp_ortu"
-                                            name="tlp_ortu" value="{{ $rematri->tlp_ortu }}"
+                                            name="tlp_ortu" value="{{ $data->rematri->tlp_ortu }}"
                                             placeholder="Telp/Hp Orang Tua">
                                         @error('tlp_ortu')
                                             <span class="text-danger">{{ $message }}</span>
@@ -240,7 +244,7 @@
                                             name="kecamatan_id" id="kecamatan_id" style="width: 100%;">
                                             <option value="">:::Pilih Kecamatan:::</option>
                                             @foreach ($kecamatan as $item)
-                                                <option value="{{ $item->id }}" @selected($item->id == $rematri->kecamatan_id)>
+                                                <option value="{{ $item->id }}" @selected($item->id == $data->rematri->kecamatan_id)>
                                                     {{ $item->kecamatan }}</option>
                                             @endforeach
                                         </select>
@@ -256,7 +260,8 @@
                                         <select
                                             class="form-control select2 select2bs4 @error('desa_id') is-invalid @enderror"
                                             name="desa_id" id="desa_id" style="width: 100%;">
-                                            <option value="{{ $rematri->desa_id }}">{{ $rematri->desa->desa }}</option>
+                                            <option value="{{ $data->rematri->desa_id }}">
+                                                {{ $data->rematri->desa->desa }}</option>
                                         </select>
                                         @error('desa_id')
                                             <span class="text-danger">{{ $message }}</span>
@@ -268,7 +273,7 @@
                                             class="text-danger">*</span></label>
                                     <div class="col-sm-7">
                                         <textarea class="form-control @error('alamat') is-invalid @enderror" rows="3" id="alamat" name="alamat"
-                                            placeholder="Enter ...">{{ $rematri->alamat }}</textarea>
+                                            placeholder="Enter ...">{{ $data->rematri->alamat }}</textarea>
                                         @error('alamat')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror

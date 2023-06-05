@@ -21,7 +21,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card card-info">
-                        <form method="POST" action="{{ route('rematri.posyandu.store') }}" class="form-horizontal">
+                        <form method="POST" action="{{ url('rematri-posyandu/store') }}" class="form-horizontal">
                             @csrf
                             <div class="card-body">
                                 <div class="form-group row">

@@ -23,8 +23,6 @@ class Rematri extends Model
         'berat_badan',
         'panjang_badan',
         'agama',
-        'kelas_id',
-        'jurusan_id',
         'nama_ortu',
         'nik_ortu',
         'tlp_ortu',
@@ -41,17 +39,14 @@ class Rematri extends Model
     {
         return $this->belongsTo(Sekolah::class);
     }
-
     public function jurusan()
     {
         return $this->belongsTo(Jurusan::class);
     }
-
     public function kelas()
     {
         return $this->belongsTo(Kelas::class);
     }
-
     public function desa()
     {
         return $this->belongsTo(Desa::class);

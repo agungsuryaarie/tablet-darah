@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Rematri;
+use App\Models\RematriSekolah;
 use App\Models\Sesi;
 use App\Models\SesiRematri;
 use Illuminate\Http\Request;
@@ -50,7 +51,7 @@ class SesiController extends Controller
                 'kelas_id' => $request->kelas_id,
             ]
         );
-        $rematri = Rematri::where('kelas_id', $request->kelas_id)->get();
+        $rematri = RematriSekolah::where('kelas_id', $request->kelas_id)->get();
         $sesiid  = Sesi::orderBy('id', 'DESC')->first();
         // fecth rematri
         foreach ($rematri as $r) {
@@ -72,32 +73,16 @@ class SesiController extends Controller
     {
         $menu = 'Sesi';
         $sesi = Sesi::where('id', Crypt::decryptString($id))->first();
-        $count = Rematri::where('kelas_id', $sesi->kelas_id)->count();
-        // $rematri = Rematri::where('kelas_id', $sesi->kelas_id)->first();
-        // $data = Rematri::where('rematri.kelas_id', $sesi->kelas_id)
-        //     // ->where('foto_sesi.sesi_id', $sesi->id)
-        //     ->leftJoin('foto_sesi', 'rematri.id', '=', 'foto_sesi.rematri_id')
-        //     ->select('rematri.*', 'foto_sesi.foto')
-        //     ->get();
-        // $data = SesiRematri::leftJoin('rematri', 'sesi_rematri.rematri_id', '=', 'rematri.id')
-        //     ->where('sesi_rematri.kelas_id', $sesi->kelas_id)
-        //     ->where('sesi_rematri.sesi_id', $sesi->id)
-        //     ->select('rematri.*', 'sesi_rematri.*', 'sesi_rematri.id')
-        //     ->first();
-        // dd($data);
+        $count = RematriSekolah::where('kelas_id', $sesi->kelas_id)->count();
         if ($request->ajax()) {
-            $data = SesiRematri::leftJoin('rematri', 'sesi_rematri.rematri_id', '=', 'rematri.id')
-                ->where('sesi_rematri.kelas_id', $sesi->kelas_id)
-                ->where('sesi_rematri.sesi_id', $sesi->id)
-                ->select('rematri.*', 'sesi_rematri.*', 'sesi_rematri.id')
-                ->get();
+            $data = SesiRematri::where('sesi_id', $sesi->id)->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('nik', function ($data) {
-                    return $data->nik;
+                    return $data->rematri_sekolah->rematri->nik;
                 })
                 ->addColumn('nama', function ($data) {
-                    return $data->nama;
+                    return $data->rematri_sekolah->rematri->nama;
                 })
                 ->addColumn('foto', function ($data) {
                     if ($data->foto != null) {

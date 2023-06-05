@@ -7,8 +7,10 @@ use App\Models\Rematri;
 use App\Models\Kecamatan;
 use App\Models\Desa;
 use App\Models\HB;
+use App\Models\HbPosyandu;
 use App\Models\Jurusan;
 use App\Models\Kelas;
+use App\Models\RematriPosyandu;
 use App\Models\RematriSekolah;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -24,41 +26,69 @@ class RematriController extends Controller
         $kecamatan = Kecamatan::get();
         $data = RematriSekolah::where('sekolah_id', '=', Auth::user()->sekolah_id)->get();
         // dd($data);
-        if ($request->ajax()) {
-            $data = RematriSekolah::where('sekolah_id', '=', Auth::user()->sekolah_id)->get();
-            return Datatables::of($data)
-                ->addIndexColumn()
-                ->addColumn('nik', function ($data) {
-                    return $data->rematri->nik;
-                })
-                ->addColumn('nama', function ($data) {
-                    return $data->rematri->nama;
-                })
-                ->addColumn('tgl_lahir', function ($data) {
-                    return $data->rematri->tgl_lahir;
-                })
-                ->addColumn('nama_ortu', function ($data) {
-                    return $data->rematri->nama_ortu;
-                })
-                ->addColumn('kelas', function ($data) {
-                    if ($data->jurusan_id == null) {
-                        $kelas =  $data->kelas->nama;
-                    } else {
-                        $kelas =  $data->kelas->nama . ' ' . $data->jurusan->nama . ' ' . $data->jurusan->ruangan;
-                    }
-                    return $kelas;
-                })
-                ->addColumn('action', function ($row) {
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->rematri_id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs editRematri"><i class="fas fa-edit"></i></a>';
-                    $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->rematri_id . '" data-original-title="Delete" class="btn btn-danger btn-xs mr-1 deleteRematri"><i class="fas fa-trash"></i></a>';
-                    $btn = '<center>' . $btn . '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . Crypt::encryptString($row->rematri_id) . '" data-original-title="History HB" class="btn btn-warning btn-xs text-white hbRematri"><i class="fas fa-plus-circle"></i></a><center>';
-                    return $btn;
-                })
-                ->rawColumns(['kecamatan', 'action'])
-                ->make(true);
+        if (Auth::user()->sekolah_id) {
+            if ($request->ajax()) {
+                $data = RematriSekolah::where('sekolah_id', '=', Auth::user()->sekolah_id)->get();
+                return Datatables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('nik', function ($data) {
+                        return $data->rematri->nik;
+                    })
+                    ->addColumn('nama', function ($data) {
+                        return $data->rematri->nama;
+                    })
+                    ->addColumn('tgl_lahir', function ($data) {
+                        return $data->rematri->tgl_lahir;
+                    })
+                    ->addColumn('nama_ortu', function ($data) {
+                        return $data->rematri->nama_ortu;
+                    })
+                    ->addColumn('kelas', function ($data) {
+                        if ($data->jurusan_id == null) {
+                            $kelas =  $data->kelas->nama;
+                        } else {
+                            $kelas =  $data->kelas->nama . ' ' . $data->jurusan->nama . ' ' . $data->jurusan->ruangan;
+                        }
+                        return $kelas;
+                    })
+                    ->addColumn('action', function ($row) {
+                        $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->rematri_id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs editRematri"><i class="fas fa-edit"></i></a>';
+                        $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->rematri_id . '" data-original-title="Delete" class="btn btn-danger btn-xs mr-1 deleteRematri"><i class="fas fa-trash"></i></a>';
+                        $btn = '<center>' . $btn . '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . Crypt::encryptString($row->rematri_id) . '" data-original-title="History HB" class="btn btn-warning btn-xs text-white hbRematri"><i class="fas fa-plus-circle"></i></a><center>';
+                        return $btn;
+                    })
+                    ->rawColumns(['kecamatan', 'action'])
+                    ->make(true);
+            }
+            return view('admin.rematri-sekolah.data', compact('menu'));
+        } else {
+            if ($request->ajax()) {
+                $data = RematriPosyandu::with('rematri')->where('posyandu_id', '=', Auth::user()->posyandu_id)->get();
+                return Datatables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('nik', function ($data) {
+                        return $data->rematri->nik;
+                    })
+                    ->addColumn('nama', function ($data) {
+                        return $data->rematri->nama;
+                    })
+                    ->addColumn('tgl_lahir', function ($data) {
+                        return $data->rematri->tgl_lahir;
+                    })
+                    ->addColumn('nama_ortu', function ($data) {
+                        return $data->rematri->nama_ortu;
+                    })
+                    ->addColumn('action', function ($row) {
+                        $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->rematri_id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs editRematri"><i class="fas fa-edit"></i></a>';
+                        $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->rematri_id . '" data-original-title="Delete" class="btn btn-danger mr-1 btn-xs deleteRematri"><i class="fas fa-trash"></i></a>';
+                        $btn = '<center>' . $btn . '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . Crypt::encryptString($row->rematri_id) . '" data-original-title="History HB" class="btn btn-warning btn-xs text-white hbRematri"><i class="fas fa-plus-circle"></i></a><center>';
+                        return $btn;
+                    })
+                    ->rawColumns(['kecamatan', 'action'])
+                    ->make(true);
+            }
+            return view('admin.rematri-posyandu.data', compact('menu'));
         }
-
-        return view('admin.rematri-sekolah.data', compact('menu'));
     }
 
     public function create()
@@ -126,25 +156,39 @@ class RematriController extends Controller
 
         $rematri = Rematri::create($validatedData);
 
-
-        $sekolah = new RematriSekolah;
-        $sekolah->rematri_id = $rematri->id;
-        $sekolah->puskesmas_id = Auth::user()->puskesmas_id;
-        $sekolah->sekolah_id = Auth::user()->sekolah_id;
-        $sekolah->kelas_id = $request->kelas_id;
-        $sekolah->jurusan_id = $request->jurusan_id;
-        $sekolah->save();
+        if (Auth::user()->sekolah_id) {
+            $sekolah = new RematriSekolah;
+            $sekolah->rematri_id = $rematri->id;
+            $sekolah->puskesmas_id = Auth::user()->puskesmas_id;
+            $sekolah->sekolah_id = Auth::user()->sekolah_id;
+            $sekolah->kelas_id = $request->kelas_id;
+            $sekolah->jurusan_id = $request->jurusan_id;
+            $sekolah->save();
+        } else {
+            $posyandu = new RematriPosyandu();
+            $posyandu->rematri_id = $rematri->id;
+            $posyandu->puskesmas_id = Auth::user()->puskesmas_id;
+            $posyandu->posyandu_id = Auth::user()->posyandu_id;
+            $posyandu->save();
+        }
 
         return redirect()->route('rematri.index')->with('success', json_encode(['success' => 'Rematri saved successfully.']));
     }
 
     public function edit($id)
     {
-        $menu = 'Edit Data Rematri';
-        $kelas = Kelas::where('sekolah_id', Auth::user()->sekolah_id)->get();
-        $kecamatan = Kecamatan::get();
-        $data = RematriSekolah::where('rematri_id', $id)->first();
-        return view('admin.rematri-sekolah.edit', compact('menu', 'kelas', 'kecamatan', 'data'));
+        if (Auth::user()->sekolah_id) {
+            $menu = 'Edit Data Rematri';
+            $kelas = Kelas::where('sekolah_id', Auth::user()->sekolah_id)->get();
+            $kecamatan = Kecamatan::get();
+            $data = RematriSekolah::where('rematri_id', $id)->first();
+            return view('admin.rematri-sekolah.edit', compact('menu', 'kelas', 'kecamatan', 'data'));
+        } else {
+            $menu = 'Edit Data Rematri';
+            $kecamatan = Kecamatan::get();
+            $data = RematriPosyandu::where('rematri_id', $id)->first();
+            return view('admin.rematri-posyandu.edit', compact('menu', 'kecamatan', 'data'));
+        }
     }
 
     public function update(Request $request, $id)
@@ -205,11 +249,18 @@ class RematriController extends Controller
         $rematri = Rematri::find($id);
         $rematri->update($validatedData);
 
-        $sekolah = RematriSekolah::where('rematri_id', $rematri->id)->first();
-        $sekolah->sekolah_id = Auth::user()->sekolah_id;
-        $sekolah->kelas_id = $request->kelas_id;
-        $sekolah->jurusan_id = $request->jurusan_id;
-        $sekolah->save();
+        if (Auth::user()->sekolah_id) {
+            $sekolah = RematriSekolah::where('rematri_id', $rematri->id)->first();
+            $sekolah->sekolah_id = Auth::user()->sekolah_id;
+            $sekolah->kelas_id = $request->kelas_id;
+            $sekolah->jurusan_id = $request->jurusan_id;
+            $sekolah->save();
+        } else {
+            $sekolah = RematriPosyandu::where('rematri_id', $rematri->id)->first();
+            $sekolah->puskesmas_id = Auth::user()->puskesmas_id;
+            $sekolah->posyandu_id = Auth::user()->posyandu_id;
+            $sekolah->save();
+        }
 
         return redirect()->route('rematri.index')->with('success', json_encode(['success' => 'Rematri update successfully.']));
     }
@@ -237,28 +288,53 @@ class RematriController extends Controller
     public function hb(Request $request, $id)
     {
         $menu = 'Data HB Rematri';
-        $rematri = Rematri::where('sekolah_id', Auth::user()->sekolah_id)->find(Crypt::decryptString($id));
-        if ($request->ajax()) {
-            $data = HB::where('rematri_id', Crypt::decryptString($id))->get();
-            return Datatables::of($data)
-                ->addIndexColumn()
-                ->addColumn('berat_badan', function ($data) {
-                    return '<center>' . $data->berat_badan . '<center>';
-                })
-                ->addColumn('panjang_badan', function ($data) {
-                    return '<center>' . $data->panjang_badan . '<center>';
-                })
-                ->addColumn('hb', function ($data) {
-                    return '<center>' . $data->hb . '<center>';
-                })
-                ->addColumn('action', function ($row) {
-                    return '<center><a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-xs deleteHB"><i class="fas fa-trash"></i></a><center>';
-                })
-                ->rawColumns(['berat_badan', 'panjang_badan', 'hb', 'action'])
-                ->make(true);
-        }
+        if (Auth::user()->sekolah_id) {
+            $data = RematriSekolah::where('sekolah_id', Auth::user()->sekolah_id)->find(Crypt::decryptString($id));
+            if ($request->ajax()) {
+                $data = HB::where('rematri_id', Crypt::decryptString($id))->get();
+                return Datatables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('berat_badan', function ($data) {
+                        return '<center>' . $data->berat_badan . '<center>';
+                    })
+                    ->addColumn('panjang_badan', function ($data) {
+                        return '<center>' . $data->panjang_badan . '<center>';
+                    })
+                    ->addColumn('hb', function ($data) {
+                        return '<center>' . $data->hb . '<center>';
+                    })
+                    ->addColumn('action', function ($row) {
+                        return '<center><a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-xs deleteHB"><i class="fas fa-trash"></i></a><center>';
+                    })
+                    ->rawColumns(['berat_badan', 'panjang_badan', 'hb', 'action'])
+                    ->make(true);
+            }
 
-        return view('admin.rematri-sekolah.hb', compact('menu', 'rematri'));
+            return view('admin.rematri-sekolah.hb', compact('menu', 'data'));
+        } else {
+            $data = RematriPosyandu::where('posyandu_id', Auth::user()->posyandu_id)->find(Crypt::decryptString($id));
+            if ($request->ajax()) {
+                $data = HbPosyandu::where('rematri_id', Crypt::decryptString($id))->get();
+                return Datatables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('berat_badan', function ($data) {
+                        return '<center>' . $data->berat_badan . '<center>';
+                    })
+                    ->addColumn('panjang_badan', function ($data) {
+                        return '<center>' . $data->panjang_badan . '<center>';
+                    })
+                    ->addColumn('hb', function ($data) {
+                        return '<center>' . $data->hb . '<center>';
+                    })
+                    ->addColumn('action', function ($row) {
+                        return '<center><a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-xs deleteHB"><i class="fas fa-trash"></i></a><center>';
+                    })
+                    ->rawColumns(['berat_badan', 'panjang_badan', 'hb', 'action'])
+                    ->make(true);
+            }
+
+            return view('admin.rematri-posyandu.hb', compact('menu', 'data'));
+        }
     }
     public function storehb(Request $request)
     {

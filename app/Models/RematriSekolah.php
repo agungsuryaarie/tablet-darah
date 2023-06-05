@@ -30,4 +30,12 @@ class RematriSekolah extends Model
     {
         return $this->belongsTo(Sekolah::class);
     }
+    public function jurusan()
+    {
+        return $this->belongsTo(Jurusan::class);
+    }
+    public function kelas()
+    {
+        return $this->belongsTo(Kelas::class);
+    }
 }

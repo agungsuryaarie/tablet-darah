@@ -27,18 +27,18 @@
                                     <tr>
                                         <td style="width: 15%">NIK</td>
                                         <td style="width: 2%">:</td>
-                                        <td style="width: 40%">{{ $rematri->nik }}</td>
+                                        <td style="width: 40%">{{ $data->rematri->nik }}</td>
                                     </tr>
                                     <tr>
                                         <td>Nama</td>
                                         <td>:</td>
-                                        <td>{{ $rematri->nama }}</td>
+                                        <td>{{ $data->nama }}</td>
                                     </tr>
                                     <tr>
                                         <td>Umur</td>
                                         <td>:</td>
                                         <td>
-                                            <?php $tanggal_lahir = date('Y-m-d', strtotime($rematri->tgl_lahir));
+                                            <?php $tanggal_lahir = date('Y-m-d', strtotime($data->tgl_lahir));
                                             $birthDate = new \DateTime($tanggal_lahir);
                                             $today = new \DateTime('today');
                                             if ($birthDate > $today) {
@@ -110,7 +110,7 @@
                     <form id="hbForm" name="hbForm" class="form-horizontal">
                         @csrf
                         <input type="hidden" name="hb_id" id="hb_id">
-                        <input type="hidden" name="rematri_id" value="{{ $rematri->id }}">
+                        <input type="hidden" name="rematri_id" value="{{ $data->id }}">
                         <div class="card-body">
                             <div class="form-group">
                                 <label for="text" class="col-sm-8 control-label">Tgl Pengecekan (dd-mm-yyyy)<span
@@ -218,7 +218,7 @@
                 lengthMenu: [10, 50, 100, 200, 500],
                 lengthChange: true,
                 autoWidth: false,
-                ajax: "{{ route('rematri.posyandu.hb', Crypt::encryptString($rematri->id)) }}",
+                ajax: "{{ route('rematri.posyandu.hb', Crypt::encryptString($data->id)) }}",
                 columns: [{
                         data: "DT_RowIndex",
                         name: "DT_RowIndex",
