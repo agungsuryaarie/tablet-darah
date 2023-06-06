@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('kelas_id');
             $table->timestamps();
 
-            $table->foreign('rematri_id')->references('id')->on('rematri');
+            $table->foreign('rematri_id')->references('id')->on('rematri')->onDelete('cascade');
             $table->foreign('puskesmas_id')->references('id')->on('puskesmas');
             $table->foreign('sekolah_id')->references('id')->on('sekolah');
         });

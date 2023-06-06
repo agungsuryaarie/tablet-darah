@@ -25,7 +25,13 @@
                         @endif
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block">{{ Auth::user()->nama }}</a>
+                        @if (Auth::user()->role == 2)
+                            <a href="{{ route('profilpuskes.index') }}" class="d-block">{{ Auth::user()->nama }}</a>
+                        @elseif(Auth::user()->role == 3)
+                            <a href="{{ route('profilsekolah.index') }}" class="d-block">{{ Auth::user()->nama }}</a>
+                        @elseif(Auth::user()->role == 4)
+                            <a href="{{ route('profilposyandu.index') }}" class="d-block">{{ Auth::user()->nama }}</a>
+                        @endif
                         <small class="text-muted">
                             @if (Auth::user()->role == 1)
                                 administrator

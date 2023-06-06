@@ -78,7 +78,12 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
     });
 
     Route::group(['middleware' => ['checkUser:2']], function () {
-
+        // Profil
+        Route::get('profile-puskesmas', [UserPuskesController::class, 'profil'])->name('profilpuskes.index');
+        Route::put('profile-puskesmas/{user}/update', [UserPuskesController::class, 'updateprofil'])->name('profilpuskes.update');
+        Route::put('profile-puskesmas/{user}/update-password', [UserPuskesController::class, 'updatepassword'])->name('profilpuskes.update.password');
+        Route::put('profile-puskesmas/{user}/update-foto', [UserPuskesController::class, 'updatefoto'])->name('profilpuskes.update.foto');
+        //Posyandu
         Route::post('posyandu/get-posyandu', [PosyanduController::class, 'getPosyandu']);
         Route::post('sekolah/get-sekolah', [SekolahController::class, 'getSekolah']);
         Route::post('sekolah/get-sekolah-puskes', [SekolahController::class, 'getSekolahPuskes']);
@@ -117,6 +122,11 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
     });
 
     Route::group(['middleware' => ['checkUser:3']], function () {
+        // Profil
+        Route::get('profile-sekolah', [UserSekolahController::class, 'profil'])->name('profilsekolah.index');
+        Route::put('profile-sekolah/{user}/update', [UserSekolahController::class, 'updateprofil'])->name('profilsekolah.update');
+        Route::put('profile-sekolah/{user}/update-password', [UserSekolahController::class, 'updatepassword'])->name('profilsekolah.update.password');
+        Route::put('profile-sekolah/{user}/update-foto', [UserSekolahController::class, 'updatefoto'])->name('profilsekolah.update.foto');
 
         // Jurusan
         Route::resource('jurusan', JurusanController::class);
@@ -147,6 +157,12 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
         Route::get('sesi/{id}/foto-rematri', [SesiController::class, 'foto'])->name('sesi.foto');
     });
     Route::group(['middleware' => ['checkUser:4']], function () {
+        //Profil
+        Route::get('profile-posyandu', [UserPosyanduController::class, 'profil'])->name('profilposyandu.index');
+        Route::put('profile-posyandu/{user}/update', [UserPosyanduController::class, 'updateprofil'])->name('profilposyandu.update');
+        Route::put('profile-posyandu/{user}/update-password', [UserPosyanduController::class, 'updatepassword'])->name('profilposyandu.update.password');
+        Route::put('profile-posyandu/{user}/update-foto', [UserPosyanduController::class, 'updatefoto'])->name('profilposyandu.update.foto');
+
         // Rematri
         Route::get('rematri-posyandu', [RematriController::class, 'index'])->name('rematri.posyandu.index');
         Route::get('rematri-posyandu-create', [RematriController::class, 'create'])->name('rematri.posyandu.create');

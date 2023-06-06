@@ -79,10 +79,10 @@ class SesiController extends Controller
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('nik', function ($data) {
-                    return $data->rematri_posyandu->nik;
+                    return $data->rematri->nik;
                 })
                 ->addColumn('nama', function ($data) {
-                    return $data->rematri_posyandu->nama;
+                    return $data->rematri->nama;
                 })
                 ->addColumn('foto', function ($data) {
                     if ($data->foto != null) {
@@ -115,16 +115,13 @@ class SesiController extends Controller
     }
     public function upload(Request $request)
     {
-        // dd($request->all());
-        // $ttd = SesiRematri::find($request->ttd_id);
-        //Translate Bahasa Indonesia
         $message = array(
             'foto.images' => 'File harus image.',
             'foto.mimes' => 'Foto harus jpeg,png,jpg.',
-            'foto,max' => 'File maksimal 3MB.',
+            'foto,max' => 'File maksimal 2MB.',
         );
         $this->validate($request, [
-            'foto' => 'image|mimes:jpeg,png,jpg|max:3000'
+            'foto' => 'image|mimes:jpeg,png,jpg|max:2000'
         ], $message);
         $img = $request->file('foto');
         $img->storeAs('public/foto-sesi/', $img->hashName());

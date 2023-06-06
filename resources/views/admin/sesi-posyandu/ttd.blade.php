@@ -41,6 +41,7 @@
                                                 id="foto" onchange="previewImg();" accept=".png, .jpg, .jpeg" required>
                                             <label class="custom-file-label">Pilih File</label>
                                         </div>
+                                        <small><i>*Foto maksimal 2MB dan berekstensi jpeg, jpg, png.</i></small>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
