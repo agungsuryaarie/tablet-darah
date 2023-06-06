@@ -32,13 +32,13 @@
                                     <tr>
                                         <td>Nama</td>
                                         <td>:</td>
-                                        <td>{{ $data->nama }}</td>
+                                        <td>{{ $data->rematri->nama }}</td>
                                     </tr>
                                     <tr>
                                         <td>Umur</td>
                                         <td>:</td>
                                         <td>
-                                            <?php $tanggal_lahir = date('Y-m-d', strtotime($data->tgl_lahir));
+                                            <?php $tanggal_lahir = date('Y-m-d', strtotime($data->rematri->tgl_lahir));
                                             $birthDate = new \DateTime($tanggal_lahir);
                                             $today = new \DateTime('today');
                                             if ($birthDate > $today) {

@@ -15,6 +15,6 @@ class SesiRematriPosyandu extends Model
 
     public function rematri_posyandu()
     {
-        return $this->belongsTo(RematriPosyandu::class);
+        return $this->belongsTo(Rematri::class);
     }
 }

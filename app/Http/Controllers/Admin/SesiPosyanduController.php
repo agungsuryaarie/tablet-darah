@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Rematri;
 use App\Models\RematriPosyandu;
 use App\Models\SesiPosyandu;
 use App\Models\SesiRematriPosyandu;
@@ -49,7 +50,7 @@ class SesiPosyanduController extends Controller
         $sesipid  = SesiPosyandu::orderBy('id', 'DESC')->first();
         // fecth rematri posyandu
         foreach ($rematrip as $rp) {
-            $id_rematrip = $rp->id;
+            $id_rematrip = $rp->rematri_id;
             //simpan seluruh rematri dari posyandu
             SesiRematriPosyandu::create(
                 [
@@ -67,18 +68,14 @@ class SesiPosyanduController extends Controller
         $sesip = SesiPosyandu::where('id', Crypt::decryptString($id))->first();
         $count = RematriPosyandu::where('posyandu_id', $sesip->posyandu_id)->count();
         if ($request->ajax()) {
-            $data = SesiRematriPosyandu::leftJoin('rematri_posyandu', 'sesi_rematri_posyandu.rematri_posyandu_id', '=', 'rematri_posyandu.id')
-                ->where('sesi_rematri_posyandu.posyandu_id', $sesip->posyandu_id)
-                ->where('sesi_rematri_posyandu.sesi_posyandu_id', $sesip->id)
-                ->select('rematri_posyandu.*', 'sesi_rematri_posyandu.*', 'sesi_rematri_posyandu.id')
-                ->get();
+            $data = SesiRematriPosyandu::where('sesi_posyandu_id', $sesip->id)->get();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('nik', function ($data) {
-                    return $data->nik;
+                    return $data->rematri_posyandu->nik;
                 })
                 ->addColumn('nama', function ($data) {
-                    return $data->nama;
+                    return $data->rematri_posyandu->nama;
                 })
                 ->addColumn('foto', function ($data) {
                     if ($data->foto != null) {
@@ -104,7 +101,7 @@ class SesiPosyanduController extends Controller
     public function ttd($id, $ids, $ttd)
     {
         $menu = 'Foto';
-        $rematrip = RematriPosyandu::where('id', Crypt::decryptString($ids))->first();
+        $rematrip = Rematri::where('id', Crypt::decryptString($ids))->first();
         $sesip = SesiPosyandu::where('id', $id)->first();
         $sesipfoto = SesiRematriPosyandu::find($ttd);
         return view('admin.sesi-posyandu.ttd', compact('menu', 'rematrip', 'sesip', 'sesipfoto'));

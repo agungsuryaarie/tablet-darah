@@ -55,7 +55,7 @@ class SesiController extends Controller
         $sesiid  = Sesi::orderBy('id', 'DESC')->first();
         // fecth rematri
         foreach ($rematri as $r) {
-            $id_rematri = $r->id;
+            $id_rematri = $r->rematri_id;
             //simpan seluruh rematri dari kelas
             SesiRematri::create(
                 [
@@ -79,10 +79,10 @@ class SesiController extends Controller
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('nik', function ($data) {
-                    return $data->rematri_sekolah->rematri->nik;
+                    return $data->rematri_posyandu->nik;
                 })
                 ->addColumn('nama', function ($data) {
-                    return $data->rematri_sekolah->rematri->nama;
+                    return $data->rematri_posyandu->nama;
                 })
                 ->addColumn('foto', function ($data) {
                     if ($data->foto != null) {
