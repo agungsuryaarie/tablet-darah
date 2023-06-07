@@ -9,7 +9,7 @@
                     <div class="login-wrap p-4 p-md-5">
                         <div class="d-flex">
                             <div class="w-100">
-                                <img src="{{ url('dist/assets/img/Logo2.png') }}" class="mb-3" style="width: 100px" />
+                                <img src="{{ url('dist/assets/img/logo2.png') }}" class="mb-3" style="width: 100px" />
                                 <h6 class="mb-4">
                                     Silahkan Login Menggunakan E-mail dan Pasword Anda
                                 </h6>
