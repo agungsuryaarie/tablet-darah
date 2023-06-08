@@ -214,7 +214,7 @@
             e.preventDefault();
             $(this).html(
                 "<span class='spinner-border spinner-border-sm'></span><span class='visually-hidden'><i> menyimpan...</i></span>"
-            );
+            ).attr('disabled', 'disabled');
 
             $.ajax({
                 data: $("#sesiForm").serialize(),
@@ -230,11 +230,11 @@
                                 value +
                                 '</li></strong>');
                             $(".alert-danger").fadeOut(5000);
-                            $("#saveBtn").html("Simpan");
+                            $("#saveBtn").html("Simpan").removeAttr("disabled");
                         });
                     } else {
                         alertSuccess("Sesi saved successfully.");
-                        $("#saveBtn").html("Simpan");
+                        $("#saveBtn").html("Simpan").removeAttr("disabled");;
                         $('#ajaxModel').modal('hide');
                         setTimeout(function() {
                             window.location.reload();
