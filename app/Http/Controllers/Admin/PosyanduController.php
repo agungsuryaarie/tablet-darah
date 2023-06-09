@@ -45,12 +45,26 @@ class PosyanduController extends Controller
             'kecamatan_id.required' => 'Kecamatan harus dipilih.',
             'desa_id.required' => 'Desa harus dipilih.',
             'kode_posyandu.required' => 'Kode Posyandu harus diisi.',
+            'kode_posyandu.unique' => 'Kode Posyandu sudah terdaftar.',
             'nama_posyandu.required' => 'Nama Posyandu harus diisi.',
         );
+        //Check If Field Unique
+        if (!$request->posyandu_id) {
+            //rule tambah data tanpa user_id
+            $ruleKode = 'required|unique:posyandu,kode_posyandu';
+        } else {
+            //rule edit jika tidak ada user_id
+            $lastKode = Posyandu::where('id', $request->posyandu_id)->first();
+            if ($lastKode->kode_posyandu == $request->kode_posyandu) {
+                $ruleKode = 'required';
+            } else {
+                $ruleKode = 'required|unique:posyandu,kode_posyandu';
+            }
+        }
         $validator = Validator::make($request->all(), [
             'kecamatan_id' => 'required',
             'desa_id' => 'required',
-            'kode_posyandu' => 'required',
+            'kode_posyandu' => $ruleKode,
             'nama_posyandu' => 'required',
         ], $message);
 

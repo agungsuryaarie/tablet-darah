@@ -1,6 +1,9 @@
 @extends('admin.layouts.app')
 
 @section('content')
+    @php
+        $rematri = \App\Models\RematriSekolah::where('sekolah_id', Auth::user()->sekolah_id)->get();
+    @endphp
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
@@ -25,8 +28,8 @@
                             <h6 class="float-left"><i class="fas fa-info-circle"></i> Sesi otomatis berakhir 1 minggu
                                 setelah sesi dibuat.
                             </h6>
-                            <a href="javascript:void(0)" id="createNewSesi" class="btn btn-info btn-xs float-right">
-                                <i class="fas fa-plus-circle"></i> Tambah</a>
+                            <button href="javascript:void(0)" id="createNewSesi" class="btn btn-info btn-xs float-right">
+                                <i class="fas fa-plus-circle"></i> Tambah</button>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -301,5 +304,16 @@
 
             }, 1000);
         })
+
+        //validasi data
+        document.addEventListener('DOMContentLoaded', function() {
+            var submitButton = document.getElementById('createNewSesi');
+            // Cek apakah data ada atau tidak ada
+            @if ($rematri->isEmpty())
+                submitButton.disabled = true;
+            @else
+                submitButton.disabled = false;
+            @endif
+        });
     </script>
 @endsection

@@ -53,14 +53,28 @@ class SekolahController extends Controller
             'npsn.required' => 'NPSN harus diisi.',
             'npsn.max' => 'NPSN maksimal 8 digit.',
             'npsn.min' => 'NPSN minimal 8 digit.',
+            'npsn.unique' => 'NPSN sudah terdaftar.',
             'jenjang.required' => 'Jenjang harus dipilih.',
             'status.required' => 'Status harus dipilih.',
             'alamat.required' => 'Alamat harus diisi.',
             'alamat..max' => 'Alamat melebihi batas maksimal karakter.',
         );
+        //Check If Field Unique
+        if (!$request->sekolah_id) {
+            //rule tambah data tanpa user_id
+            $ruleNpsn = 'required|max:8|min:8|unique:sekolah,npsn';
+        } else {
+            //rule edit jika tidak ada user_id
+            $lastNpsn = Sekolah::where('id', $request->sekolah_id)->first();
+            if ($lastNpsn->npsn == $request->npsn) {
+                $ruleNpsn = 'required|max:8|min:8';
+            } else {
+                $ruleNpsn = 'required|max:8|min:8|unique:sekolah,npsn';
+            }
+        }
         $validator = Validator::make($request->all(), [
             'kecamatan_id' => 'required',
-            'npsn' => 'required|max:8|min:8',
+            'npsn' => $ruleNpsn,
             'nama_sekolah' => 'required',
             'jenjang' => 'required',
             'status' => 'required',

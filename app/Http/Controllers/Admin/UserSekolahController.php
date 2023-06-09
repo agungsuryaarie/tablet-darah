@@ -50,6 +50,7 @@ class UserSekolahController extends Controller
         //Translate Bahasa Indonesia
         $message = array(
             'sekolah_id.required' => 'Sekolah harus dipilih.',
+            'sekolah_id.unique' => 'Admin Sekolah sudah terdaftar.',
             'nik.required' => 'NIK harus diisi.',
             'nik.numeric' => 'NIK harus angka.',
             'nik.max' => 'NIK maksimal 16 digit.',
@@ -72,8 +73,15 @@ class UserSekolahController extends Controller
             //rule tambah data tanpa user_id
             $ruleNik = 'required|max:16|min:16|unique:users_sekolah,nik';
             $ruleEmail = 'required|email|unique:users_sekolah,email';
+            $ruleSid = 'required|unique:users_sekolah,sekolah_id';
         } else {
             //rule edit jika tidak ada user_id
+            $lastSid = UserSekolah::where('id', $request->usersekolah_id)->first();
+            if ($lastSid->sekolah_id == $request->sekolah_id) {
+                $ruleSid = 'required';
+            } else {
+                $ruleSid = 'required|unique:users_sekolah,sekolah_id';
+            }
             $lastNik = UserSekolah::where('id', $request->usersekolah_id)->first();
             if ($lastNik->nik == $request->nik) {
                 $ruleNik = 'required|max:16|min:16';
@@ -88,7 +96,7 @@ class UserSekolahController extends Controller
             }
         }
         $validator = Validator::make($request->all(), [
-            'sekolah_id' => 'required',
+            'sekolah_id' => $ruleSid,
             'nik' => $ruleNik,
             'nama' => 'required|max:255',
             'nohp' => 'required|numeric',

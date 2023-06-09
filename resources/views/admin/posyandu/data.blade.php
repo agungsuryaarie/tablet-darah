@@ -287,7 +287,7 @@
                     },
                 });
             });
-            
+
             $("body").on("click", ".deletePos", function() {
                 var posyandu_id = $(this).data("id");
                 $("#modelHeadingHps").html("Hapus");

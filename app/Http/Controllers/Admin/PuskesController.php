@@ -46,11 +46,25 @@ class PuskesController extends Controller
         $message = array(
             'kecamatan_id.required' => 'Kecamatan harus dipilih.',
             'kode_puskesmas.required' => 'Kode Puskesmas harus diisi.',
+            'kode_puskesmas.unique' => 'Kode Puskesmas sudah terdaftar.',
             'nama_puskesmas.required' => 'Nama Puskesmas harus diisi.',
         );
+        //Check If Field Unique
+        if (!$request->puskesmas_id) {
+            //rule tambah data tanpa user_id
+            $ruleKode = 'required|unique:puskesmas,kode_puskesmas';
+        } else {
+            //rule edit jika tidak ada user_id
+            $lastKode = Puskesmas::where('id', $request->puskesmas_id)->first();
+            if ($lastKode->kode_puskesmas == $request->kode_puskesmas) {
+                $ruleKode = 'required';
+            } else {
+                $ruleKode = 'required|unique:puskesmas,kode_puskesmas';
+            }
+        }
         $validator = Validator::make($request->all(), [
             'kecamatan_id' => 'required',
-            'kode_puskesmas' => 'required',
+            'kode_puskesmas' => $ruleKode,
             'nama_puskesmas' => 'required',
         ], $message);
 

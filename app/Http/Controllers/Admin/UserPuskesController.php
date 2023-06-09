@@ -51,6 +51,7 @@ class UserPuskesController extends Controller
         $message = array(
             'kecamatan_id.required' => 'Kecamatan harus dipilih.',
             'puskesmas_id.required' => 'Puskesmas harus dipilih.',
+            'puskesmas_id.unique' => 'Admin Puskesmas sudah terdaftar.',
             'nik.required' => 'NIK harus diisi.',
             'nik.numeric' => 'NIK harus angka.',
             'nik.max' => 'NIK maksimal 16 digit.',
@@ -73,8 +74,15 @@ class UserPuskesController extends Controller
             //rule tambah data tanpa user_id
             $ruleNik = 'required|max:16|min:16|unique:users_puskesmas,nik';
             $ruleEmail = 'required|email|unique:users_puskesmas,email';
+            $rulePid = 'required|unique:users_puskesmas,puskesmas_id';
         } else {
             //rule edit jika tidak ada user_id
+            $lastPid = UserPuskesmas::where('id', $request->userpuskes_id)->first();
+            if ($lastPid->puskesmas_id == $request->puskesmas_id) {
+                $rulePid = 'required';
+            } else {
+                $rulePid = 'required|unique:users_puskesmas,puskesmas_id';
+            }
             $lastNik = UserPuskesmas::where('id', $request->userpuskes_id)->first();
             if ($lastNik->nik == $request->nik) {
                 $ruleNik = 'required|max:16|min:16';
@@ -90,7 +98,7 @@ class UserPuskesController extends Controller
         }
         $validator = Validator::make($request->all(), [
             'kecamatan_id' => 'required',
-            'puskesmas_id' => 'required',
+            'puskesmas_id' => $rulePid,
             'nik' => $ruleNik,
             'nama' => 'required|max:255',
             'nohp' => 'required|numeric',

@@ -49,6 +49,7 @@ class UserPosyanduController extends Controller
         //Translate Bahasa Indonesia
         $message = array(
             'posyandu_id.required' => 'Posyandu harus dipilih.',
+            'posyandu_id.unique' => 'Admin Posyandu sudah terdaftar.',
             'nik.required' => 'NIK harus diisi.',
             'nik.numeric' => 'NIK harus angka.',
             'nik.max' => 'NIK maksimal 16 digit.',
@@ -71,8 +72,15 @@ class UserPosyanduController extends Controller
             //rule tambah data tanpa user_id
             $ruleNik = 'required|max:16|min:16|unique:users_posyandu,nik';
             $ruleEmail = 'required|email|unique:users_posyandu,email';
+            $rulePoid = 'required|unique:users_posyandu,posyandu_id';
         } else {
             //rule edit jika tidak ada user_id
+            $lastPoid = UserPosyandu::where('id', $request->userposyandu_id)->first();
+            if ($lastPoid->posyandu_id == $request->posyandu_id) {
+                $rulePoid = 'required|max:16|min:16';
+            } else {
+                $rulePoid = 'required|unique:users_posyandu,posyandu_id';
+            }
             $lastNik = UserPosyandu::where('id', $request->userposyandu_id)->first();
             if ($lastNik->nik == $request->nik) {
                 $ruleNik = 'required|max:16|min:16';
@@ -87,7 +95,7 @@ class UserPosyanduController extends Controller
             }
         }
         $validator = Validator::make($request->all(), [
-            'posyandu_id' => 'required',
+            'posyandu_id' => $rulePoid,
             'nik' => $ruleNik,
             'nama' => 'required|max:255',
             'nohp' => 'required|numeric',
