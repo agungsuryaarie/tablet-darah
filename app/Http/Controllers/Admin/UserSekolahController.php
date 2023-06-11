@@ -175,7 +175,7 @@ class UserSekolahController extends Controller
             ]
         );
         //redirect to index
-        return redirect()->route('profilsekolah.index')->with(['status' => 'Profil Berhasil Diupdate!']);
+        return redirect()->route('profilsekolah.index')->with(['toast_success' => 'Profil updated successfully.']);
     }
     public function updatepassword(Request $request, $id)
     {
@@ -199,7 +199,7 @@ class UserSekolahController extends Controller
             ]
         );
         //redirect to index
-        return redirect()->route('profilsekolah.index')->with(['status' => 'Password Berhasil Diupdate!']);
+        return redirect()->route('profilsekolah.index')->with(['toast_success' => 'Password updated successfully.']);
     }
     public function updatefoto(Request $request, $id)
     {
@@ -221,6 +221,6 @@ class UserSekolahController extends Controller
             'foto' => $img->hashName(),
         ]);
         //redirect to index
-        return redirect()->route('profilsekolah.index')->with(['status' => 'Foto Berhasil Diupdate!']);
+        return redirect()->route('profilsekolah.index')->with(['toast_success' => 'Photo updated successfully.']);
     }
 }
