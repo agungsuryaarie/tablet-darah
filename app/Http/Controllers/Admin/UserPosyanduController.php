@@ -135,4 +135,89 @@ class UserPosyanduController extends Controller
         $user->delete();
         return response()->json(['success' => 'User Posyandu deleted successfully.']);
     }
+    public function profil()
+    {
+        $menu = 'Profil Saya';
+        $user = UserPosyandu::where('id', Auth::user()->id)->where('posyandu_id', Auth::user()->posyandu_id)->first();
+        return view('admin.profil-posyandu.data', compact('user', 'menu'));
+    }
+    public function updateprofil(Request $request, $id)
+    {
+        $user = UserPosyandu::where("id", $id)->first();
+        $lastEmail = UserPosyandu::where('id', $request->id)->first();
+        if ($lastEmail->email == $request->email) {
+            $ruleEmail = 'required|email';
+        } else {
+            $ruleEmail = 'required|email|unique:users_posyandu,email';
+        }
+        $lastNik = UserPosyandu::where('id', $id)->first();
+        if ($lastNik->nik == $request->nik) {
+            $ruleNik = 'required|max:16|min:16';
+        } else {
+            $ruleNik = 'required|max:16|min:16|unique:users_posyandu,nik';
+        }
+        //validate form
+        $this->validate($request, [
+            'nama' => 'required|max:255',
+            'nohp' => 'required|numeric',
+            'email' => $ruleEmail,
+            'nik' => $ruleNik,
+        ]);
+        $user->update(
+            [
+                'nama' => $request->nama,
+                'nohp' => $request->nohp,
+                'email' => $request->email,
+                'nik' => $request->nik,
+            ]
+        );
+        //redirect to index
+        return redirect()->route('profilposyandu.index')->with(['status' => 'Profil Berhasil Diupdate!']);
+    }
+    public function updatepassword(Request $request, $id)
+    {
+        $user = UserPosyandu::where("id", $id)->first();
+        //Translate Bahasa Indonesia
+        $message = array(
+            'npassword.required' => 'Password harus diisi.',
+            'npassword.min' => 'Password minimal 8.',
+            'nrepassword.required' => 'Harap konfirmasi password.',
+            'nrepassword.same' => 'Password harus sama.',
+            'nrepassword.min' => 'Password minimal 8.',
+        );
+        //validate form
+        $this->validate($request, [
+            'npassword' => 'required|min:8',
+            'nrepassword' => 'required|same:npassword|min:8',
+        ], $message);
+        $user->update(
+            [
+                'password' => Hash::make($request->npassword),
+            ]
+        );
+        //redirect to index
+        return redirect()->route('profilposyandu.index')->with(['status' => 'Password Berhasil Diupdate!']);
+    }
+    public function updatefoto(Request $request, $id)
+    {
+        $user = UserPosyandu::where("id", $id)->first();
+        //Translate Bahasa Indonesia
+        $message = array(
+            'foto.image' => 'Foto harus image.',
+            'foto.mimes' => 'Foto harus jpeg,png,jpg.',
+            'foto,max' => 'Foto maksimal 1MB.',
+        );
+        $this->validate($request, [
+            'foto' => 'image|mimes:jpeg,png,jpg|max:1024'
+        ], $message);
+        $img = $request->file('foto');
+        $img->storeAs('public/foto-user/', $img->hashName());
+        //delete old
+        Storage::delete('public/foto-user/' . $user->foto);
+        $user->update([
+            'foto' => $img->hashName(),
+        ]);
+        //redirect to index
+        return redirect()->route('profilposyandu.index')->with(['status' => 'Foto Berhasil Diupdate!']);
+    }
 }

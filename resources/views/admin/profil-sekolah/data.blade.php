@@ -22,19 +22,15 @@
                     <div class="col-md-4">
                         <div class="card card-widget widget-user">
                             <div class="widget-user-header bg-info">
-                                <h3 class="widget-user-username">{{ Auth::user()->profile->nama }}</h3>
-                                @if (Auth::user()->role == 1)
-                                    <h5 class="widget-user-desc">administrator</h5>
-                                @else
-                                    <h5 class="widget-user-desc">{{ Auth::user()->sekolah->nama_sekolah }}</h5>
-                                @endif
+                                <h3 class="widget-user-username">{{ Auth::user()->nama }}</h3>
+                                <h5 class="widget-user-desc">{{ Auth::user()->sekolah->sekolah }}</h5>
                             </div>
                             <div class="widget-user-image">
-                                @if (Auth::user()->profile->foto == null)
+                                @if (Auth::user()->foto == null)
                                     <img src="{{ url('storage/foto-user/blank.png') }}" class="img-circle elevation-2"
                                         alt="User Image">
                                 @else
-                                    <img src="{{ url('storage/foto-user/' . Auth::user()->profile->foto) }}"
+                                    <img src="{{ url('storage/foto-user/' . Auth::user()->foto) }}"
                                         class="img-circle elevation-2" alt="User Image">
                                 @endif
                             </div>
@@ -82,34 +78,6 @@
                                 <span>{{ $user->email }}</span>
                                 <h6 class="mt-2"><b>Nomor Handphone</b></h6>
                                 <span>{{ $user->nohp }}</span>
-                                <h6 class="mt-2"><b>Jenis Kelamin</b></h6>
-                                @if ($user->profile->gender == null)
-                                    <span class="text-danger"><i>* tidak ada</i></span>
-                                @else
-                                    @if ($user->profile->gender == 'L')
-                                        Laki-laki
-                                    @else
-                                        Perempuan
-                                    @endif
-                                @endif
-                                <h6 class="mt-2"><b>Tempat Lahir</b></h6>
-                                @if ($user->profile->tempat_lahir == null)
-                                    <span class="text-danger"><i>* tidak ada</i></span>
-                                @else
-                                    {{ $user->profile->tempat_lahir }}
-                                @endif
-                                <h6 class="mt-2"><b>Tanggal Lahir</b></h6>
-                                @if ($user->profile->tgl_lahir == null)
-                                    <span class="text-danger"><i>* tidak ada</i></span>
-                                @else
-                                    {{ \Carbon\Carbon::parse($user->profile->tgl_lahir)->translatedFormat('l, d F Y') }}
-                                @endif
-                                <h6 class="mt-2"><b>Alamat</b></h6>
-                                @if ($user->profile->alamat == null)
-                                    <span class="text-danger"><i>* tidak ada</i></span>
-                                @else
-                                    {{ $user->profile->alamat }}
-                                @endif
                             </div>
                         </div>
                     </div>
@@ -126,7 +94,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="card">
-                        <form method="POST" action="{{ route('profil.update', $user->id) }}">
+                        <form method="POST" action="{{ route('profilsekolah.update', $user->id) }}">
                             @csrf
                             @method('put')
                             <input type="hidden" name="id" value="{{ $user->id }}">
@@ -134,8 +102,8 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>NIK <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" value="{{ old('nik', $user->nik) }}"
-                                            disabled>
+                                        <input type="text" name="nik" class="form-control"
+                                            value="{{ old('nik', $user->nik) }}">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
@@ -160,44 +128,6 @@
                                             value="{{ old('nohp', $user->nohp) }}">
                                     </div>
                                 </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>Jenis Kelamin</label>
-                                        <div class="radio-btn">
-                                            <div class="custom-control custom-radio">
-                                                <input class="custom-control-input" type="radio" value="L"
-                                                    name="jenis_kelamin" id="jk1"
-                                                    {{ old('jenis_kelamin', $user->profile->gender) == 'L' ? 'checked' : '' }}>
-                                                <label for="jk1" class="custom-control-label">Laki-laki</label>
-                                            </div>
-                                            <div class="custom-control custom-radio">
-                                                <input class="custom-control-input" type="radio" value="P"
-                                                    name="jenis_kelamin" id="jk2"
-                                                    {{ old('jenis_kelamin', $user->profile->gender) == 'P' ? 'checked' : '' }}>
-                                                <label for="jk2" class="custom-control-label">Perempuan</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>Tempat Lahir</label>
-                                        <textarea name="tempat_lahir" class="form-control rows="3">{{ old('tempat_lahir', $user->profile->tempat_lahir) }}</textarea>
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>Tanggal Lahir</label>
-                                        <input type="date" name="tgl_lahir" class="form-control"
-                                            value="{{ old('tgl_lahir', $user->profile->tgl_lahir) }}">
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>Alamat</label>
-                                        <textarea name="alamat" class="form-control rows="3">{{ old('alamat', $user->profile->alamat) }}</textarea>
-                                    </div>
-                                </div>
                                 <div class="card-footer">
                                     <button type="button" class="btn btn-default btn-sm"
                                         data-dismiss="modal">Kembali</button>
@@ -219,7 +149,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="card">
-                        <form method="POST" action="{{ route('profil.update.password', $user->id) }}">
+                        <form method="POST" action="{{ route('profilsekolah.update.password', $user->id) }}">
                             @csrf
                             @method('put')
                             <input type="hidden" name="id" value="{{ $user->id }}">
@@ -259,7 +189,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="card">
-                        <form method="POST" action="{{ route('profil.update.foto', $user->id) }}"
+                        <form method="POST" action="{{ route('profilsekolah.update.foto', $user->id) }}"
                             enctype="multipart/form-data">
                             @csrf
                             @method('put')
@@ -267,13 +197,12 @@
                             <div class="card-body">
                                 <div class="col-md-12">
                                     <div class="col-md-4">
-                                        @if (Auth::user()->profile->foto == null)
+                                        @if (Auth::user()->foto == null)
                                             <img src="{{ url('storage/foto-user/blank.png') }}" alt="Image Profile"
                                                 class="img-thumbnail rounded img-preview" width="120px">
                                         @else
-                                            <img src="{{ url('storage/foto-user/' . $user->profile->foto) }}"
-                                                alt="Image Profile" class="img-thumbnail rounded img-preview"
-                                                width="120px">
+                                            <img src="{{ url('storage/foto-user/' . $user->foto) }}" alt="Image Profile"
+                                                class="img-thumbnail rounded img-preview" width="120px">
                                         @endif
                                     </div>
                                     <div class="col-md-12 mt-2">

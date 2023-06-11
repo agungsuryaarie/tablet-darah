@@ -9,6 +9,7 @@ use App\Models\Puskesmas;
 use App\Models\UserPuskesmas;
 use Yajra\Datatables\Datatables;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -142,5 +143,90 @@ class UserPuskesController extends Controller
     {
         $data['puskesmas'] = Puskesmas::where("kecamatan_id", $request->kecamatan_id)->get(["puskesmas", "id"]);
         return response()->json($data);
+    }
+    public function profil()
+    {
+        $menu = 'Profil Saya';
+        $user = UserPuskesmas::where('id', Auth::user()->id)->where('puskesmas_id', Auth::user()->puskesmas_id)->first();
+        return view('admin.profil-puskesmas.data', compact('user', 'menu'));
+    }
+    public function updateprofil(Request $request, $id)
+    {
+        $user = UserPuskesmas::where("id", $id)->first();
+        $lastEmail = UserPuskesmas::where('id', $request->id)->first();
+        if ($lastEmail->email == $request->email) {
+            $ruleEmail = 'required|email';
+        } else {
+            $ruleEmail = 'required|email|unique:users_puskesmas,email';
+        }
+        $lastNik = UserPuskesmas::where('id', $id)->first();
+        if ($lastNik->nik == $request->nik) {
+            $ruleNik = 'required|max:16|min:16';
+        } else {
+            $ruleNik = 'required|max:16|min:16|unique:users_puskesmas,nik';
+        }
+        //validate form
+        $this->validate($request, [
+            'nama' => 'required|max:255',
+            'nohp' => 'required|numeric',
+            'email' => $ruleEmail,
+            'nik' => $ruleNik,
+        ]);
+        $user->update(
+            [
+                'nama' => $request->nama,
+                'nohp' => $request->nohp,
+                'email' => $request->email,
+                'nik' => $request->nik,
+            ]
+        );
+        //redirect to index
+        return redirect()->route('profilpuskes.index')->with(['status' => 'Profil Berhasil Diupdate!']);
+    }
+    public function updatepassword(Request $request, $id)
+    {
+        $user = UserPuskesmas::where("id", $id)->first();
+        //Translate Bahasa Indonesia
+        $message = array(
+            'npassword.required' => 'Password harus diisi.',
+            'npassword.min' => 'Password minimal 8.',
+            'nrepassword.required' => 'Harap konfirmasi password.',
+            'nrepassword.same' => 'Password harus sama.',
+            'nrepassword.min' => 'Password minimal 8.',
+        );
+        //validate form
+        $this->validate($request, [
+            'npassword' => 'required|min:8',
+            'nrepassword' => 'required|same:npassword|min:8',
+        ], $message);
+        $user->update(
+            [
+                'password' => Hash::make($request->npassword),
+            ]
+        );
+        //redirect to index
+        return redirect()->route('profilpuskes.index')->with(['status' => 'Password Berhasil Diupdate!']);
+    }
+    public function updatefoto(Request $request, $id)
+    {
+        $user = UserPuskesmas::where("id", $id)->first();
+        //Translate Bahasa Indonesia
+        $message = array(
+            'foto.image' => 'Foto harus image.',
+            'foto.mimes' => 'Foto harus jpeg,png,jpg.',
+            'foto,max' => 'Foto maksimal 1MB.',
+        );
+        $this->validate($request, [
+            'foto' => 'image|mimes:jpeg,png,jpg|max:1024'
+        ], $message);
+        $img = $request->file('foto');
+        $img->storeAs('public/foto-user/', $img->hashName());
+        //delete old
+        Storage::delete('public/foto-user/' . $user->foto);
+        $user->update([
+            'foto' => $img->hashName(),
+        ]);
+        //redirect to index
+        return redirect()->route('profilpuskes.index')->with(['status' => 'Foto Berhasil Diupdate!']);
     }
 }
