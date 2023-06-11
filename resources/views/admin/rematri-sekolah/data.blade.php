@@ -30,7 +30,7 @@
                                         <th>Nama</th>
                                         <th style="width:10%">Tgl Lahir</th>
                                         <th style="width:25%">Nama Ortu</th>
-                                        <th style="width:15%">Kelas</th>
+                                        <th style="width:5%">Kelas</th>
                                         <th class="text-center" style="width: 10%">Action</th>
                                     </tr>
                                 </thead>

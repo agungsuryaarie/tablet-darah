@@ -255,14 +255,14 @@ class RematriController extends Controller
             $sekolah->kelas_id = $request->kelas_id;
             $sekolah->jurusan_id = $request->jurusan_id;
             $sekolah->save();
-            return redirect()->route('rematri.index')->with('success', json_encode(['success' => 'Rematri saved successfully.']));
+            return redirect()->route('rematri.index')->with('toast_success', 'Rematri saved successfully.');
         } else {
             $posyandu = new RematriPosyandu();
             $posyandu->rematri_id = $rematri->id;
             $posyandu->puskesmas_id = Auth::user()->puskesmas_id;
             $posyandu->posyandu_id = Auth::user()->posyandu_id;
             $posyandu->save();
-            return redirect()->route('rematri.posyandu.index')->with('success', json_encode(['success' => 'Rematri saved successfully.']));
+            return redirect()->route('rematri.posyandu.index')->with('toast_success', 'Rematri saved successfully.');
         }
     }
 
@@ -448,14 +448,14 @@ class RematriController extends Controller
             $sekolah->kelas_id = $request->kelas_id;
             $sekolah->jurusan_id = $request->jurusan_id;
             $sekolah->save();
-            return redirect()->route('rematri.index')->with('success', json_encode(['success' => 'Rematri update successfully.']));
+            return redirect()->route('rematri.index')->with('toast_success', 'Rematri updated successfully.');
         } else {
             $sekolah = RematriPosyandu::where('rematri_id', $rematri->id)->first();
             $sekolah->puskesmas_id = Auth::user()->puskesmas_id;
             $sekolah->posyandu_id = Auth::user()->posyandu_id;
             $sekolah->save();
         }
-        return redirect()->route('rematri.posyandu.index')->with('success', json_encode(['success' => 'Rematri update successfully.']));
+        return redirect()->route('rematri.posyandu.index')->with('toast_success', 'Rematri updated successfully.');
     }
 
     public function getJurusan(Request $request)

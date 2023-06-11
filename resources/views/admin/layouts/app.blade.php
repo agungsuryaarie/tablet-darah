@@ -71,5 +71,6 @@
             @yield('content')
             @yield('modal')
         </div>
+        @include('sweetalert::alert')
         @include('admin.layouts.footer')
     </div>
