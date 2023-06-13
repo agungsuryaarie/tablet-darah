@@ -100,6 +100,8 @@
             </div>
         </div>
     </section>
+@endsection
+@section('modal')
     <div class="modal fade" id="ajaxModel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -154,8 +156,31 @@
             </div>
         </div>
     </div>
+    <div id="myModal" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h6><i class="fa fa-info-circle text-danger"></i> Mohon Perhatian</h6>
+                    <hr>
+                    <p style="text-align: justify">Untuk mengurangi kesalahan pada sesi, pastikan <b>DATA REMATRI</b>
+                        sudah terinput semua berdasarkan kelas masing-masing. Jika <b>DATA REMATRI</b> tidak tersedia tombol
+                        <button class="btn btn-info btn-xs" disabled><i class="fas fa-plus-circle"></i> Tambah</button>
+                        tidak akan aktif. Ketika membuat sesi, sistem hanya menyingkronisasikan
+                        <b>DATA REMATRI</b> yang saat ini tersedia. Jika sesi telah dibuat dan admin sekolah baru saja
+                        menginputkan
+                        <b>DATA REMATRI</b> terbaru, maka <b>DATA REMATRI</b> terbaru tersebut tidak tergabung kedalam sesi.
+                    </p>
+                    <footer class="blockquote-footer">developer diskominfo</footer>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="dataRematri" class="btn btn-primary btn-sm" data-dismiss="modal">Lengkapi
+                        Dulu</button>
+                    <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Mengerti</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
-
 @section('script')
     <script>
         $("#createNewSesi").click(function() {
@@ -252,7 +277,10 @@
         $('.SesiError').click(function() {
             toastr.error('Sesi sudah berakhir.')
         });
-
+        $("body").on("click", "#dataRematri", function() {
+            var url = "{{ route('rematri.create') }}";
+            window.location = url;
+        });
         //waktu sesi
         // Dapatkan tanggal dari database
         var data = {!! json_encode($sesi) !!};
@@ -304,7 +332,6 @@
 
             }, 1000);
         })
-
         //validasi data
         document.addEventListener('DOMContentLoaded', function() {
             var submitButton = document.getElementById('createNewSesi');
@@ -314,6 +341,14 @@
             @else
                 submitButton.disabled = false;
             @endif
+        });
+        // modal auto
+        window.addEventListener('DOMContentLoaded', function() {
+            $('#myModal').modal('show');
+        });
+        $(document).ready(function() {
+            $('#myModal').modal('show');
+            $("#modelHeadingInfo").html("<h6><i class='fa fa-info-circle'></i> Informasi</h6>");
         });
     </script>
 @endsection
