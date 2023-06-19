@@ -280,7 +280,7 @@
                     e.preventDefault();
                     $(this).html(
                         "<span class='spinner-border spinner-border-sm'></span><span class='visually-hidden'><i> menghapus...</i></span>"
-                    ).attr('disabled', 'disabled');;
+                    ).attr('disabled', 'disabled');
                     $.ajax({
                         type: "DELETE",
                         url: "{{ route('sekolah-binaan.store') }}" + "/" + sekolah_id,
