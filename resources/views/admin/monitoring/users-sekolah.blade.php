@@ -20,6 +20,10 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card">
+                        <div class="card-header">
+                            <span class="badge badge-sm badge-success">registered : {{ $regis }}</span>
+                            <span class="badge badge-sm badge-danger">not registered : {{ $notregis }}</span>
+                        </div>
                         <div class="card-body">
                             <table class="table table-bordered table-striped data-table">
                                 <thead>

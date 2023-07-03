@@ -17,10 +17,10 @@ class UserSekolahController extends Controller
     public function registered(Request $request)
     {
         $menu = 'Sekolah Registered';
-        // $data = Sekolah::leftJoin('users_sekolah', 'sekolah.id', '=', 'users_sekolah.sekolah_id')
-        //     ->select('sekolah.*', 'users_sekolah.sekolah_id')
-        //     ->get();
-        // dd($data);
+        $regis = Sekolah::leftJoin('users_sekolah', 'sekolah.id', '=', 'users_sekolah.sekolah_id')
+            ->select('sekolah.*', 'users_sekolah.sekolah_id')->where('sekolah_id', '!=', null)->count();
+        $notregis = Sekolah::leftJoin('users_sekolah', 'sekolah.id', '=', 'users_sekolah.sekolah_id')
+            ->select('sekolah.*', 'users_sekolah.sekolah_id')->where('sekolah_id', '=', null)->count();
         if ($request->ajax()) {
             $data = Sekolah::leftJoin('users_sekolah', 'sekolah.id', '=', 'users_sekolah.sekolah_id')
                 ->select('sekolah.*', 'users_sekolah.sekolah_id')
@@ -44,7 +44,7 @@ class UserSekolahController extends Controller
                 ->rawColumns(['status'])
                 ->make(true);
         }
-        return view('admin.monitoring.users-sekolah', compact('menu'));
+        return view('admin.monitoring.users-sekolah', compact('menu', 'regis', 'notregis'));
     }
     public function index(Request $request)
     {
