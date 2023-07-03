@@ -98,7 +98,7 @@
                 <a href="{{ route('userssekolah.registered') }}"
                     class="nav-link {{ request()->segment(1) == 'users-sekolah' ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Users Sekolah</p>
+                    <p>Sekolah Registered</p>
                 </a>
             </li>
         </ul>
