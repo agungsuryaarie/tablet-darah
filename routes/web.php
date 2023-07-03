@@ -75,6 +75,9 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
         Route::get('users-puskesmas/{id}/edit', [UserPuskesController::class, 'edit'])->name('userpuskes.edit');
         Route::delete('users-puskesmas/{user}/destroy', [UserPuskesController::class, 'destroy'])->name('userpuskes.destroy');
         Route::post('users-puskesmas/getpuskesmas', [UserPuskesController::class, 'getPuskes'])->name('userpuskes.getpuskes');
+
+        // Users Sekolah
+        Route::get('users-sekolah/registered', [UserSekolahController::class, 'registered'])->name('userssekolah.registered');
     });
 
     Route::group(['middleware' => ['checkUser:2']], function () {

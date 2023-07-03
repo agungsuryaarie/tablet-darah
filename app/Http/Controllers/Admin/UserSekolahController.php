@@ -14,6 +14,38 @@ use Illuminate\Support\Facades\Storage;
 
 class UserSekolahController extends Controller
 {
+    public function registered(Request $request)
+    {
+        $menu = 'Sekolah Registered';
+        // $data = Sekolah::leftJoin('users_sekolah', 'sekolah.id', '=', 'users_sekolah.sekolah_id')
+        //     ->select('sekolah.*', 'users_sekolah.sekolah_id')
+        //     ->get();
+        // dd($data);
+        if ($request->ajax()) {
+            $data = Sekolah::leftJoin('users_sekolah', 'sekolah.id', '=', 'users_sekolah.sekolah_id')
+                ->select('sekolah.*', 'users_sekolah.sekolah_id')
+                ->get();
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('npsn', function ($data) {
+                    return $data->npsn;
+                })
+                ->addColumn('sekolah', function ($data) {
+                    return $data->sekolah;
+                })
+                ->addColumn('status', function ($data) {
+                    if ($data->sekolah_id != null) {
+                        $status = '<center><span class="badge badge-success">registered</span></center>';
+                    } else {
+                        $status = '<center><span class="badge badge-danger">not registered</span></center>';
+                    }
+                    return $status;
+                })
+                ->rawColumns(['status'])
+                ->make(true);
+        }
+        return view('admin.monitoring.users-sekolah', compact('menu'));
+    }
     public function index(Request $request)
     {
         $menu = 'User Sekolah';
