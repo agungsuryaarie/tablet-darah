@@ -21,6 +21,10 @@ class UserSekolahController extends Controller
             ->select('sekolah.*', 'users_sekolah.sekolah_id')->where('sekolah_id', '!=', null)->count();
         $notregis = Sekolah::leftJoin('users_sekolah', 'sekolah.id', '=', 'users_sekolah.sekolah_id')
             ->select('sekolah.*', 'users_sekolah.sekolah_id')->where('sekolah_id', '=', null)->count();
+        $added = Sekolah::leftJoin('users_sekolah', 'sekolah.id', '=', 'users_sekolah.sekolah_id')
+            ->select('sekolah.*', 'users_sekolah.sekolah_id')->where('sekolah.puskesmas_id', '!=', null)->count();
+        $notadded = Sekolah::leftJoin('users_sekolah', 'sekolah.id', '=', 'users_sekolah.sekolah_id')
+            ->select('sekolah.*', 'users_sekolah.sekolah_id')->where('sekolah.puskesmas_id', '=', null)->count();
         if ($request->ajax()) {
             $data = Sekolah::leftJoin('users_sekolah', 'sekolah.id', '=', 'users_sekolah.sekolah_id')
                 ->select('sekolah.*', 'users_sekolah.sekolah_id')
@@ -33,18 +37,26 @@ class UserSekolahController extends Controller
                 ->addColumn('sekolah', function ($data) {
                     return $data->sekolah;
                 })
+                ->addColumn('binaan', function ($data) {
+                    if ($data->puskesmas_id != null) {
+                        $binaan = $data->puskesmas->puskesmas . '<i class="fa fa-check-circle text-xs text-blue"></i>';
+                    } else {
+                        $binaan = '<center><span class="badge badge-danger">tidak ditambahkan</span></center>';
+                    }
+                    return $binaan;
+                })
                 ->addColumn('status', function ($data) {
                     if ($data->sekolah_id != null) {
-                        $status = '<center><span class="badge badge-success">registered</span></center>';
+                        $status = '<center><span class="badge badge-success">terdaftar</span></center>';
                     } else {
-                        $status = '<center><span class="badge badge-danger">not registered</span></center>';
+                        $status = '<center><span class="badge badge-danger">tidak terdaftar</span></center>';
                     }
                     return $status;
                 })
-                ->rawColumns(['status'])
+                ->rawColumns(['status', 'binaan'])
                 ->make(true);
         }
-        return view('admin.monitoring.users-sekolah', compact('menu', 'regis', 'notregis'));
+        return view('admin.monitoring.users-sekolah', compact('menu', 'regis', 'notregis', 'added', 'notadded'));
     }
     public function index(Request $request)
     {

@@ -21,8 +21,10 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <span class="badge badge-sm badge-success">registered : {{ $regis }}</span>
-                            <span class="badge badge-sm badge-danger">not registered : {{ $notregis }}</span>
+                            <span class="badge badge-sm badge-success">Terdaftar : {{ $regis }}</span>
+                            <span class="badge badge-sm badge-danger">Tidak Terdaftar : {{ $notregis }}</span>
+                            <span class="badge badge-sm badge-success">Ditambahkan: {{ $added }}</span>
+                            <span class="badge badge-sm badge-danger">Tidak Ditambahkan : {{ $notadded }}</span>
                         </div>
                         <div class="card-body">
                             <table class="table table-bordered table-striped data-table">
@@ -31,7 +33,8 @@
                                         <th style="width:5%">No</th>
                                         <th style="width:10%">NPSN</th>
                                         <th>Nama Sekolah</th>
-                                        <th class="text-center" style="width:10%">Status</th>
+                                        <th>Binaan</th>
+                                        <th class="text-center" style="width:10%">User</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -69,6 +72,10 @@
                     {
                         data: 'sekolah',
                         name: 'sekolah'
+                    },
+                    {
+                        data: 'binaan',
+                        name: 'binaan'
                     },
                     {
                         data: 'status',
