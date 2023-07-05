@@ -43,7 +43,7 @@
                                             @if ($today->lessThan($createdDate))
                                                 <a href="{{ route('sesi.rematri', Crypt::encryptString($item->id)) }}">
                                                 @else
-                                                    <a href="#" class="SesiError">
+                                                    <a href="#">
                                             @endif
                                             <div class="position-relative p-3 bg-info rounded shadow" style="height: 200px">
                                                 @if ($today->lessThan($createdDate))
@@ -81,6 +81,7 @@
                                                     <div class="col-12 text-center mt-3">
                                                         <span class="btn btn-danger btn-round btn-xs mr-2 ml-2"
                                                             id="berakhir_{{ $loop->index }}"></span>
+                                                        <div id="container"></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -274,9 +275,9 @@
         $('.select2bs4').select2({
             theme: 'bootstrap4'
         })
-        $('.SesiError').click(function() {
-            toastr.error('Sesi sudah berakhir.')
-        });
+        // $('.SesiError').click(function() {
+        //     toastr.error('Sesi sudah berakhir.')
+        // });
         $("body").on("click", "#dataRematri", function() {
             var url = "{{ route('rematri.create') }}";
             window.location = url;
@@ -286,7 +287,6 @@
         var data = {!! json_encode($sesi) !!};
         // Mengakses setiap data tanggal dan jam dalam perulangan
         data.forEach(function(item, index) {
-
             // Ubah tanggal database menjadi objek Date
             var targetDate = new Date(item.created_at);
 
@@ -328,6 +328,46 @@
                 if (timeDiff < 0) {
                     var countdownElement = document.getElementById('berakhir_' + index);
                     countdownElement.innerHTML = "sesi berakhir";
+                    // Tambahkan tombol View
+                    var viewButton = document.createElement('button');
+                    viewButton.className = 'btn btn-primary btn-xs ml-2 mr-2';
+                    viewButton.innerHTML = '<i class="fa fa-eye"></i> View';
+                    viewButton.addEventListener('click', function() {
+                        var sesi_id = item.id;
+                        var url = "{{ url('sesi') }}" + "/" + sesi_id +
+                            "/rematri-view";
+                        window.location = url;
+                    });
+                    countdownElement.appendChild(viewButton);
+
+                    // Tambahkan tombol Export
+                    var exportButton = document.createElement('button');
+                    exportButton.className =
+                        'btn btn-success btn-xs';
+                    exportButton.innerHTML =
+                        '<i class="fa fa-download"></i> Export';
+                    exportButton.addEventListener('click',
+                        function() {
+                            // Logika untuk mengekspor data
+                            // ...
+
+                            // Contoh: Kirim permintaan AJAX ke endpoint ekspor data
+                            // $.ajax({
+                            //     url: '/export/' + index,
+                            //     method: 'GET',
+                            //     success: function(response) {
+                            //         // Logika setelah berhasil mengekspor data
+                            //     },
+                            //     error: function(error) {
+                            //         // Logika jika terjadi kesalahan saat mengekspor data
+                            //     }
+                            // });
+
+                            // Contoh: Buka tautan ekspor data di tab baru
+                            // window.open('/export/' + index);
+                            console.log('Test');
+                        });
+                    countdownElement.appendChild(exportButton);
                 }
 
             }, 1000);

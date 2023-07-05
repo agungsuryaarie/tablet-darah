@@ -142,4 +142,32 @@ class SesiController extends Controller
     //     $foto = FotoSesi::where('rematri_id', $id)->first();
     //     return response()->json($foto);
     // }
+    public function rematriview(Request $request, $id)
+    {
+        $menu = 'Hasil Sesi';
+        $sesi = Sesi::where('id', $id)->first();
+        $count = RematriSekolah::where('kelas_id', $sesi->kelas_id)->count();
+        if ($request->ajax()) {
+            $data = SesiRematri::where('sesi_id', $sesi->id)->get();
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('nik', function ($data) {
+                    return $data->rematri->nik;
+                })
+                ->addColumn('nama', function ($data) {
+                    return $data->rematri->nama;
+                })
+                ->addColumn('foto', function ($data) {
+                    if ($data->foto != null) {
+                        $foto = '<center><img src="' . url("storage/foto-sesi/" . $data->foto) . '" width="30px" class="img rounded"><center>';
+                    } else {
+                        $foto = '<center><span class="text-danger"><i>* belum foto</i></span></center>';
+                    }
+                    return $foto;
+                })
+                ->rawColumns(['foto'])
+                ->make(true);
+        }
+        return view('admin.sesi.rematriview', compact('menu', 'sesi', 'count'));
+    }
 }
