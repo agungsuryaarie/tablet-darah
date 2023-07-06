@@ -288,10 +288,10 @@
                     $("#jenjang").val(data.jenjang);
                     $("#sekolah_id").val(data.sekolah_id);
                     $.ajax({
-                        url: "{{ url('sekolah/get-sekolah') }}",
+                        url: "{{ url('sekolah/get-sekolah-puskes') }}",
                         type: "POST",
                         data: {
-                            kecamatan_id: {{ Auth::user()->kecamatan_id }},
+                            puskesmas_id: {{ Auth::user()->puskesmas_id }},
                             _token: '{{ csrf_token() }}'
                         },
                         dataType: 'json',
