@@ -181,17 +181,17 @@ class RematriController extends Controller
             if ($request->nohp == null) {
                 $ruleNohp = '';
             } else {
-                $ruleNohp = 'min:11|max:12|numeric';
+                $ruleNohp = 'numeric';
             }
             if ($request->email == null) {
-                $ruleEmail = '';
+                $ruleEmail = 'email';
             } else {
                 $ruleEmail = 'email|unique:rematri,email';
             }
             if ($request->tlp_ortu == null) {
                 $ruleTelpOrtu = '';
             } else {
-                $ruleTelpOrtu = 'min:11|max:12|numeric';
+                $ruleTelpOrtu = 'numeric';
             }
             $validator = Validator::make($request->all(), [
                 'nama'              => 'required|max:255',
@@ -217,17 +217,17 @@ class RematriController extends Controller
             if ($request->nohp == null) {
                 $ruleNohp = '';
             } else {
-                $ruleNohp = 'min:11|max:12|numeric';
+                $ruleNohp = 'numeric';
             }
             if ($request->email == null) {
-                $ruleEmail = '';
+                $ruleEmail = 'email';
             } else {
                 $ruleEmail = 'email|unique:rematri,email';
             }
             if ($request->tlp_ortu == null) {
                 $ruleTelpOrtu = '';
             } else {
-                $ruleTelpOrtu = 'min:11|max:12|numeric';
+                $ruleTelpOrtu = 'numeric';
             }
             $validator = Validator::make($request->all(), [
                 'nama'              => 'required|max:255',
@@ -393,17 +393,19 @@ class RematriController extends Controller
         if ($request->nohp == null) {
             $ruleNohp = '';
         } else {
-            $ruleNohp = 'min:11|max:12|numeric';
+            $ruleNohp = 'numeric';
         }
         if ($request->email == null) {
             $ruleEmail = '';
+        } elseif ($rematri->email == $request->email) {
+            $ruleEmail = 'email';
         } else {
             $ruleEmail = 'email|unique:rematri,email';
         }
         if ($request->tlp_ortu == null) {
             $ruleTelpOrtu = '';
         } else {
-            $ruleTelpOrtu = 'min:11|max:12|numeric';
+            $ruleTelpOrtu = 'numeric';
         }
         if (Auth::user()->sekolah_id) {
             $validator = Validator::make($request->all(), [
