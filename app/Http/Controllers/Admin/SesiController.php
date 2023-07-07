@@ -79,7 +79,7 @@ class SesiController extends Controller
     {
         $menu = 'Sesi';
         $sesi = Sesi::where('id', Crypt::decryptString($id))->where('sekolah_id', Auth::user()->sekolah_id)->first();
-        $count = RematriSekolah::where('kelas_id', $sesi->kelas_id)->where('sekolah_id', Auth::user()->sekolah_id)->count();
+        $count = SesiRematri::where('sesi_id', $sesi->id)->count();
         if ($request->ajax()) {
             $data = SesiRematri::where('sesi_id', $sesi->id)->get();
             return Datatables::of($data)
@@ -151,8 +151,8 @@ class SesiController extends Controller
     public function rematriview(Request $request, $id)
     {
         $menu = 'Hasil Sesi';
-        $sesi = Sesi::where('id', $id)->first();
-        $count = RematriSekolah::where('kelas_id', $sesi->kelas_id)->count();
+        $sesi = Sesi::where('id', $id)->where('sekolah_id', Auth::user()->sekolah_id)->first();
+        $count = SesiRematri::where('sesi_id', $sesi->id)->count();
         if ($request->ajax()) {
             $data = SesiRematri::where('sesi_id', $sesi->id)->get();
             return Datatables::of($data)
@@ -178,9 +178,9 @@ class SesiController extends Controller
     }
     public function export(Request $request, $id)
     {
-        $sesi = Sesi::where('id', $id)->first();
+        $sesi = Sesi::where('id', $id)->where('sekolah_id', Auth::user()->sekolah_id)->first();
         $data = SesiRematri::where('sesi_id', $sesi->id)->get();
-        $count = RematriSekolah::where('kelas_id', $sesi->kelas_id)->count();
+        $count = SesiRematri::where('sesi_id', $sesi->id)->count();
         // Design Table
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
