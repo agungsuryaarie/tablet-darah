@@ -348,24 +348,10 @@
                         '<i class="fa fa-download"></i> Export';
                     exportButton.addEventListener('click',
                         function() {
-                            // Logika untuk mengekspor data
-                            // ...
-
-                            // Contoh: Kirim permintaan AJAX ke endpoint ekspor data
-                            // $.ajax({
-                            //     url: '/export/' + index,
-                            //     method: 'GET',
-                            //     success: function(response) {
-                            //         // Logika setelah berhasil mengekspor data
-                            //     },
-                            //     error: function(error) {
-                            //         // Logika jika terjadi kesalahan saat mengekspor data
-                            //     }
-                            // });
-
-                            // Contoh: Buka tautan ekspor data di tab baru
-                            // window.open('/export/' + index);
-                            console.log('Test');
+                            var sesi_id = item.id;
+                            var url = "{{ url('sesi') }}" + "/" + sesi_id +
+                                "/export";
+                            window.location = url;
                         });
                     countdownElement.appendChild(exportButton);
                 }

@@ -258,7 +258,7 @@
                 });
                 $('#sekolah_id').on('change', function() {
                     var idSekolah = this.value;
-                    console.log(idSekolah);
+                    // console.log(idSekolah);
                     $("#jenjang").html('');
                     $.ajax({
                         url: "{{ url('sekolah/get-jenjang-auto') }}",
@@ -279,7 +279,7 @@
 
             $("body").on("click", ".editUsersekolah", function() {
                 var usersekolah_id = $(this).data("id");
-                console.log(usersekolah_id);
+                // console.log(usersekolah_id);
                 $.get("{{ route('usersekolah.index') }}" + "/" + usersekolah_id + "/edit", function(data) {
                     $("#modelHeading").html("Edit User Sekolah");
                     $("#saveBtn").val("edit-usersekolah");
@@ -312,7 +312,7 @@
                     });
                     $('#sekolah_id').on('change', function() {
                         var idSekolah = this.value;
-                        console.log(idSekolah);
+                        // console.log(idSekolah);
                         $("#jenjang").html('');
                         $.ajax({
                             url: "{{ url('sekolah/get-jenjang-auto') }}",
