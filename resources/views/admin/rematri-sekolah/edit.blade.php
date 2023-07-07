@@ -104,8 +104,8 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="inputEmail3" class="col-sm-2 col-form-label">Email<span
-                                            class="text-danger">*</span></label>
+                                    <label for="inputEmail3" class="col-sm-2 col-form-label">Email<small>
+                                            (Opsional)</small></label>
                                     <div class="col-sm-4">
                                         <input type="email" class="form-control @error('email') is-invalid @enderror"
                                             id="email" name="email" value="{{ $data->rematri->email }}"
@@ -116,8 +116,8 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="text" class="col-sm-2 col-form-label">Telp/HP<span
-                                            class="text-danger">*</span></label>
+                                    <label for="text" class="col-sm-2 col-form-label">Telp/HP<small>
+                                            (Opsional)</small></label>
                                     <div class="col-sm-2">
                                         <input type="text" class="form-control @error('nohp') is-invalid @enderror"
                                             id="nohp" name="nohp" value="{{ $data->rematri->nohp }}"
@@ -233,8 +233,8 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="text" class="col-sm-2 col-form-label">Telp/Hp Orang Tua<span
-                                            class="text-danger">*</span></label>
+                                    <label for="text" class="col-sm-2 col-form-label">Telp/Hp Orang Tua<small>
+                                            (Opsional)</small></label>
                                     <div class="col-sm-2">
                                         <input type="text"
                                             class="form-control @error('tlp_ortu') is-invalid @enderror" id="tlp_ortu"
