@@ -184,7 +184,7 @@ class RematriController extends Controller
                 $ruleNohp = 'numeric';
             }
             if ($request->email == null) {
-                $ruleEmail = 'email';
+                $ruleEmail = '';
             } else {
                 $ruleEmail = 'email|unique:rematri,email';
             }
@@ -220,7 +220,7 @@ class RematriController extends Controller
                 $ruleNohp = 'numeric';
             }
             if ($request->email == null) {
-                $ruleEmail = 'email';
+                $ruleEmail = '';
             } else {
                 $ruleEmail = 'email|unique:rematri,email';
             }
