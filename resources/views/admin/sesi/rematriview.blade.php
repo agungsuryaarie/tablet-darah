@@ -102,7 +102,7 @@
                 lengthMenu: [10, 50, 100, 200, 500],
                 lengthChange: true,
                 autoWidth: false,
-                ajax: "{{ route('sesi.rematri', Crypt::encryptString($sesi->id)) }}",
+                ajax: "{{ route('sesi.rematriview', $sesi->id) }}",
                 columns: [{
                         data: "DT_RowIndex",
                         name: "DT_RowIndex",
@@ -120,6 +120,14 @@
                         name: "foto",
                     },
                 ],
+            });
+        });
+        $(document).ready(function() {
+            $('.popup-link').magnificPopup({
+                type: 'image',
+                gallery: {
+                    enabled: true
+                }
             });
         });
     </script>

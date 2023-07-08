@@ -40,4 +40,6 @@
     <link rel="stylesheet" href="{{ url('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
     <!-- Toastr -->
     <link rel="stylesheet" href="{{ url('plugins/toastr/toastr.min.css') }}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css">
 </head>

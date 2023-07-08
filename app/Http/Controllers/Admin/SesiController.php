@@ -165,7 +165,9 @@ class SesiController extends Controller
                 })
                 ->addColumn('foto', function ($data) {
                     if ($data->foto != null) {
-                        $foto = '<center><img src="' . url("storage/foto-sesi/" . $data->foto) . '" width="30px" class="img rounded"><center>';
+                        $foto = '<a href="' . url('storage/foto-sesi/' . $data->foto) . '" class="popup-link" target="blank">
+                        <center><img src="' . url('storage/foto-sesi/' . $data->foto) . '" width="70px" class="img rounded" alt="' . $data->rematri->nama . '"><center>
+                    </a>';
                     } else {
                         $foto = '<center><span class="text-danger"><i>* belum foto</i></span></center>';
                     }

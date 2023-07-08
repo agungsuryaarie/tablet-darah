@@ -49,6 +49,8 @@
 <script src="{{ url('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
 <!-- Toastr -->
 <script src="{{ url('plugins/toastr/toastr.min.js') }}"></script>
+{{-- popup foto --}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
 @yield('script')
 </body>
 
