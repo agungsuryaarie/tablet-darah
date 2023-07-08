@@ -221,7 +221,7 @@
                                     <div class="col-sm-6">
                                         <input type="text"
                                             class="form-control @error('nik_ortu') is-invalid @enderror" id="nik_ortu"
-                                            name="nik_ortu" placeholder="Nik Orang Tua" value="{{ old('nik_ortu') }}">
+                                            name="nik_ortu" placeholder="NIK Orang Tua" value="{{ old('nik_ortu') }}">
                                         @error('nik_ortu')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror

@@ -192,7 +192,7 @@
                                         <input type="text"
                                             class="form-control @error('nik_ortu') is-invalid @enderror" id="nik_ortu"
                                             name="nik_ortu" value="{{ $data->rematri->nik_ortu }}"
-                                            placeholder="Nik Orang Tua">
+                                            placeholder="NIK Orang Tua">
                                         @error('nik_ortu')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror

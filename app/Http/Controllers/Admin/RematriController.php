@@ -136,7 +136,6 @@ class RematriController extends Controller
                 'nik_ortu'                  => 'NIK Orang Tua harus diisi.',
                 'nik_ortu.max'              => 'NIK Orang Tua maksimal 16 digit.',
                 'nik_ortu.min'              => 'NIK Orang Tua minimal 16 digit.',
-                'nik_ortu.unique'           => 'NIK Ortu sudah terdaftar.',
                 'tlp_ortu.numeric'          => 'Nomor Handphone Orang Tua harus angka.',
                 'kecamatan_id'              => 'Kecamatan harus dipilih.',
                 'desa_id'                   => 'Desa harus dipilih.',
@@ -170,7 +169,6 @@ class RematriController extends Controller
                 'nik_ortu'                  => 'NIK Orang Tua harus diisi.',
                 'nik_ortu.max'              => 'NIK Orang Tua maksimal 16 digit.',
                 'nik_ortu.min'              => 'NIK Orang Tua minimal 16 digit.',
-                'nik_ortu.unique'           => 'NIK Ortu sudah terdaftar.',
                 'tlp_ortu.numeric'          => 'Nomor Handphone Orang Tua harus angka.',
                 'kecamatan_id'              => 'Kecamatan harus dipilih.',
                 'desa_id'                   => 'Desa harus dipilih.',
@@ -207,7 +205,7 @@ class RematriController extends Controller
                 'berat_badan'       => 'required|numeric',
                 'panjang_badan'     => 'required|numeric',
                 'nama_ortu'         => 'required|max:255',
-                'nik_ortu'          => 'required||max:16|min:16|unique:rematri,nik_ortu',
+                'nik_ortu'          => 'required||max:16|min:16',
                 'tlp_ortu'          => $ruleTelpOrtu,
                 'kecamatan_id'      => 'required',
                 'desa_id'           => 'required',
@@ -242,7 +240,7 @@ class RematriController extends Controller
                 'berat_badan'       => 'required|numeric',
                 'panjang_badan'     => 'required|numeric',
                 'nama_ortu'         => 'required|max:255',
-                'nik_ortu'          => 'required||max:16|min:16|unique:rematri,nik_ortu',
+                'nik_ortu'          => 'required||max:16|min:16',
                 'tlp_ortu'          => $ruleTelpOrtu,
                 'kecamatan_id'      => 'required',
                 'desa_id'           => 'required',
@@ -339,7 +337,6 @@ class RematriController extends Controller
                 'nik_ortu'                  => 'NIK Orang Tua harus diisi.',
                 'nik_ortu.max'              => 'NIK Orang Tua maksimal 16 digit.',
                 'nik_ortu.min'              => 'NIK Orang Tua minimal 16 digit.',
-                'nik_ortu.unique'           => 'NIK Ortu sudah terdaftar.',
                 'tlp_ortu.numeric'          => 'Nomor Handphone Orang Tua harus angka.',
                 'kecamatan_id'              => 'Kecamatan harus dipilih.',
                 'desa_id'                   => 'Desa harus dipilih.',
@@ -373,7 +370,6 @@ class RematriController extends Controller
                 'nik_ortu'                  => 'NIK Orang Tua harus diisi.',
                 'nik_ortu.max'              => 'NIK Orang Tua maksimal 16 digit.',
                 'nik_ortu.min'              => 'NIK Orang Tua minimal 16 digit.',
-                'nik_ortu.unique'           => 'NIK Ortu sudah terdaftar.',
                 'tlp_ortu.numeric'          => 'Nomor Handphone Orang Tua harus angka.',
                 'kecamatan_id'              => 'Kecamatan harus dipilih.',
                 'desa_id'                   => 'Desa harus dipilih.',
@@ -384,11 +380,6 @@ class RematriController extends Controller
             $ruleNik = 'required|min:16|max:16';
         } else {
             $ruleNik = 'required|max:16|min:16|unique:rematri,nik';
-        }
-        if ($rematri->nik_ortu == $request->nik_ortu) {
-            $ruleNikO = 'required|min:16|max:16';
-        } else {
-            $ruleNikO = 'required|max:16|min:16|unique:rematri,nik_ortu';
         }
         if ($request->nohp == null) {
             $ruleNohp = '';
@@ -422,7 +413,7 @@ class RematriController extends Controller
                 'berat_badan'       => 'required|numeric',
                 'panjang_badan'     => 'required|numeric',
                 'nama_ortu'         => 'required|max:255',
-                'nik_ortu'          => $ruleNikO,
+                'nik_ortu'          => 'required|max:16|min:16',
                 'tlp_ortu'          => $ruleTelpOrtu,
                 'kecamatan_id'      => 'required',
                 'desa_id'           => 'required',
@@ -442,7 +433,7 @@ class RematriController extends Controller
                 'berat_badan'       => 'required|numeric',
                 'panjang_badan'     => 'required|numeric',
                 'nama_ortu'         => 'required|max:255',
-                'nik_ortu'          => $ruleNikO,
+                'nik_ortu'          => 'required|max:16|min:16',
                 'tlp_ortu'          => $ruleTelpOrtu,
                 'kecamatan_id'      => 'required',
                 'desa_id'           => 'required',
