@@ -210,5 +210,13 @@
             //     });
             // });
         });
+        $(document).ready(function() {
+            $('.popup-link').magnificPopup({
+                type: 'image',
+                gallery: {
+                    enabled: true
+                }
+            });
+        });
     </script>
 @endsection
