@@ -280,7 +280,7 @@
                             });
                         } else {
                             table.draw();
-                            alertSuccess("HB berhasil ditambah");
+                            toastr.success("HB berhasil ditambah");
                             $("#saveBtn").html("Simpan");
                             $('#ajaxModel').modal('hide');
                         }
@@ -318,7 +318,7 @@
                                 });
                             } else {
                                 table.draw();
-                                alertSuccess(data.success);
+                                toastr.success(data.success);
                                 $("#hapusBtn").html(
                                     "<i class='fa fa-trash'></i>Hapus");
                                 $('#ajaxModelHps').modal('hide');

@@ -165,7 +165,7 @@
                                 });
                             } else {
                                 table.draw();
-                                alertSuccess(data.success);
+                                toastr.success(data.success);
                                 $("#hapusBtn").html(
                                     "<i class='fa fa-trash'></i>Hapus");
                                 $('#ajaxModelHps').modal('hide');
