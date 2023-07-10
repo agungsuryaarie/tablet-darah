@@ -35,7 +35,7 @@ class DashboardController extends Controller
         $puskesmas_count = Puskesmas::with(['rematri' => function ($query) {
             $query->select('puskesmas_id', DB::raw('count(*) as count'))->groupBy('puskesmas_id');
         }])->get();
-        dd($puskesmas_count);
+
         // $user = User::where('role', '!=', 1)->count();
         return view('admin.dashboard', compact('menu', 'puskesmas', 'sekolah', 'sekolah_puskes', 'posyandu', 'posyandu_puskes', 'user_puskes', 'usersekolah_puskes', 'userposyandu_puskes', 'rematri_count', 'puskesmas_count'));
     }
