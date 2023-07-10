@@ -29,7 +29,6 @@
     <link rel="stylesheet" href="{{ url('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ url('plugins/toastr/toastr.min.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/flot@0.8.3/jquery.flot.css" rel="stylesheet" type="text/css">
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">

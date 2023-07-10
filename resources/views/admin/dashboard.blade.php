@@ -132,7 +132,7 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-body">
-                                <div id="chart" style="height: 400px;"></div>
+                                <div id="bar-chart" style="height: 400px;"></div>
                             </div>
                         </div>
                     </div>
@@ -189,8 +189,9 @@
     @endif
 @endsection
 @section('script')
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flot@0.8.3/jquery.flot.js"></script>
+    <script src="{{ url('plugins/flot/jquery.flot.js') }}"></script>
+    <script src="{{ url('plugins/flot/plugins/jquery.flot.resize.js') }}"></script>
+    <script src="{{ url('plugins/flot/plugins/jquery.flot.pie.js') }}"></script>
     <script>
         $(function() {
             $.ajaxSetup({
@@ -214,22 +215,22 @@
             ]);
         });
 
-        var data = {!! json_encode($puskesmas_count) !!};
+        var puskesmas_count = {!! json_encode($puskesmas_count) !!};
 
-        // Mengubah format data menjadi sesuai dengan format yang dibutuhkan oleh Flot
-        var chartData = [];
-        data.forEach(function(item, index) {
-            var count = item.rematri ? item.rematri.count : 0;
-            chartData.push([index + 1, item.puskesmas, count]);
-        });
-
-        // Menginisialisasi grafik bar chart dengan Flot
-        $.plot("#chart", [{
-            data: chartData,
+        var bar_data = {
+            data: puskesmas_count.map(function(item, index) {
+                return [index + 1, item.rematri_count];
+            }),
             bars: {
                 show: true
             }
-        }], {
+        };
+
+        var xaxis_ticks = puskesmas_count.map(function(item, index) {
+            return [index + 1, item.puskesmas];
+        });
+
+        $.plot('#bar-chart', [bar_data], {
             series: {
                 bars: {
                     align: "center",
@@ -240,10 +241,7 @@
             },
             xaxis: {
                 mode: "categories",
-                tickLength: 0,
-                ticks: chartData.map(function(item) {
-                    return [item[0], item[1]];
-                })
+                tickLength: 0
             },
             yaxis: {
                 tickSize: 1

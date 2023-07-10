@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Kecamatan;
 use App\Models\Posyandu;
 use App\Models\Puskesmas;
 use App\Models\RematriSekolah;
@@ -32,9 +31,7 @@ class DashboardController extends Controller
         $usersekolah_puskes = UserSekolah::where('puskesmas_id', Auth::user()->puskesmas_id)->count();
         $userposyandu_puskes = UserPosyandu::where('puskesmas_id', Auth::user()->puskesmas_id)->count();
         $rematri_count = RematriSekolah::where('sekolah_id', Auth::user()->sekolah_id)->count();
-        $puskesmas_count = Puskesmas::with(['rematri' => function ($query) {
-            $query->select('puskesmas_id', DB::raw('count(*) as count'))->groupBy('puskesmas_id');
-        }])->get();
+        $puskesmas_count = Puskesmas::withCount('rematri')->get();
 
         // $user = User::where('role', '!=', 1)->count();
         return view('admin.dashboard', compact('menu', 'puskesmas', 'sekolah', 'sekolah_puskes', 'posyandu', 'posyandu_puskes', 'user_puskes', 'usersekolah_puskes', 'userposyandu_puskes', 'rematri_count', 'puskesmas_count'));
