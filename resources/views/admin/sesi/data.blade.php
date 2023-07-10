@@ -262,7 +262,7 @@
                             $("#saveBtn").html("Simpan").removeAttr("disabled");
                         });
                     } else {
-                        alertSuccess("Sesi saved successfully.");
+                        toastr.success("Sesi saved successfully.");
                         $("#saveBtn").html("Simpan").removeAttr("disabled");;
                         $('#ajaxModel').modal('hide');
                         setTimeout(function() {

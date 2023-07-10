@@ -162,7 +162,7 @@
                             $("#saveBtn").html("Simpan");
                         });
                     } else {
-                        alertSuccess("Sesi Posyandu saved successfully.");
+                        toastr.success("Sesi Posyandu saved successfully.");
                         $("#saveBtn").html("Simpan");
                         $('#ajaxModel').modal('hide');
                         setTimeout(function() {
