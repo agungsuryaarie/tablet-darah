@@ -39,4 +39,8 @@ class Kecamatan extends Model
     {
         return $this->hasMany(Posyandu::class);
     }
+    public function rematri()
+    {
+        return $this->hasMany(Rematri::class);
+    }
 }

@@ -3,14 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Kecamatan;
 use App\Models\Posyandu;
 use App\Models\Puskesmas;
+use App\Models\RematriSekolah;
 use App\Models\Sekolah;
-use App\Models\User;
 use App\Models\UserPosyandu;
 use App\Models\UserPuskesmas;
 use App\Models\UserSekolah;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use Yajra\Datatables\Datatables;
 
 class DashboardController extends Controller
 {
@@ -27,7 +30,22 @@ class DashboardController extends Controller
         $user_puskes = UserPuskesmas::count();
         $usersekolah_puskes = UserSekolah::where('puskesmas_id', Auth::user()->puskesmas_id)->count();
         $userposyandu_puskes = UserPosyandu::where('puskesmas_id', Auth::user()->puskesmas_id)->count();
+        $rematri_count = RematriSekolah::where('sekolah_id', Auth::user()->sekolah_id)->count();
         // $user = User::where('role', '!=', 1)->count();
-        return view('admin.dashboard', compact('menu', 'puskesmas', 'sekolah', 'sekolah_puskes', 'posyandu', 'posyandu_puskes', 'user_puskes', 'usersekolah_puskes', 'userposyandu_puskes'));
+        return view('admin.dashboard', compact('menu', 'puskesmas', 'sekolah', 'sekolah_puskes', 'posyandu', 'posyandu_puskes', 'user_puskes', 'usersekolah_puskes', 'userposyandu_puskes', 'rematri_count'));
+    }
+
+    public function puskesmas(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = Puskesmas::with('rematri')->get();
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('rematri', function ($data) {
+                    return '<center>' . $data->rematri->count() . '</center>';
+                })
+                ->rawColumns(['rematri'])
+                ->make(true);
+        }
     }
 }

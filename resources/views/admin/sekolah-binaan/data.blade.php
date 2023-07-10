@@ -1,148 +1,46 @@
 @extends('admin.layouts.app')
 @section('content')
-    <div class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1 class="m-0">{{ $menu }}</h1>
+    <x-header menu="{{ $menu }}"></x-header>
+    <x-datatable link="javascript:void(0)" label="Tambah">
+        <th style="width:5%">No</th>
+        <th style="width:8%">NPSN</th>
+        <th>Sekolah</th>
+        <th style="width:12%">Jenjang</th>
+        <th style="width:10%">Status</th>
+        <th style="width:12%">Kecamatan</th>
+        <th class="text-center" style="width: 5%">Action</th>
+    </x-datatable>
+    <x-ajaxModel size="modal-xl">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="float-left"><i class="fas fa-info-circle"></i> Pilih sekolah berdasarkan
+                        binaan dari puskesmas anda.
+                    </h6>
                 </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="{{ 'dashboard' }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">{{ $menu }}</li>
-                    </ol>
-                </div>
-            </div>
-        </div>
-    </div>
-    <section class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <a href="javascript:void(0)" id="createNewSekolah" class="btn btn-info btn-xs float-right">
-                                <i class="fas fa-plus-circle"></i> Tambah</a>
-                        </div>
-                        <div class="card-body">
-                            <table class="table table-bordered table-striped data-table">
-                                <thead>
-                                    <tr>
-                                        <th style="width:5%">No</th>
-                                        <th style="width:8%">NPSN</th>
-                                        <th>Sekolah</th>
-                                        <th style="width:12%">Jenjang</th>
-                                        <th style="width:10%">Status</th>
-                                        <th style="width:12%">Kecamatan</th>
-                                        <th class="text-center" style="width: 5%">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-                    </div>
+                <div class="card-body">
+                    <table class="table table-bordered table-striped data-table-sekolah">
+                        <thead>
+                            <tr>
+                                <th style="width:5%">No</th>
+                                <th style="width:8%">NPSN</th>
+                                <th>Sekolah</th>
+                                <th style="width:12%">Jenjang</th>
+                                <th style="width:10%">Status</th>
+                                <th style="width:12%">Kecamatan</th>
+                                <th class="text-center" style="width: 5%"><input type="checkbox" id="selectAll"></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
                 </div>
             </div>
         </div>
-    </section>
-    <div class="modal fade" id="ajaxModelSekolah" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="modelHeading"></h4>
-                </div>
-                <div class="modal-body">
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert" style="display: none;">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form id="sekolahForm" name="sekolahForm" class="form-horizontal">
-                        @csrf
-                        <input type="hidden" name="sekolah_id" id="sekolah_id">
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h6 class="float-left"><i class="fas fa-info-circle"></i> Pilih sekolah berdasarkan
-                                        binaan dari puskesmas anda.
-                                    </h6>
-                                </div>
-                                <div class="card-body">
-                                    <table class="table table-bordered table-striped data-table-sekolah">
-                                        <thead>
-                                            <tr>
-                                                <th style="width:5%">No</th>
-                                                <th style="width:8%">NPSN</th>
-                                                <th>Sekolah</th>
-                                                <th style="width:12%">Jenjang</th>
-                                                <th style="width:10%">Status</th>
-                                                <th style="width:12%">Kecamatan</th>
-                                                <th class="text-center" style="width: 5%"><input type="checkbox"
-                                                        id="selectAll"></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody></tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="card-footer">
-                                <button type="submit" class="btn btn-primary btn-sm" id="take"
-                                    value="create">Tambahkan
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-@endsection
-@section('modal')
-    {{-- Modal Delete --}}
-    <div class="modal fade" id="ajaxModelHps">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h6 class="modal-title" id="modelHeadingHps">
-                        </h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                </div>
-                <div class="modal-body">
-                    <div class="alert alert-dismissible fade show" role="alert" style="display: none;">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <center>
-                        <h6 class="text-muted">::KEPUTUSAN INI TIDAK DAPAT DIUBAH KEMBALI::</h6>
-                    </center>
-                    <center>
-                        <h6>Apakah anda yakin menghapus Sekolah Binaan ini ?</h6>
-                    </center>
-                </div>
-                <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Kembali</button>
-                    <button type="submit" class="btn btn-danger btn-sm " id="hapusBtn"><i class="fa fa-trash"></i>
-                        Hapus</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    </x-ajaxModel>
+    <x-delete></x-delete>
 @endsection
 @section('script')
     <script>
-        // Fungsi hanyaAngka
-        function hanyaAngka(evt) {
-            var charCode = (evt.which) ? evt.which : event.keyCode
-            if (charCode > 31 && (charCode < 48 || charCode > 57))
-
-                return false;
-            return true;
-        }
         $(function() {
             $.ajaxSetup({
                 headers: {
@@ -150,7 +48,43 @@
                 },
             });
 
-            var table = $(".data-table").DataTable({
+            var myTable = DataTable("{{ route('sekolah-binaan.index') }}", [{
+                    data: "DT_RowIndex",
+                    name: "DT_RowIndex",
+                },
+                {
+                    data: "npsn",
+                    name: "npsn",
+                },
+                {
+                    data: "sekolah",
+                    name: "sekolah",
+                },
+                {
+                    data: "jenjang",
+                    name: "jenjang",
+                },
+                {
+                    data: "status",
+                    name: "status",
+                },
+                {
+                    data: "kecamatan",
+                    name: "kecamatan",
+                },
+                {
+                    data: "action",
+                    name: "action",
+                    orderable: false,
+                    searchable: false,
+                },
+            ]);
+
+            // Create
+            var createHeading = "Pilih Sekolah Binaan";
+            createModel(createHeading)
+
+            var tablesekolah = $(".data-table-sekolah").DataTable({
                 processing: true,
                 serverSide: true,
                 responsive: true,
@@ -158,7 +92,7 @@
                 lengthMenu: [10, 50, 100, 200, 500],
                 lengthChange: true,
                 autoWidth: false,
-                ajax: "{{ route('sekolah-binaan.index') }}",
+                ajax: "{{ route('sekolah-binaan.take') }}",
                 columns: [{
                         data: "DT_RowIndex",
                         name: "DT_RowIndex",
@@ -191,131 +125,18 @@
                     },
                 ],
             });
-            $("#createNewSekolah").click(function() {
-                $("#saveBtn").val("create-sekolah");
-                $("#sekolah_id").val("");
-                $("#sekolahForm").trigger("reset");
-                $("#modelHeading").html("Pilih Sekolah Binaan");
-                $("#ajaxModelSekolah").modal("show");
-                if ($.fn.DataTable.isDataTable('.data-table-sekolah')) {
-                    $('.data-table-sekolah').DataTable().destroy();
-                }
-                var tablesekolah = $(".data-table-sekolah").DataTable({
-                    processing: true,
-                    serverSide: true,
-                    responsive: true,
-                    pageLength: 10,
-                    lengthMenu: [10, 50, 100, 200, 500],
-                    lengthChange: true,
-                    autoWidth: false,
-                    ajax: "{{ route('sekolah-binaan.take') }}",
-                    columns: [{
-                            data: "DT_RowIndex",
-                            name: "DT_RowIndex",
-                        },
-                        {
-                            data: "npsn",
-                            name: "npsn",
-                        },
-                        {
-                            data: "sekolah",
-                            name: "sekolah",
-                        },
-                        {
-                            data: "jenjang",
-                            name: "jenjang",
-                        },
-                        {
-                            data: "status",
-                            name: "status",
-                        },
-                        {
-                            data: "kecamatan",
-                            name: "kecamatan",
-                        },
-                        {
-                            data: "action",
-                            name: "action",
-                            orderable: false,
-                            searchable: false,
-                        },
-                    ],
-                });
-            });
-            $("#take").click(function(e) {
-                e.preventDefault();
-                $(this).html(
-                    "<span class='spinner-border spinner-border-sm'></span><span class='visually-hidden'><i> sedang diproses...</i></span>"
-                ).attr('disabled', 'disabled');
-                $.ajax({
-                    data: $("#sekolahForm").serialize(),
-                    url: "{{ route('take.update') }}",
-                    type: "POST",
-                    dataType: "json",
-                    success: function(data) {
-                        if (data.errors) {
-                            $('.alert-danger').html('');
-                            $.each(data.errors, function(key, value) {
-                                $('.alert-danger').show();
-                                $('.alert-danger').append('<strong><li>' +
-                                    value +
-                                    '</li></strong>');
-                                $(".alert-danger").fadeOut(5000);
-                                $("#take").html("Tambahkan").removeAttr("disabled");
-                            });
-                        } else {
-                            table.draw();
-                            alertSuccess(data.success);
-                            $("#take").html("Tambahkan").removeAttr("disabled");
-                            $('#ajaxModelSekolah').modal('hide');
-                        }
-                    },
-                });
-            });
-            $("body").on("click", ".deleteSekolah", function() {
-                var sekolah_id = $(this).data("id");
-                $("#modelHeadingHps").html("Hapus");
-                $("#ajaxModelHps").modal("show");
-                $("#hapusBtn").click(function(e) {
-                    e.preventDefault();
-                    $(this).html(
-                        "<span class='spinner-border spinner-border-sm'></span><span class='visually-hidden'><i> menghapus...</i></span>"
-                    ).attr('disabled', 'disabled');
-                    $.ajax({
-                        type: "DELETE",
-                        url: "{{ route('sekolah-binaan.store') }}" + "/" + sekolah_id,
-                        data: {
-                            _token: "{!! csrf_token() !!}",
-                        },
-                        success: function(data) {
-                            if (data.errors) {
-                                $('.alert-danger').html('');
-                                $.each(data.errors, function(key, value) {
-                                    $('.alert-danger').show();
-                                    $('.alert-danger').append('<strong><li>' +
-                                        value +
-                                        '</li></strong>');
-                                    $(".alert-danger").fadeOut(5000);
-                                    $("#hapusBtn").html(
-                                        "<i class='fa fa-trash'></i>Hapus"
-                                    ).removeAttr("disabled");
-                                });
-                            } else {
-                                table.draw();
-                                alertSuccess(data.success);
-                                $("#hapusBtn").html(
-                                    "<i class='fa fa-trash'></i>Hapus").removeAttr(
-                                    "disabled");
-                                $('#ajaxModelHps').modal('hide');
-                            }
-                        },
-                    });
-                });
-            });
-            $('.select2bs4').select2({
-                theme: 'bootstrap4'
-            })
+
+
+            // Save
+            saveBtn("{{ route('take.update') }}", myTable);
+
+            // Delete
+            var fitur = "Sekolah";
+            var editUrl = "{{ route('sekolah-binaan.index') }}";
+            var deleteUrl = "{{ route('sekolah-binaan.store') }}";
+            Delete(fitur, editUrl, deleteUrl, myTable)
         });
+
         //select all
         $(document).ready(function() {
             // Checkbox "Pilih Semua"

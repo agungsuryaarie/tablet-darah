@@ -14,9 +14,9 @@ class PuskesController extends Controller
     public function index(Request $request)
     {
         $menu = 'Puskesmas';
-        $kecamatan = Kecamatan::get();
+        $kecamatan = Kecamatan::latest()->get();
         if ($request->ajax()) {
-            $data = Puskesmas::get();
+            $data = Puskesmas::latest()->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('kode_puskesmas', function ($data) {
@@ -30,8 +30,8 @@ class PuskesController extends Controller
                     return $data->kecamatan->kecamatan;
                 })
                 ->addColumn('action', function ($row) {
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs editPuskes"><i class="fas fa-edit"></i></a>';
-                    $btn = '<center>' . $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-xs deletePuskes"><i class="fas fa-trash"></i></a><center>';
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs"><i class="fas fa-edit"></i></a>';
+                    $btn = '<center>' . $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-xs delete"><i class="fas fa-trash"></i></a><center>';
                     return $btn;
                 })
                 ->rawColumns(['puskesmas', 'kecamatan', 'action'])
@@ -47,15 +47,15 @@ class PuskesController extends Controller
             'kecamatan_id.required' => 'Kecamatan harus dipilih.',
             'kode_puskesmas.required' => 'Kode Puskesmas harus diisi.',
             'kode_puskesmas.unique' => 'Kode Puskesmas sudah terdaftar.',
-            'nama_puskesmas.required' => 'Nama Puskesmas harus diisi.',
+            'puskesmas.required' => 'Nama Puskesmas harus diisi.',
         );
         //Check If Field Unique
-        if (!$request->puskesmas_id) {
+        if (!$request->hidden_id) {
             //rule tambah data tanpa user_id
             $ruleKode = 'required|unique:puskesmas,kode_puskesmas';
         } else {
             //rule edit jika tidak ada user_id
-            $lastKode = Puskesmas::where('id', $request->puskesmas_id)->first();
+            $lastKode = Puskesmas::where('id', $request->hidden_id)->first();
             if ($lastKode->kode_puskesmas == $request->kode_puskesmas) {
                 $ruleKode = 'required';
             } else {
@@ -65,7 +65,7 @@ class PuskesController extends Controller
         $validator = Validator::make($request->all(), [
             'kecamatan_id' => 'required',
             'kode_puskesmas' => $ruleKode,
-            'nama_puskesmas' => 'required',
+            'puskesmas' => 'required',
         ], $message);
 
         if ($validator->fails()) {
@@ -73,12 +73,12 @@ class PuskesController extends Controller
         }
         Puskesmas::updateOrCreate(
             [
-                'id' => $request->puskesmas_id
+                'id' => $request->hidden_id
             ],
             [
                 'kecamatan_id' => $request->kecamatan_id,
                 'kode_puskesmas' => $request->kode_puskesmas,
-                'puskesmas' => $request->nama_puskesmas,
+                'puskesmas' => $request->puskesmas,
             ]
         );
         return response()->json(['success' => 'Puskesmas saved successfully.']);

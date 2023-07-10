@@ -61,10 +61,10 @@ class UserSekolahController extends Controller
     public function index(Request $request)
     {
         $menu = 'User Sekolah';
-        $sekolah = Sekolah::where('puskesmas_id', '=', Auth::user()->puskesmas_id)->get();
+        $sekolah = Sekolah::where('puskesmas_id', '=', Auth::user()->puskesmas_id)->latest()->get();
         // dd($sekolah);
         if ($request->ajax()) {
-            $data = UserSekolah::where('puskesmas_id', '=', Auth::user()->puskesmas_id)->get();
+            $data = UserSekolah::where('puskesmas_id', '=', Auth::user()->puskesmas_id)->latest()->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('sekolah', function ($data) {
@@ -79,8 +79,8 @@ class UserSekolahController extends Controller
                     return $foto;
                 })
                 ->addColumn('action', function ($row) {
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs editUsersekolah"><i class="fas fa-edit"></i></a>';
-                    $btn = '<center>' . $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-xs deleteUsersekolah"><i class="fas fa-trash"></i></a><center>';
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs"><i class="fas fa-edit"></i></a>';
+                    $btn = '<center>' . $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-xs delete"><i class="fas fa-trash"></i></a><center>';
                     return $btn;
                 })
                 ->rawColumns(['foto', 'action'])
@@ -113,26 +113,26 @@ class UserSekolahController extends Controller
             'repassword.min' => 'Password minimal 8 karakter.',
         );
         //Check If Field Unique
-        if (!$request->usersekolah_id) {
+        if (!$request->hidden_id) {
             //rule tambah data tanpa user_id
             $ruleNik = 'required|max:16|min:16|unique:users_sekolah,nik';
             $ruleEmail = 'required|email|unique:users_sekolah,email';
-            $ruleSid = 'required|unique:users_sekolah,sekolah_id';
+            $ruleSid = 'required';
         } else {
             //rule edit jika tidak ada user_id
-            $lastSid = UserSekolah::where('id', $request->usersekolah_id)->first();
+            $lastSid = UserSekolah::where('id', $request->hidden_id)->first();
             if ($lastSid->sekolah_id == $request->sekolah_id) {
                 $ruleSid = 'required';
             } else {
-                $ruleSid = 'required|unique:users_sekolah,sekolah_id';
+                $ruleSid = 'required';
             }
-            $lastNik = UserSekolah::where('id', $request->usersekolah_id)->first();
+            $lastNik = UserSekolah::where('id', $request->hidden_id)->first();
             if ($lastNik->nik == $request->nik) {
                 $ruleNik = 'required|max:16|min:16';
             } else {
                 $ruleNik = 'required|max:16|min:16|unique:users_sekolah,nik';
             }
-            $lastEmail = UserSekolah::where('id', $request->usersekolah_id)->first();
+            $lastEmail = UserSekolah::where('id', $request->hidden_id)->first();
             if ($lastEmail->email == $request->email) {
                 $ruleEmail = 'required|email';
             } else {
@@ -151,15 +151,17 @@ class UserSekolahController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()->all()]);
         }
+
+        $jenjang = Sekolah::where('id', $request->sekolah_id)->get('jenjang');
         UserSekolah::updateOrCreate(
             [
-                'id' => $request->usersekolah_id
+                'id' => $request->hidden_id
             ],
             [
                 'kecamatan_id' => Auth::user()->kecamatan_id,
                 'puskesmas_id' => Auth::user()->puskesmas_id,
                 'sekolah_id' => $request->sekolah_id,
-                'jenjang' => $request->jenjang,
+                'jenjang' =>  $jenjang,
                 'nik' => $request->nik,
                 'nama' => $request->nama,
                 'nohp' => $request->nohp,

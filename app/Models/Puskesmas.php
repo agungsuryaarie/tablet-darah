@@ -37,7 +37,11 @@ class Puskesmas extends Model
     }
     public function rematri()
     {
-        return $this->hasMany(Rematri::class);
+        return $this->hasMany(RematriSekolah::class);
+    }
+    public function sesi()
+    {
+        return $this->hasMany(SesiRematri::class);
     }
     public function rematrip()
     {

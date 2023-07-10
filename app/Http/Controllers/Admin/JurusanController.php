@@ -24,8 +24,8 @@ class JurusanController extends Controller
                     return $data->kelas->nama;
                 })
                 ->addColumn('action', function ($row) {
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs editJurusan"><i class="fas fa-edit"></i></a>';
-                    $btn = '<center>' . $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-xs deleteJurusan"><i class="fas fa-trash"></i></a><center>';
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs"><i class="fas fa-edit"></i></a>';
+                    $btn = '<center>' . $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-xs delete"><i class="fas fa-trash"></i></a><center>';
                     return $btn;
                 })
                 ->rawColumns(['action'])
@@ -54,7 +54,7 @@ class JurusanController extends Controller
         }
         Jurusan::updateOrCreate(
             [
-                'id' => $request->jurusan_id
+                'id' => $request->hidden_id
             ],
             [
                 'sekolah_id' => Auth::user()->sekolah_id,

@@ -1,20 +1,6 @@
 @extends('admin.layouts.app')
 @section('content')
-    <div class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1 class="m-0">{{ $menu }}</h1>
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="{{ 'dashboard' }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">{{ $menu }}</li>
-                    </ol>
-                </div>
-            </div>
-        </div>
-    </div>
+    <x-header menu="{{ $menu }}"></x-header>
     <section class="content">
         <div class="container-fluid">
             <div class="row">
@@ -54,35 +40,28 @@
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
                 },
             });
-            var table = $(".data-table").DataTable({
-                processing: true,
-                serverSide: true,
-                responsive: true,
-                lengthChange: false,
-                autoWidth: false,
-                ajax: "{{ route('userssekolah.registered') }}",
-                columns: [{
-                        data: 'DT_RowIndex',
-                        name: 'DT_RowIndex'
-                    },
-                    {
-                        data: 'npsn',
-                        name: 'npsn'
-                    },
-                    {
-                        data: 'sekolah',
-                        name: 'sekolah'
-                    },
-                    {
-                        data: 'binaan',
-                        name: 'binaan'
-                    },
-                    {
-                        data: 'status',
-                        name: 'status'
-                    },
-                ]
-            });
+
+            var myTable = DataTable("{{ route('userssekolah.registered') }}", [{
+                    data: 'DT_RowIndex',
+                    name: 'DT_RowIndex'
+                },
+                {
+                    data: 'npsn',
+                    name: 'npsn'
+                },
+                {
+                    data: 'sekolah',
+                    name: 'sekolah'
+                },
+                {
+                    data: 'binaan',
+                    name: 'binaan'
+                },
+                {
+                    data: 'status',
+                    name: 'status'
+                },
+            ]);
         });
     </script>
 @endsection

@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Jenjang;
 use App\Models\Kecamatan;
 use App\Models\Sekolah;
-use App\Models\Puskesmas;
 use App\Models\Status;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
@@ -17,9 +16,11 @@ class SekolahController extends Controller
     public function index(Request $request)
     {
         $menu = 'Sekolah';
-        $kecamatan = Kecamatan::get();
+        $kecamatan = Kecamatan::latest()->get();
+        $jenjang = Jenjang::latest()->get();
+        $status = Status::latest()->get();
         if ($request->ajax()) {
-            $data = Sekolah::get();
+            $data = Sekolah::latest()->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('status', function ($data) {
@@ -33,15 +34,15 @@ class SekolahController extends Controller
                     return $data->kecamatan->kecamatan;
                 })
                 ->addColumn('action', function ($row) {
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs editSekolah"><i class="fas fa-edit"></i></a>';
-                    $btn = '<center>' . $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-xs deleteSekolah"><i class="fas fa-trash"></i></a><center>';
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs"><i class="fas fa-edit"></i></a>';
+                    $btn = '<center>' . $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-xs delete"><i class="fas fa-trash"></i></a><center>';
                     return $btn;
                 })
                 ->rawColumns(['kecamatan', 'action'])
                 ->make(true);
         }
 
-        return view('admin.sekolah.data', compact('menu', 'kecamatan'));
+        return view('admin.sekolah.data', compact('menu', 'kecamatan', 'jenjang', 'status'));
     }
 
     public function store(Request $request)
@@ -49,23 +50,23 @@ class SekolahController extends Controller
         //Translate Bahasa Indonesia
         $message = array(
             'kecamatan_id.required' => 'Kecamatan harus dipilih.',
-            'nama_sekolah.required' => 'Nama Sekolah harus diisi.',
+            'sekolah.required' => 'Nama Sekolah harus diisi.',
             'npsn.required' => 'NPSN harus diisi.',
             'npsn.max' => 'NPSN maksimal 8 digit.',
             'npsn.min' => 'NPSN minimal 8 digit.',
             'npsn.unique' => 'NPSN sudah terdaftar.',
             'jenjang.required' => 'Jenjang harus dipilih.',
             'status.required' => 'Status harus dipilih.',
-            'alamat.required' => 'Alamat harus diisi.',
-            'alamat..max' => 'Alamat melebihi batas maksimal karakter.',
+            'alamat_jalan.required' => 'Alamat harus diisi.',
+            'alamat_jalan..max' => 'Alamat melebihi batas maksimal karakter.',
         );
         //Check If Field Unique
-        if (!$request->sekolah_id) {
+        if (!$request->hidden_id) {
             //rule tambah data tanpa user_id
             $ruleNpsn = 'required|max:8|min:8|unique:sekolah,npsn';
         } else {
             //rule edit jika tidak ada user_id
-            $lastNpsn = Sekolah::where('id', $request->sekolah_id)->first();
+            $lastNpsn = Sekolah::where('id', $request->hidden_id)->first();
             if ($lastNpsn->npsn == $request->npsn) {
                 $ruleNpsn = 'required|max:8|min:8';
             } else {
@@ -75,10 +76,10 @@ class SekolahController extends Controller
         $validator = Validator::make($request->all(), [
             'kecamatan_id' => 'required',
             'npsn' => $ruleNpsn,
-            'nama_sekolah' => 'required',
+            'sekolah' => 'required',
             'jenjang' => 'required',
             'status' => 'required',
-            'alamat' => 'required|max:255',
+            'alamat_jalan' => 'required|max:255',
         ], $message);
 
         if ($validator->fails()) {
@@ -86,16 +87,16 @@ class SekolahController extends Controller
         }
         Sekolah::updateOrCreate(
             [
-                'id' => $request->sekolah_id
+                'id' => $request->hidden_id
             ],
             [
                 'kecamatan_id' => $request->kecamatan_id,
                 'puskesmas_id' => null,
                 'npsn' => $request->npsn,
-                'sekolah' => $request->nama_sekolah,
+                'sekolah' => $request->sekolah,
                 'jenjang' => $request->jenjang,
                 'status' => $request->status,
-                'alamat_jalan' => $request->alamat,
+                'alamat_jalan' => $request->alamat_jalan,
             ]
         );
         return response()->json(['success' => 'Sekolah saved successfully.']);
@@ -140,7 +141,7 @@ class SekolahController extends Controller
 
     public function getJenjangAuto(Request $request)
     {
-        $data['jenjang'] = Sekolah::where("id", $request->sekolah_id)
+        $data['jenjang'] = Sekolah::where("id", $request->hidden_id)
             ->get();
         return response()->json($data);
     }

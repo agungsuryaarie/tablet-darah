@@ -128,11 +128,18 @@
                             </div>
                         </div>
                     @endif
+                    <div class="col-md-6">
+                        <x-datatableNoHeader header="Jumlah Rematri Perpuskesmas">
+                            <th style="width: 3%" class="text-center"></th>
+                            <th>Puskesmas</th>
+                            <th style="width:12%" class="text-center">Jumlah Rematri</th>
+                        </x-datatableNoHeader>
+                    </div>
                 </div>
             </div>
         </section>
     @else
-        <div class="panel-header bg-maroon">
+        <div class="panel-header bg-maroon mb-2">
             <div class="page-inner py-4">
                 <div class="content-header">
                     <div class="container-fluid">
@@ -151,5 +158,49 @@
                 </div>
             </div>
         </div>
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-3 col-6">
+                        <div class="small-box bg-warning">
+                            <div class="inner">
+                                <h3>{{ $rematri_count }}</h3>
+                                <p>Jumlah Rematri</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-person"></i>
+                            </div>
+                            <a href="{{ route('usersekolah.index') }}" class="small-box-footer">Selengkapnya <i
+                                    class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     @endif
+@endsection
+@section('script')
+    <script>
+        $(function() {
+            $.ajaxSetup({
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                },
+            });
+
+            var myTable = DataTable("{{ route('puskesmas.rematri.count') }}", [{
+                    data: "DT_RowIndex",
+                    name: "DT_RowIndex",
+                },
+                {
+                    data: "puskesmas",
+                    name: "puskesmas",
+                },
+                {
+                    data: "rematri",
+                    name: "rematri",
+                },
+            ]);
+        });
+    </script>
 @endsection

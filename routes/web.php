@@ -44,6 +44,7 @@ Route::controller(AuthController::class)->group(function () {
 Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']], function () {
     // Dashboard
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('puskesmas/rematri/count', [DashboardController::class, 'puskesmas'])->name('puskesmas.rematri.count');
     Route::group(['middleware' => ['checkUser:1']], function () {
         // Kabupaten
         Route::resource('kabupaten', KabController::class);
@@ -73,7 +74,7 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
         Route::get('users-puskesmas', [UserPuskesController::class, 'index'])->name('userpuskes.index');
         Route::post('users-puskesmas', [UserPuskesController::class, 'store'])->name('userpuskes.store');
         Route::get('users-puskesmas/{id}/edit', [UserPuskesController::class, 'edit'])->name('userpuskes.edit');
-        Route::delete('users-puskesmas/{user}/destroy', [UserPuskesController::class, 'destroy'])->name('userpuskes.destroy');
+        Route::delete('users-puskesmas/{user}', [UserPuskesController::class, 'destroy'])->name('userpuskes.destroy');
         Route::post('users-puskesmas/getpuskesmas', [UserPuskesController::class, 'getPuskes'])->name('userpuskes.getpuskes');
 
         // Users Sekolah
@@ -111,13 +112,13 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
         Route::get('users-sekolah', [UserSekolahController::class, 'index'])->name('usersekolah.index');
         Route::post('users-sekolah', [UserSekolahController::class, 'store'])->name('usersekolah.store');
         Route::get('users-sekolah/{id}/edit', [UserSekolahController::class, 'edit'])->name('usersekolah.edit');
-        Route::delete('users-sekolah/{user}/destroy', [UserSekolahController::class, 'destroy'])->name('usersekolah.destroy');
+        Route::delete('users-sekolah/{user}', [UserSekolahController::class, 'destroy'])->name('usersekolah.destroy');
 
         // Users Posyandu
         Route::get('users-posyandu', [UserPosyanduController::class, 'index'])->name('userposyandu.index');
         Route::post('users-posyandu', [UserPosyanduController::class, 'store'])->name('userposyandu.store');
         Route::get('users-posyandu/{id}/edit', [UserPosyanduController::class, 'edit'])->name('userposyandu.edit');
-        Route::delete('users-posyandu/{user}/destroy', [UserPosyanduController::class, 'destroy'])->name('userposyandu.destroy');
+        Route::delete('users-posyandu/{user}', [UserPosyanduController::class, 'destroy'])->name('userposyandu.destroy');
 
         // Route::get('rematri', [RematriController::class, 'index'])->name('rematri.index');
         // Route::get('rematri/create', [RematriController::class, 'create'])->name('rematri.create');

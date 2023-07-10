@@ -24,8 +24,8 @@ class KabController extends Controller
                     return $data->kabupaten;
                 })
                 ->addColumn('action', function ($row) {
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs editKab"><i class="fas fa-edit"></i></a>';
-                    $btn = '<center>' . $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-xs deleteKab"><i class="fas fa-trash"></i></a><center>';
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs edit"><i class="fas fa-edit"></i></a>';
+                    $btn = '<center>' . $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-xs delete"><i class="fas fa-trash"></i></a><center>';
                     return $btn;
                 })
                 ->rawColumns(['kode_wilayah', 'kabupaten', 'action'])
@@ -39,14 +39,14 @@ class KabController extends Controller
     {
         //Translate Bahasa Indonesia
         $message = array(
-            'nama_kabupaten.required' => 'Nama Kabupaten harus diisi.',
+            'kabupaten.required' => 'Nama Kabupaten harus diisi.',
             'kode_wilayah.required' => 'Kode Wilayah harus diisi.',
             'kode_wilayah.max' => 'Kode Wilayah maksimal 4 digit.',
             'kode_wilayah.min' => 'Kode Wilayah minimal 4 digit.',
         );
         $validator = Validator::make($request->all(), [
             'kode_wilayah' => 'required|max:4|min:4',
-            'nama_kabupaten' => 'required',
+            'kabupaten' => 'required',
         ], $message);
 
         if ($validator->fails()) {
@@ -54,11 +54,11 @@ class KabController extends Controller
         }
         Kabupaten::updateOrCreate(
             [
-                'id' => $request->kabupaten_id
+                'id' => $request->hidden_id
             ],
             [
                 'kode_wilayah' => $request->kode_wilayah,
-                'kabupaten' => $request->nama_kabupaten,
+                'kabupaten' => $request->kabupaten,
             ]
         );
         return response()->json(['success' => 'Kabupaten saved successfully.']);

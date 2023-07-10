@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Kabupaten;
 use App\Models\Kecamatan;
 use App\Models\Puskesmas;
 use App\Models\UserPuskesmas;
@@ -36,8 +35,8 @@ class UserPuskesController extends Controller
                     return $data->puskesmas->puskesmas;
                 })
                 ->addColumn('action', function ($row) {
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs editUserpuskes"><i class="fas fa-edit"></i></a>';
-                    $btn = '<center>' . $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-xs deleteUserpuskes"><i class="fas fa-trash"></i></a><center>';
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs "><i class="fas fa-edit"></i></a>';
+                    $btn = '<center>' . $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-xs delete"><i class="fas fa-trash"></i></a><center>';
                     return $btn;
                 })
                 ->rawColumns(['foto', 'action'])
@@ -71,26 +70,26 @@ class UserPuskesController extends Controller
             'repassword.min' => 'Password minimal 8 karakter.',
         );
         //Check If Field Unique
-        if (!$request->userpuskes_id) {
+        if (!$request->hidden_id) {
             //rule tambah data tanpa user_id
             $ruleNik = 'required|max:16|min:16|unique:users_puskesmas,nik';
             $ruleEmail = 'required|email|unique:users_puskesmas,email';
             $rulePid = 'required|unique:users_puskesmas,puskesmas_id';
         } else {
             //rule edit jika tidak ada user_id
-            $lastPid = UserPuskesmas::where('id', $request->userpuskes_id)->first();
+            $lastPid = UserPuskesmas::where('id', $request->hidden_id)->first();
             if ($lastPid->puskesmas_id == $request->puskesmas_id) {
                 $rulePid = 'required';
             } else {
                 $rulePid = 'required|unique:users_puskesmas,puskesmas_id';
             }
-            $lastNik = UserPuskesmas::where('id', $request->userpuskes_id)->first();
+            $lastNik = UserPuskesmas::where('id', $request->hidden_id)->first();
             if ($lastNik->nik == $request->nik) {
                 $ruleNik = 'required|max:16|min:16';
             } else {
                 $ruleNik = 'required|max:16|min:16|unique:users_puskesmas,nik';
             }
-            $lastEmail = UserPuskesmas::where('id', $request->userpuskes_id)->first();
+            $lastEmail = UserPuskesmas::where('id', $request->hidden_id)->first();
             if ($lastEmail->email == $request->email) {
                 $ruleEmail = 'required|email';
             } else {
@@ -112,7 +111,7 @@ class UserPuskesController extends Controller
         }
         UserPuskesmas::updateOrCreate(
             [
-                'id' => $request->userpuskes_id
+                'id' => $request->hidden_id
             ],
             [
                 'kecamatan_id' => $request->kecamatan_id,
