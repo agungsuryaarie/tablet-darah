@@ -13,6 +13,7 @@ use App\Models\UserPuskesmas;
 use App\Models\UserSekolah;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Yajra\Datatables\Datatables;
 
 class DashboardController extends Controller
@@ -31,8 +32,12 @@ class DashboardController extends Controller
         $usersekolah_puskes = UserSekolah::where('puskesmas_id', Auth::user()->puskesmas_id)->count();
         $userposyandu_puskes = UserPosyandu::where('puskesmas_id', Auth::user()->puskesmas_id)->count();
         $rematri_count = RematriSekolah::where('sekolah_id', Auth::user()->sekolah_id)->count();
+        $puskesmas_count = Puskesmas::with(['rematri' => function ($query) {
+            $query->select('puskesmas_id', DB::raw('count(*) as count'))->groupBy('puskesmas_id');
+        }])->get();
+        dd($puskesmas_count);
         // $user = User::where('role', '!=', 1)->count();
-        return view('admin.dashboard', compact('menu', 'puskesmas', 'sekolah', 'sekolah_puskes', 'posyandu', 'posyandu_puskes', 'user_puskes', 'usersekolah_puskes', 'userposyandu_puskes', 'rematri_count'));
+        return view('admin.dashboard', compact('menu', 'puskesmas', 'sekolah', 'sekolah_puskes', 'posyandu', 'posyandu_puskes', 'user_puskes', 'usersekolah_puskes', 'userposyandu_puskes', 'rematri_count', 'puskesmas_count'));
     }
 
     public function puskesmas(Request $request)

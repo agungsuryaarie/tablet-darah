@@ -128,6 +128,15 @@
                             </div>
                         </div>
                     @endif
+
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div id="chart" style="height: 400px;"></div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="col-md-6">
                         <x-datatableNoHeader header="Jumlah Rematri Perpuskesmas">
                             <th style="width: 3%" class="text-center"></th>
@@ -170,7 +179,7 @@
                             <div class="icon">
                                 <i class="ion ion-person"></i>
                             </div>
-                            <a href="{{ route('usersekolah.index') }}" class="small-box-footer">Selengkapnya <i
+                            <a href="{{ route('rematri.index') }}" class="small-box-footer">Selengkapnya <i
                                     class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
@@ -180,6 +189,8 @@
     @endif
 @endsection
 @section('script')
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flot@0.8.3/jquery.flot.js"></script>
     <script>
         $(function() {
             $.ajaxSetup({
@@ -201,6 +212,42 @@
                     name: "rematri",
                 },
             ]);
+        });
+
+        var data = {!! json_encode($puskesmas_count) !!};
+
+        // Mengubah format data menjadi sesuai dengan format yang dibutuhkan oleh Flot
+        var chartData = [];
+        data.forEach(function(item, index) {
+            var count = item.rematri ? item.rematri.count : 0;
+            chartData.push([index + 1, item.puskesmas, count]);
+        });
+
+        // Menginisialisasi grafik bar chart dengan Flot
+        $.plot("#chart", [{
+            data: chartData,
+            bars: {
+                show: true
+            }
+        }], {
+            series: {
+                bars: {
+                    align: "center",
+                    barWidth: 0.5,
+                    lineWidth: 0,
+                    fill: 0.7
+                }
+            },
+            xaxis: {
+                mode: "categories",
+                tickLength: 0,
+                ticks: chartData.map(function(item) {
+                    return [item[0], item[1]];
+                })
+            },
+            yaxis: {
+                tickSize: 1
+            }
         });
     </script>
 @endsection
