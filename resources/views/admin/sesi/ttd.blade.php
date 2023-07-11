@@ -65,30 +65,6 @@
                                     style="width: 100%; height: 100%;"></canvas>
                             </div>
                         </div>
-                        {{-- <div class="col-md-12">
-                            <div class="col-md-4" style="text-align: center">
-                                <img src="{{ url('storage/foto-sesi/blank.png') }}" alt="Image Profile"
-                    class="img-thumbnail rounded img-preview" width="120px">
-                </div>
-                <div class="row">
-                    <div class="col-md-4 mt-2">
-                        <div class="input-group">
-                            <input type="hidden" name="kelas_id" value="{{ $sesi->kelas_id }}">
-                            <input type="hidden" name="sesi_id" value="{{ $sesi->id }}">
-                            <input type="hidden" name="rematri_id" value="{{ $rematri->id }}">
-                            <input type="hidden" name="ttd_id" value="{{ $sesifoto->id }}">
-                            <div class="custom-file">
-                                <input type="file" id="foto" name="foto" class="custom-file-input" id="foto" onchange="previewImg();" accept=".png, .jpg, .jpeg" required>
-                                <label class="custom-file-label">Pilih File</label>
-                            </div>
-                        </div>
-                        <small><i>*Foto maksimal 2MB dan berekstensi jpeg, jpg, png.</i></small>
-                    </div>
-                    <div class="col-md-4">
-                        <button type="submit" class="btn btn-primary" style="margin-top:10px"><i class="fa fa-upload"></i> Upload</button>
-                    </div>
-                </div>
-        </div> --}}
                     </div>
                     <div class="card-footer card-comments"
                         style="display: flex; justify-content: center; align-items: center;">
