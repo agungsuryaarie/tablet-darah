@@ -41,19 +41,14 @@
 @endsection
 @section('script')
     <script>
-        function previewImg() {
-            const foto = document.querySelector('#foto');
-            const img = document.querySelector('.img-preview');
-
-            const fileFoto = new FileReader();
-            fileFoto.readAsDataURL(foto.files[0]);
-
-            fileFoto.onload = function(e) {
-                img.src = e.target.result;
-            }
-        }
-        $(function() {
-            bsCustomFileInput.init();
+        $(document).ready(function(e) {
+            $('#image').change(function() {
+                let reader = new FileReader();
+                reader.onload = (e) => {
+                    $('#preview-image-before-upload').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(this.files[0]);
+            });
         });
     </script>
 @endsection

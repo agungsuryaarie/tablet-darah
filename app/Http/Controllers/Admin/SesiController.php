@@ -118,7 +118,6 @@ class SesiController extends Controller
     {
         $agent = new Agent();
 
-
         $menu = 'Foto';
         $rematri = Rematri::where('id', Crypt::decryptString($ids))->first();
         $sesi = Sesi::where('id', $id)->first();
@@ -147,22 +146,22 @@ class SesiController extends Controller
             $filename = $img->hashName();
             $img->storeAs('public/foto-sesi/', $filename);
         } else {
-            $imageData = $request->input('image');
-            $imageData = str_replace('data:image/jpeg;base64,', '', $imageData);
-            $imageData = str_replace(' ', '+', $imageData);
-            $imageData = base64_decode($imageData);
+            $img = $request->input('image');
+            $img = str_replace('data:image/jpeg;base64,', '', $img);
+            $img = str_replace(' ', '+', $img);
+            $img = base64_decode($img);
 
-            $imageName = time() . '.jpeg';
+            $filename = time() . '.jpeg';
 
             // Simpan gambar ke direktori yang diinginkan
-            $imagePath = public_path('storage/foto-sesi/' . $imageName);
-            file_put_contents($imagePath, $imageData);
+            $imagePath = public_path('storage/foto-sesi/');
+            file_put_contents($imagePath, $filename);
         }
 
         SesiRematri::updateOrCreate(
             ['id' => $request->ttd_id],
             [
-                'foto' => $img->hashName(),
+                'foto' => $filename,
             ]
         );
         //redirect to index
