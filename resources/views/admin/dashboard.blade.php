@@ -132,7 +132,7 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-body">
-                                <div id="bar-chart" style="height: 400px;"></div>
+                                <div id="bar-chart" style="height: 400px; width:100%;"></div>
                             </div>
                         </div>
                     </div>
@@ -228,24 +228,33 @@
 
         var xaxis_ticks = puskesmas_count.map(function(item, index) {
             return [index + 1, item.puskesmas];
-        });
 
+        });
         $.plot('#bar-chart', [bar_data], {
+            grid: {
+                borderWidth: 1,
+                borderColor: '#f3f3f3',
+                tickColor: '#f3f3f3'
+            },
             series: {
                 bars: {
-                    align: "center",
+                    show: true,
                     barWidth: 0.5,
-                    lineWidth: 0,
-                    fill: 0.7
-                }
+                    align: 'center',
+                },
             },
+            colors: ['#3c8dbc'],
+            // autoScale: "sliding-window",
             xaxis: {
                 mode: "categories",
-                tickLength: 0
+                tickLength: 0,
+                font: {
+                    size: 10,
+                    variant: "small-caps"
+                },
+                // ticks: xaxis_ticks,
             },
-            yaxis: {
-                tickSize: 1
-            }
+
         });
     </script>
 @endsection

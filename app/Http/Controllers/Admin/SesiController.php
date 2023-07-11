@@ -18,6 +18,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
+use Jenssegers\Agent\Agent;
 
 class SesiController extends Controller
 {
@@ -115,24 +116,48 @@ class SesiController extends Controller
     }
     public function ttd($id, $ids, $ttd)
     {
+        $agent = new Agent();
+
+
         $menu = 'Foto';
         $rematri = Rematri::where('id', Crypt::decryptString($ids))->first();
         $sesi = Sesi::where('id', $id)->first();
         $sesifoto = SesiRematri::find($ttd);
-        return view('admin.sesi.ttd', compact('menu', 'rematri', 'sesi', 'sesifoto'));
+        if ($agent->isMobile()) {
+            return view('admin.sesi.ttd_mobile', compact('menu', 'rematri', 'sesi', 'sesifoto'));
+        } else {
+            return view('admin.sesi.ttd', compact('menu', 'rematri', 'sesi', 'sesifoto'));
+        }
     }
     public function upload(Request $request)
     {
         $message = array(
             'foto.images' => 'File harus image.',
             'foto.mimes' => 'Foto harus jpeg,png,jpg.',
-            'foto,max' => 'File maksimal 2MB.',
+            'foto,max' => 'File maksimal 5MB.',
         );
         $this->validate($request, [
-            'foto' => 'image|mimes:jpeg,png,jpg|max:2000'
+            'foto' => 'image|mimes:jpeg,png,jpg|max:5000'
         ], $message);
-        $img = $request->file('foto');
-        $img->storeAs('public/foto-sesi/', $img->hashName());
+
+        $agent = new Agent();
+
+        if ($agent->isMobile()) {
+            $img = $request->file('foto');
+            $filename = $img->hashName();
+            $img->storeAs('public/foto-sesi/', $filename);
+        } else {
+            $imageData = $request->input('image');
+            $imageData = str_replace('data:image/jpeg;base64,', '', $imageData);
+            $imageData = str_replace(' ', '+', $imageData);
+            $imageData = base64_decode($imageData);
+
+            $imageName = time() . '.jpeg';
+
+            // Simpan gambar ke direktori yang diinginkan
+            $imagePath = public_path('storage/foto-sesi/' . $imageName);
+            file_put_contents($imagePath, $imageData);
+        }
 
         SesiRematri::updateOrCreate(
             ['id' => $request->ttd_id],
@@ -143,13 +168,7 @@ class SesiController extends Controller
         //redirect to index
         return redirect()->route('sesi.rematri', Crypt::encryptString($request->sesi_id))->with(['status' => 'Foto uploaded successfully.']);
     }
-    // fecth foto with ajax
-    // ====================
-    // public function foto($id)
-    // {
-    //     $foto = FotoSesi::where('rematri_id', $id)->first();
-    //     return response()->json($foto);
-    // }
+
     public function rematriview(Request $request, $id)
     {
         $menu = 'Hasil Sesi';
