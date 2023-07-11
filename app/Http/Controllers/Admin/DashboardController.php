@@ -10,6 +10,7 @@ use App\Models\Sekolah;
 use App\Models\UserPosyandu;
 use App\Models\UserPuskesmas;
 use App\Models\UserSekolah;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,6 +21,7 @@ class DashboardController extends Controller
 
     public function index()
     {
+
 
         $menu = "Dashboard";
         $puskesmas = Puskesmas::count();
@@ -33,8 +35,17 @@ class DashboardController extends Controller
         $rematri_count = RematriSekolah::where('sekolah_id', Auth::user()->sekolah_id)->count();
         $puskesmas_count = Puskesmas::withCount('rematri')->get();
 
-        // $user = User::where('role', '!=', 1)->count();
-        return view('admin.dashboard', compact('menu', 'puskesmas', 'sekolah', 'sekolah_puskes', 'posyandu', 'posyandu_puskes', 'user_puskes', 'usersekolah_puskes', 'userposyandu_puskes', 'rematri_count', 'puskesmas_count'));
+        $auth = Auth::user()->role;
+
+        if ($auth == 1) {
+            return view('admin.dashboard.admin', compact('menu', 'puskesmas', 'sekolah', 'posyandu', 'user_puskes', 'puskesmas_count'));
+        } elseif ($auth == 2) {
+            return view('admin.dashboard.puskesmas', compact('menu', 'sekolah_puskes', 'posyandu_puskes', 'usersekolah_puskes', 'userposyandu_puskes'));
+        } elseif ($auth == 3) {
+            return view('admin.dashboard.sekolah', compact('menu', 'rematri_count'));
+        } else {
+            return view('admin.dashboard.posyandu', compact('menu', 'rematri_count'));
+        }
     }
 
     public function puskesmas(Request $request)
