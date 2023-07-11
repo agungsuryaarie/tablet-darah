@@ -146,16 +146,16 @@ class SesiController extends Controller
             $filename = $img->hashName();
             $img->storeAs('public/foto-sesi/', $filename);
         } else {
-            $img = $request->input('image');
-            $img = str_replace('data:image/jpeg;base64,', '', $img);
-            $img = str_replace(' ', '+', $img);
-            $img = base64_decode($img);
+            $imageData = $request->input('image');
+            $imageData = str_replace('data:image/jpeg;base64,', '', $imageData);
+            $imageData = str_replace(' ', '+', $imageData);
+            $imageData = base64_decode($imageData);
 
             $filename = time() . '.jpeg';
 
             // Simpan gambar ke direktori yang diinginkan
-            $imagePath = public_path('storage/foto-sesi/');
-            file_put_contents($imagePath, $filename);
+            $imagePath = public_path('storage/foto-sesi/' . $filename);
+            file_put_contents($imagePath, $imageData);
         }
 
         SesiRematri::updateOrCreate(
