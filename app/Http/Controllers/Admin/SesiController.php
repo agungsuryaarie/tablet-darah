@@ -151,7 +151,7 @@ class SesiController extends Controller
             $imageData = str_replace(' ', '+', $imageData);
             $imageData = base64_decode($imageData);
 
-            $filename = time() . '.jpeg';
+            $filename = time() . '_' . $request->sesi_id . $request->rematri_id . '.jpeg';
 
             // Simpan gambar ke direktori yang diinginkan
             $imagePath = public_path('storage/foto-sesi/' . $filename);
