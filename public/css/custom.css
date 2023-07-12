@@ -1,0 +1,122 @@
+  @import "https://code.highcharts.com/css/highcharts.css";
+
+        .highcharts-figure,
+        .highcharts-data-table table {
+            min-width: 310px;
+            /* max-width: 800px; */
+        }
+
+        .highcharts-data-table table {
+            font-family: Verdana, sans-serif;
+            border-collapse: collapse;
+            border: 1px solid #ebebeb;
+            margin: 10px auto;
+            text-align: center;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .highcharts-data-table caption {
+            padding: 1em 0;
+            font-size: 1.2em;
+            color: #555;
+        }
+
+        .highcharts-data-table th {
+            font-weight: 600;
+            padding: 0.5em;
+        }
+
+        .highcharts-data-table td,
+        .highcharts-data-table th,
+        .highcharts-data-table caption {
+            padding: 0.5em;
+        }
+
+        .highcharts-data-table thead tr,
+        .highcharts-data-table tr:nth-child(even) {
+            background: #f8f8f8;
+        }
+
+        .highcharts-data-table tr:hover {
+            background: #f1f7ff;
+        }
+
+        .highcharts-yaxis .highcharts-axis-line {
+            stroke-width: 2px;
+        }
+
+        /* Link the series colors to axis colors */
+        .highcharts-color-0 {
+            fill: #7cb5ec;
+            stroke: #7cb5ec;
+        }
+
+        .highcharts-axis.highcharts-color-0 .highcharts-axis-line {
+            stroke: #7cb5ec;
+        }
+
+        .highcharts-axis.highcharts-color-0 text {
+            fill: #7cb5ec;
+        }
+
+        .highcharts-color-1 {
+            fill: #90ed7d;
+            stroke: #90ed7d;
+        }
+
+        .highcharts-axis.highcharts-color-1 .highcharts-axis-line {
+            stroke: #90ed7d;
+        }
+
+        .highcharts-axis.highcharts-color-1 text {
+            fill: #90ed7d;
+        }
+
+
+        #container {
+            min-width: 310px;
+            /* max-width: 800px; */
+            height: 400px;
+            margin: 0 auto;
+        }
+
+        .buttons {
+            min-width: 310px;
+            text-align: center;
+            margin: 1rem 0;
+            font-size: 0;
+        }
+
+        .buttons button {
+            cursor: pointer;
+            border: 1px solid silver;
+            border-right-width: 0;
+            background-color: #f8f8f8;
+            font-size: 1rem;
+            padding: 0.5rem;
+            transition-duration: 0.3s;
+            margin: 0;
+        }
+
+        .buttons button:first-child {
+            border-top-left-radius: 0.3em;
+            border-bottom-left-radius: 0.3em;
+        }
+
+        .buttons button:last-child {
+            border-top-right-radius: 0.3em;
+            border-bottom-right-radius: 0.3em;
+            border-right-width: 1px;
+        }
+
+        .buttons button:hover {
+            color: white;
+            background-color: rgb(158 159 163);
+            outline: none;
+        }
+
+        .buttons button.active {
+            background-color: #0051b4;
+            color: white;
+        }

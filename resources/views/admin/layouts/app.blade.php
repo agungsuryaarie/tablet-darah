@@ -29,49 +29,8 @@
     <link rel="stylesheet" href="{{ url('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ url('plugins/toastr/toastr.min.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css">
-    <link rel="stylesheet" type="text/css"
-        href="https://cdn.jsdelivr.net/gh/lafeber/world-flags-sprite/stylesheets/flags32-both.css" />
-    <style>
-        .buttons {
-            min-width: 310px;
-            text-align: center;
-            margin: 1rem 0;
-            font-size: 0;
-        }
+    <link rel="stylesheet" href="{{ url('css/custom.css') }}">
 
-        .buttons button {
-            cursor: pointer;
-            border: 1px solid silver;
-            border-right-width: 0;
-            background-color: #f8f8f8;
-            font-size: 1rem;
-            padding: 0.5rem;
-            transition-duration: 0.3s;
-            margin: 0;
-        }
-
-        .buttons button:first-child {
-            border-top-left-radius: 0.3em;
-            border-bottom-left-radius: 0.3em;
-        }
-
-        .buttons button:last-child {
-            border-top-right-radius: 0.3em;
-            border-bottom-right-radius: 0.3em;
-            border-right-width: 1px;
-        }
-
-        .buttons button:hover {
-            color: white;
-            background-color: rgb(158 159 163);
-            outline: none;
-        }
-
-        .buttons button.active {
-            background-color: #0051b4;
-            color: white;
-        }
-    </style>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">

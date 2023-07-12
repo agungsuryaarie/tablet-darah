@@ -10,7 +10,7 @@ class Sesi extends Model
     use HasFactory;
 
     protected $table = "sesi";
-    protected $fillable = ['kecamatan_id', 'puskesmas_id', 'sekolah_id', 'nama', 'jurusan_id', 'kelas_id'];
+    protected $fillable = ['kecamatan_id', 'puskesmas_id', 'sekolah_id', 'nama', 'jurusan_id', 'kelas_id', 'created_at'];
 
     public function puskesmas()
     {
@@ -27,5 +27,10 @@ class Sesi extends Model
     public function kelas()
     {
         return $this->belongsTo(Kelas::class);
+    }
+
+    public function sesi_rematri()
+    {
+        return $this->belongsTo(SesiRematri::class);
     }
 }

@@ -82,6 +82,7 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
     });
 
     Route::group(['middleware' => ['checkUser:2']], function () {
+        Route::get('rematri/puskesmas/{id}', [DashboardController::class, 'chartPuskesmas'])->name('rematri.puskesmas');
         // Profil
         Route::get('profile-puskesmas', [UserPuskesController::class, 'profil'])->name('profilpuskes.index');
         Route::put('profile-puskesmas/{user}/update', [UserPuskesController::class, 'updateprofil'])->name('profilpuskes.update');
@@ -126,6 +127,8 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
     });
 
     Route::group(['middleware' => ['checkUser:3']], function () {
+
+        Route::get('rematri/sekolah/{id}', [DashboardController::class, 'chartSekolah'])->name('rematri.sekolah');
         // Profil
         Route::get('profile-sekolah', [UserSekolahController::class, 'profil'])->name('profilsekolah.index');
         Route::put('profile-sekolah/{user}/update', [UserSekolahController::class, 'updateprofil'])->name('profilsekolah.update');
@@ -142,6 +145,7 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
 
         // Rematri
         Route::get('rematri', [RematriController::class, 'index'])->name('rematri.index');
+
         Route::get('rematri-create', [RematriController::class, 'create'])->name('rematri.create');
         Route::post('rematri/store', [RematriController::class, 'store'])->name('rematri.store');
         Route::get('rematri/edit/{rematri}', [RematriController::class, 'edit'])->name('rematri.edit');
