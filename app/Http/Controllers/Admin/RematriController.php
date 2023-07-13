@@ -5,10 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Rematri;
 use App\Models\Kecamatan;
-use App\Models\Desa;
 use App\Models\HB;
 use App\Models\HbPosyandu;
-use App\Models\Jurusan;
 use App\Models\Kelas;
 use App\Models\RematriPosyandu;
 use App\Models\RematriSekolah;
@@ -37,19 +35,17 @@ class RematriController extends Controller
                     ->addColumn('nama', function ($data) {
                         return $data->rematri->nama;
                     })
+                    ->addColumn('kelas', function ($data) {
+                        return $data->kelas->nama ?? null;
+                    })
+                    ->addColumn('ruangan', function ($data) {
+                        return $data->ruangan->nama ?? null;
+                    })
                     ->addColumn('tgl_lahir', function ($data) {
                         return $data->rematri->tgl_lahir;
                     })
                     ->addColumn('nama_ortu', function ($data) {
                         return $data->rematri->nama_ortu;
-                    })
-                    ->addColumn('kelas', function ($data) {
-                        if ($data->jurusan_id == null) {
-                            $kelas =  $data->kelas->nama;
-                        } else {
-                            $kelas =  $data->kelas->nama . ' ' . $data->jurusan->nama . ' ' . $data->jurusan->ruangan;
-                        }
-                        return $kelas;
                     })
                     ->addColumn('action', function ($row) {
                         $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . Crypt::encryptString($row->rematri_id) . '" data-original-title="Edit" class="edit btn btn-primary btn-xs editRematri"><i class="fas fa-edit"></i></a>';
@@ -95,7 +91,7 @@ class RematriController extends Controller
     {
         $menu = 'Tambah Data Rematri';
         if (Auth::user()->sekolah_id) {
-            $kelas = Kelas::where('sekolah_id', Auth::user()->sekolah_id)->get();
+            $kelas = Kelas::where('jenjang', Auth::user()->jenjang)->get();
             $kecamatan = Kecamatan::get();
             return view('admin.rematri-sekolah.create', compact('menu', 'kelas', 'kecamatan'));
         } else {
@@ -128,6 +124,7 @@ class RematriController extends Controller
                 'nohp.numeric'              => 'Nomor Handphone harus angka.',
                 'agama.required'            => 'Agama harus diisi.',
                 'kelas_id.required'         => 'Kelas harus diisi.',
+                'ruangan_id.required'       => 'Ruangan harus diisi.',
                 'berat_badan.required'      => 'Berat Badan harus diisi.',
                 'berat_badan.numeric'       => 'Berat Badan harus angka.',
                 'panjang_badan.required'    => 'Panjang Badan harus diisi.',
@@ -202,6 +199,7 @@ class RematriController extends Controller
                 'nohp'              => $ruleNohp,
                 'agama'             => 'required',
                 'kelas_id'          => 'required',
+                'ruangan_id'        => 'required',
                 'berat_badan'       => 'required|numeric',
                 'panjang_badan'     => 'required|numeric',
                 'nama_ortu'         => 'required|max:255',
@@ -275,7 +273,7 @@ class RematriController extends Controller
             $sekolah->puskesmas_id = Auth::user()->puskesmas_id;
             $sekolah->sekolah_id = Auth::user()->sekolah_id;
             $sekolah->kelas_id = $request->kelas_id;
-            $sekolah->jurusan_id = $request->jurusan_id;
+            $sekolah->ruangan_id = $request->ruangan_id;
             $sekolah->save();
             return redirect()->route('rematri.index')->with('toast_success', 'Rematri saved successfully.');
         } else {
@@ -292,7 +290,7 @@ class RematriController extends Controller
     {
         if (Auth::user()->sekolah_id) {
             $menu = 'Edit Data Rematri';
-            $kelas = Kelas::where('sekolah_id', Auth::user()->sekolah_id)->get();
+            $kelas = Kelas::where('jenjang', Auth::user()->jenjang)->get();
             $kecamatan = Kecamatan::get();
             $data = RematriSekolah::where('rematri_id', Crypt::decryptString($id))->first();
             return view('admin.rematri-sekolah.edit', compact('menu', 'kelas', 'kecamatan', 'data'));
@@ -329,6 +327,7 @@ class RematriController extends Controller
                 'nohp.numeric'              => 'Nomor Handphone harus angka.',
                 'agama.required'            => 'Agama harus diisi.',
                 'kelas_id.required'         => 'Kelas harus diisi.',
+                'ruangan_id.required'       => 'Ruangan harus diisi.',
                 'berat_badan.required'      => 'Berat Badan harus diisi.',
                 'berat_badan.numeric'       => 'Berat Badan harus angka.',
                 'panjang_badan.required'    => 'Panjang Badan harus diisi.',
@@ -410,6 +409,7 @@ class RematriController extends Controller
                 'nohp'              => $ruleNohp,
                 'agama'             => 'required',
                 'kelas_id'          => 'required',
+                'ruangan_id'          => 'required',
                 'berat_badan'       => 'required|numeric',
                 'panjang_badan'     => 'required|numeric',
                 'nama_ortu'         => 'required|max:255',
@@ -467,7 +467,7 @@ class RematriController extends Controller
             $sekolah = RematriSekolah::where('rematri_id', $rematri->id)->first();
             $sekolah->sekolah_id = Auth::user()->sekolah_id;
             $sekolah->kelas_id = $request->kelas_id;
-            $sekolah->jurusan_id = $request->jurusan_id;
+            $sekolah->ruangan_id = $request->ruangan_id;
             $sekolah->save();
             return redirect()->route('rematri.index')->with('toast_success', 'Rematri updated successfully.');
         } else {
@@ -479,25 +479,13 @@ class RematriController extends Controller
         return redirect()->route('rematri.posyandu.index')->with('toast_success', 'Rematri updated successfully.');
     }
 
-    public function getJurusan(Request $request)
-    {
-        $data['jurusan'] = Jurusan::with('kelas')->where("kelas_id", $request->kelas_id)
-            ->get();
-
-        return response()->json($data);
-    }
-
-    public function getDesa(Request $request)
-    {
-        $data['desa'] = Desa::where("kecamatan_id", $request->kecamatan_id)->get(["desa", "id"]);
-        return response()->json($data);
-    }
 
     public function destroy($id)
     {
         Rematri::find($id)->delete();
         return response()->json(['success' => 'Rematri deleted successfully.']);
     }
+
     public function hb(Request $request, $id)
     {
         $menu = 'Data HB Rematri';

@@ -146,10 +146,8 @@
         </ul>
     </li>
 @elseif (Auth::user()->role == 3)
-    <li
-        class="nav-item {{ request()->segment(1) == 'jurusan' || request()->segment(1) == 'kelas' ? 'menu-open' : '' }}">
-        <a href="#"
-            class="nav-link {{ request()->segment(1) == 'jurusan' || request()->segment(1) == 'kelas' ? 'active' : '' }}">
+    <li class="nav-item {{ request()->segment(1) == 'ruangan' ? 'menu-open' : '' }}">
+        <a href="#" class="nav-link {{ request()->segment(1) == 'ruangan' ? 'active' : '' }}">
             <i class="nav-icon fas fa-database"></i>
             <p>
                 Master data
@@ -158,29 +156,12 @@
         </a>
         <ul class="nav nav-treeview">
             <li class="nav-item">
-                <a href="{{ route('kelas.index') }}"
-                    class="nav-link {{ request()->segment(1) == 'kelas' ? 'active' : '' }}">
+                <a href="{{ route('ruangan.index') }}"
+                    class="nav-link {{ request()->segment(1) == 'ruangan' ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Kelas</p>
+                    <p>Ruangan</p>
                 </a>
             </li>
-            @if (Auth::user()->jenjang == 'SMA' || Auth::user()->jenjang == 'SMK')
-                <li class="nav-item">
-                    <a href="{{ route('jurusan.index') }}"
-                        class="nav-link {{ request()->segment(1) == 'jurusan' ? 'active' : '' }}">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Jurusan</p>
-                    </a>
-                </li>
-            @elseif (Auth::user()->jenjang == 'SMP')
-                <li class="nav-item">
-                    <a href="{{ route('jurusan.index') }}"
-                        class="nav-link {{ request()->segment(1) == 'jurusan' ? 'active' : '' }}">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Ruangan</p>
-                    </a>
-                </li>
-            @endif
         </ul>
     </li>
     <li

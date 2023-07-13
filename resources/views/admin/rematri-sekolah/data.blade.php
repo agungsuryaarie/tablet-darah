@@ -29,8 +29,9 @@
                                         <th style="width:10%">NIK</th>
                                         <th>Nama</th>
                                         <th style="width:10%">Tgl Lahir</th>
-                                        <th style="width:25%">Nama Ortu</th>
                                         <th style="width:5%">Kelas</th>
+                                        <th style="width:5%">Ruangan</th>
+                                        <th style="width:25%">Nama Ortu</th>
                                         <th class="text-center" style="width: 10%">Action</th>
                                     </tr>
                                 </thead>
@@ -112,13 +113,18 @@
                         name: "tgl_lahir",
                     },
                     {
-                        data: "nama_ortu",
-                        name: "nama_ortu",
-                    },
-                    {
                         data: "kelas",
                         name: "kelas",
                     },
+                    {
+                        data: "ruangan",
+                        name: "ruangan",
+                    },
+                    {
+                        data: "nama_ortu",
+                        name: "nama_ortu",
+                    },
+
                     {
                         data: "action",
                         name: "action",

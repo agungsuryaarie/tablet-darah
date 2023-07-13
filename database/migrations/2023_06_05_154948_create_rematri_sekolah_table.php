@@ -16,8 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('rematri_id');
             $table->unsignedBigInteger('puskesmas_id');
             $table->unsignedBigInteger('sekolah_id');
-            $table->string('jurusan_id')->nullable();
-            $table->string('kelas_id');
+            $table->string('kelas_id')->nullable();
+            $table->string('ruangan_id')->nullable();
             $table->timestamps();
 
             $table->foreign('rematri_id')->references('id')->on('rematri')->onDelete('cascade');

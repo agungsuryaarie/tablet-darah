@@ -6,8 +6,6 @@ use App\Http\Controllers\Admin\UserPuskesController;
 use App\Http\Controllers\Admin\UserSekolahController;
 use App\Http\Controllers\Admin\UserPosyanduController;
 use App\Http\Controllers\Admin\RematriController;
-use App\Http\Controllers\Admin\RematriPosyanduController;
-use App\Http\Controllers\Admin\StokObatController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\KabController;
 use App\Http\Controllers\Admin\KecController;
@@ -19,6 +17,7 @@ use App\Http\Controllers\Admin\PosyanduController;
 use App\Http\Controllers\Admin\SekolahController;
 use App\Http\Controllers\Admin\SekolahBinaanController;
 use App\Http\Controllers\Admin\PosyanduBinaanController;
+use App\Http\Controllers\Admin\RuanganController;
 use App\Http\Controllers\Admin\SesiController;
 use App\Http\Controllers\Admin\SesiPosyanduController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
@@ -135,23 +134,20 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
         Route::put('profile-sekolah/{user}/update-password', [UserSekolahController::class, 'updatepassword'])->name('profilsekolah.update.password');
         Route::put('profile-sekolah/{user}/update-foto', [UserSekolahController::class, 'updatefoto'])->name('profilsekolah.update.foto');
 
-        // Jurusan
-        Route::resource('jurusan', JurusanController::class)->middleware('checkDataKelas');
-        Route::post('jurusan/get-jurusan', [JurusanController::class, 'getJurusan']);
-
         // Kelas
         Route::resource('kelas', KelasController::class);
-        Route::post('kelas/get-kelas', [KelasController::class, 'getKelas']);
+
+        // Ruangan
+        Route::resource('ruangan', RuanganController::class);
+        Route::get('ruangan/get-ruangan', [RuanganController::class, 'getRuangan']);
 
         // Rematri
         Route::get('rematri', [RematriController::class, 'index'])->name('rematri.index');
-
-        Route::get('rematri-create', [RematriController::class, 'create'])->name('rematri.create')->middleware('checkDataKelas')->middleware('checkDataJurusan');
+        Route::get('rematri-create', [RematriController::class, 'create'])->name('rematri.create');
         Route::post('rematri/store', [RematriController::class, 'store'])->name('rematri.store');
         Route::get('rematri/edit/{rematri}', [RematriController::class, 'edit'])->name('rematri.edit');
         Route::post('rematri/update/{rematri}', [RematriController::class, 'update'])->name('rematri.update');
         Route::delete('rematri/{rematri}/destroy', [RematriController::class, 'destroy'])->name('rematri.destroy');
-        Route::post('rematri/get-jurusan', [RematriController::class, 'getJurusan']);
         Route::post('rematri/get-desa', [RematriController::class, 'getDesa']);
         Route::get('rematri/{rematri}/hb', [RematriController::class, 'hb'])->name('rematri.hb');
         Route::post('rematri/hb', [RematriController::class, 'storehb'])->name('hb.store');

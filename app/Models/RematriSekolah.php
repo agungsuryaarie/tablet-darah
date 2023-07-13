@@ -15,7 +15,7 @@ class RematriSekolah extends Model
         'rematri_id',
         'puskesmas_id',
         'sekolah_id',
-        'jurusan_id',
+        'ruangan_id',
         'kelas_id',
     ];
     public function rematri()
@@ -30,10 +30,12 @@ class RematriSekolah extends Model
     {
         return $this->belongsTo(Sekolah::class);
     }
-    public function jurusan()
+
+    public function ruangan()
     {
-        return $this->belongsTo(Jurusan::class);
+        return $this->belongsTo(Ruangan::class);
     }
+
     public function kelas()
     {
         return $this->belongsTo(Kelas::class);
