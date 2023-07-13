@@ -19,6 +19,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use Jenssegers\Agent\Agent;
+use Intervention\Image\Facades\Image;
 
 class SesiController extends Controller
 {
@@ -130,21 +131,22 @@ class SesiController extends Controller
     }
     public function upload(Request $request)
     {
-        $message = array(
-            'foto.images' => 'File harus image.',
-            'foto.mimes' => 'Foto harus jpeg,png,jpg.',
-            'foto,max' => 'File maksimal 5MB.',
-        );
-        $this->validate($request, [
-            'foto' => 'image|mimes:jpeg,png,jpg|max:5000'
-        ], $message);
-
         $agent = new Agent();
 
         if ($agent->isMobile()) {
             $img = $request->file('foto');
             $filename = $img->hashName();
-            $img->storeAs('public/foto-sesi/', $filename);
+            // Mengompresi ukuran file foto
+            $image = Image::make($img)
+                ->resize(800, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                }) // Mengubah ukuran gambar menjadi lebar 800px, dengan menjaga aspek rasio dan memperbesar jika perlu
+                ->encode('webp', 80);
+            // Menyimpan dalam format WebP dengan kualitas 80%
+
+            // Simpan foto yang sudah dikompresi
+            Storage::disk('public')->put('foto-sesi/' . $filename, (string)$image);
         } else {
             $imageData = $request->input('image');
             $imageData = str_replace('data:image/jpeg;base64,', '', $imageData);
@@ -153,9 +155,20 @@ class SesiController extends Controller
 
             $filename = time() . '_' . $request->sesi_id . $request->rematri_id . '.jpeg';
 
+            // Mengompresi ukuran file foto menggunakan Intervention Image
+            $image = Image::make($imageData)
+                ->resize(800, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                })
+                ->encode('jpg', 75); // Menyimpan dalam format JPG dengan kualitas 75%
+
             // Simpan gambar ke direktori yang diinginkan
             $imagePath = public_path('storage/foto-sesi/' . $filename);
-            file_put_contents($imagePath, $imageData);
+            $image->save($imagePath);
+
+            // Jika Anda juga ingin menyimpan gambar yang sudah dikompresi ke penyimpanan Laravel
+            Storage::disk('public')->put('foto-sesi/' . $filename, file_get_contents($imagePath));
         }
 
         SesiRematri::updateOrCreate(

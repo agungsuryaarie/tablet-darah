@@ -7,7 +7,14 @@
         <th class="text-center" style="width: 10%">Action</th>
     </x-datatable>
     <x-ajaxModel size="">
-        <x-input type="text" name="nama" label="Nama Kelas"></x-input>
+        <x-dropdown name="nama" label="Nama Kelas">
+            <option value="VII">VII</option>
+            <option value="VIII">VIII</option>
+            <option value="IX">IX</option>
+            <option value="X">X</option>
+            <option value="XII">XII</option>
+            <option value="XII">XII</option>
+        </x-dropdown>
     </x-ajaxModel>
     <x-delete></x-delete>
 @endsection

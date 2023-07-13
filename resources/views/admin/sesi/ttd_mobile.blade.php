@@ -23,10 +23,9 @@
                                         <div class="custom-file">
                                             <input type="file" accept="image/*" name="foto" class="custom-file-input"
                                                 capture="camera" id="image" required>
-                                            <label class="custom-file-label">Pilih File</label>
+                                            <label class="custom-file-label">Ambil Foto</label>
                                         </div>
                                     </div>
-                                    <small><i>*Foto maksimal 2MB dan berekstensi jpeg, jpg, png.</i></small>
                                 </div>
                                 <div class="col-md-4">
                                     <button type="submit" class="btn btn-primary" style="margin-top:10px"><i
@@ -40,8 +39,6 @@
     </section>
 @endsection
 @section('script')
-
-
     <script>
         $(document).ready(function(e) {
             $('#image').change(function() {

@@ -68,7 +68,8 @@
                     </div>
                     <div class="card-footer card-comments"
                         style="display: flex; justify-content: center; align-items: center;">
-                        <button class="btn btn-success" type="submit"><i class="fa fa-upload"></i> Upload</button>
+                        <button class="btn btn-success" id="upload-btn" type="submit" disabled><i class="fa fa-upload"></i>
+                            Upload</button>
                     </div>
                 </form>
             </div>
@@ -112,25 +113,17 @@
 
         // Mengambil foto dari video saat tombol "Capture" diklik
         captureBtn.addEventListener('click', () => {
+            const uploadBtn = document.getElementById('upload-btn');
             const context = canvas.getContext('2d');
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
             // Mengambil data gambar dalam format base64
             const imageData = canvas.toDataURL('image/jpeg');
             imageDataInput.value = imageData;
+
+            // Mengaktifkan tombol upload setelah gambar di-snapshot
+            uploadBtn.disabled = false;
         });
-
-        function previewImg() {
-            const foto = document.querySelector('#foto');
-            const img = document.querySelector('.img-preview');
-
-            const fileFoto = new FileReader();
-            fileFoto.readAsDataURL(foto.files[0]);
-
-            fileFoto.onload = function(e) {
-                img.src = e.target.result;
-            }
-        }
         $(function() {
             bsCustomFileInput.init();
         });
