@@ -15,6 +15,7 @@ class KelasController extends Controller
     public function index(Request $request)
     {
         $menu = 'Kelas';
+        $kelas = Kelas::where('sekolah_id', Auth::user()->sekolah_id)->first();
         if ($request->ajax()) {
             $data = Kelas::where('sekolah_id', Auth::user()->sekolah_id)->latest()->get();
             return Datatables::of($data)
@@ -22,7 +23,7 @@ class KelasController extends Controller
                 ->make(true);
         }
 
-        return view('admin.kelas.data', compact('menu'));
+        return view('admin.kelas.data', compact('menu', 'kelas'));
     }
 
     public function store(Request $request)

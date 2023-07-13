@@ -16,4 +16,8 @@ class Jurusan extends Model
     {
         return $this->belongsTo(Kelas::class);
     }
+    public function isFilled()
+    {
+        return !empty($this->kelas_id) && !empty($this->ruangan);
+    }
 }

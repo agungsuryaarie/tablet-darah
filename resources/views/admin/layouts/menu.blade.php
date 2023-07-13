@@ -164,7 +164,7 @@
                     <p>Kelas</p>
                 </a>
             </li>
-            @if (Auth::user()->jenjang == 'SMA' or Auth::user()->jenjang == 'SMK')
+            @if (Auth::user()->jenjang == 'SMA' || Auth::user()->jenjang == 'SMK')
                 <li class="nav-item">
                     <a href="{{ route('jurusan.index') }}"
                         class="nav-link {{ request()->segment(1) == 'jurusan' ? 'active' : '' }}">

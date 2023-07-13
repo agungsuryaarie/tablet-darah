@@ -30,4 +30,8 @@ class Kelas extends Model
     {
         return $this->belongsTo(Sesi::class);
     }
+    public function isFilled()
+    {
+        return !empty($this->nama);
+    }
 }

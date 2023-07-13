@@ -136,7 +136,7 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
         Route::put('profile-sekolah/{user}/update-foto', [UserSekolahController::class, 'updatefoto'])->name('profilsekolah.update.foto');
 
         // Jurusan
-        Route::resource('jurusan', JurusanController::class);
+        Route::resource('jurusan', JurusanController::class)->middleware('checkDataKelas');
         Route::post('jurusan/get-jurusan', [JurusanController::class, 'getJurusan']);
 
         // Kelas
@@ -146,7 +146,7 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
         // Rematri
         Route::get('rematri', [RematriController::class, 'index'])->name('rematri.index');
 
-        Route::get('rematri-create', [RematriController::class, 'create'])->name('rematri.create');
+        Route::get('rematri-create', [RematriController::class, 'create'])->name('rematri.create')->middleware('checkDataKelas')->middleware('checkDataJurusan');
         Route::post('rematri/store', [RematriController::class, 'store'])->name('rematri.store');
         Route::get('rematri/edit/{rematri}', [RematriController::class, 'edit'])->name('rematri.edit');
         Route::post('rematri/update/{rematri}', [RematriController::class, 'update'])->name('rematri.update');

@@ -22,6 +22,7 @@ class JurusanController extends Controller
         }
 
         $kelas = Kelas::where('sekolah_id', $auth->sekolah_id)->get();
+        $jurusan = Jurusan::where('sekolah_id', Auth::user()->sekolah_id)->first();
         if ($request->ajax()) {
             $data = Jurusan::where('sekolah_id', $auth->sekolah_id)->latest()->get();
             return Datatables::of($data)
@@ -29,16 +30,16 @@ class JurusanController extends Controller
                 ->addColumn('kelas', function ($data) {
                     return $data->kelas->nama;
                 })
-                ->addColumn('action', function ($row) {
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs"><i class="fas fa-edit"></i></a>';
-                    $btn = '<center>' . $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-xs delete"><i class="fas fa-trash"></i></a><center>';
-                    return $btn;
-                })
-                ->rawColumns(['action'])
+                // ->addColumn('action', function ($row) {
+                //     $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs"><i class="fas fa-edit"></i></a>';
+                //     $btn = '<center>' . $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-xs delete"><i class="fas fa-trash"></i></a><center>';
+                //     return $btn;
+                // })
+                // ->rawColumns(['action'])
                 ->make(true);
         }
 
-        return view('admin.jurusan.data', compact('menu', 'kelas'));
+        return view('admin.jurusan.data', compact('menu', 'kelas', 'jurusan'));
     }
 
     public function store(Request $request)
@@ -75,7 +76,11 @@ class JurusanController extends Controller
                 'ruangan' => $request->ruangan,
             ]
         );
-        return response()->json(['success' => 'Jurusan saved successfully.']);
+        if (Auth::user()->jenjang == 'SMA' or Auth::user()->jenjang == 'SMK') {
+            return response()->json(['success' => 'Jurusan saved successfully.']);
+        } else {
+            return response()->json(['success' => 'Ruangan saved successfully.']);
+        }
     }
 
     public function edit($id)

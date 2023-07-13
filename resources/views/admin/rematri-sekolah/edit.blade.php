@@ -180,6 +180,20 @@
                                             </select>
                                         </div>
                                     </div>
+                                @elseif (Auth::user()->jenjang == 'SMP')
+                                    <div class="form-group row">
+                                        <label for="text" class="col-sm-2 col-form-label">Ruangan</label>
+                                        <div class="col-sm-4">
+                                            <select class="form-control select2 select2bs4" name="jurusan_id"
+                                                id="jurusan_id" style="width: 100%;">
+                                                <option value="{{ $data->jurusan_id }}">
+                                                    @if ($data->jurusan_id != null)
+                                                        {{ $data->jurusan->ruangan }}
+                                                    @endif
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 @endif
                                 <div class="form-group row">
                                     <label for="text" class="col-sm-2 col-form-label">Berat Badan (kg)<span
@@ -326,12 +340,20 @@
                 },
                 dataType: 'json',
                 success: function(result) {
-                    $('#jurusan_id').html('<option value="">:::Pilih Jurusan:::</option>');
-                    $.each(result.jurusan, function(key, value) {
-                        $("#jurusan_id").append('<option value="' + value
-                            .id + '">' + value.kelas.nama + " " + value.nama + " " +
-                            value.ruangan + '</option>');
-                    });
+                    @if (Auth::user()->jenjang == 'SMP')
+                        $('#jurusan_id').html('<option value="">:::Pilih Ruangan:::</option>');
+                        $.each(result.jurusan, function(key, value) {
+                            $("#jurusan_id").append('<option value="' + value
+                                .id + '">' + value.ruangan + '</option>');
+                        });
+                    @else
+                        $('#jurusan_id').html('<option value="">:::Pilih Jurusan:::</option>');
+                        $.each(result.jurusan, function(key, value) {
+                            $("#jurusan_id").append('<option value="' + value
+                                .id + '">' + value.kelas.nama + " " + value.nama + " " +
+                                value.ruangan + '</option>');
+                        });
+                    @endif
                 }
             });
         });
