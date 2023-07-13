@@ -25,8 +25,8 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h6 class="float-left"><i class="fas fa-info-circle"></i> Sesi otomatis berakhir 1 minggu
-                                setelah sesi dibuat.
+                            <h6 class="float-left"><i class="fas fa-info-circle"></i> Sesi otomatis berakhir di akhir
+                                minggu.
                             </h6>
                             <button href="javascript:void(0)" id="createNewSesi" class="btn btn-info btn-xs float-right">
                                 <i class="fas fa-plus-circle"></i> Tambah</button>
@@ -37,7 +37,7 @@
                                     @foreach ($sesi as $item)
                                         <div class="col-sm-4 mb-3">
                                             @php
-                                                $createdDate = \Carbon\Carbon::parse($item->created_at)->addWeek();
+                                                $createdDate = \Carbon\Carbon::parse($item->created_at)->endOfWeek();
                                                 $today = \Carbon\Carbon::now();
                                             @endphp
                                             @if ($today->lessThan($createdDate))
@@ -164,7 +164,8 @@
                     <h6><i class="fa fa-info-circle text-danger"></i> Mohon Perhatian</h6>
                     <hr>
                     <p style="text-align: justify">Untuk mengurangi kesalahan pada sesi, pastikan <b>DATA REMATRI</b>
-                        sudah terinput semua berdasarkan kelas masing-masing. Jika <b>DATA REMATRI</b> tidak tersedia tombol
+                        sudah terinput semua berdasarkan kelas dan ruangan masing-masing. Jika <b>DATA REMATRI</b> tidak
+                        tersedia tombol
                         <button class="btn btn-info btn-xs" disabled><i class="fas fa-plus-circle"></i> Tambah</button>
                         tidak akan aktif. Ketika membuat sesi, sistem hanya menyingkronisasikan
                         <b>DATA REMATRI</b> yang saat ini tersedia. Jika sesi telah dibuat dan admin sekolah baru saja
@@ -291,7 +292,8 @@
             var targetDate = new Date(item.created_at);
 
             // Tambahkan 7 hari ke tanggal target
-            targetDate.setDate(targetDate.getDate() + 7);
+            targetDate = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate() + (6 -
+                targetDate.getDay()));
 
             // Hitung selisih waktu antara tanggal target dan tanggal saat ini
             var timeDiff = targetDate.getTime() - new Date().getTime();
