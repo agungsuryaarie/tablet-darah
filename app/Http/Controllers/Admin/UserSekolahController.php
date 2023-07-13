@@ -90,7 +90,7 @@ class UserSekolahController extends Controller
     }
     public function store(Request $request)
     {
-        // dd($request->all());
+
         //Translate Bahasa Indonesia
         $message = array(
             'sekolah_id.required' => 'Sekolah harus dipilih.',
@@ -152,7 +152,8 @@ class UserSekolahController extends Controller
             return response()->json(['errors' => $validator->errors()->all()]);
         }
 
-        $jenjang = Sekolah::where('id', $request->sekolah_id)->get('jenjang');
+        $jenjang = Sekolah::where('id', $request->sekolah_id)->first();
+
         UserSekolah::updateOrCreate(
             [
                 'id' => $request->hidden_id
@@ -161,7 +162,7 @@ class UserSekolahController extends Controller
                 'kecamatan_id' => Auth::user()->kecamatan_id,
                 'puskesmas_id' => Auth::user()->puskesmas_id,
                 'sekolah_id' => $request->sekolah_id,
-                'jenjang' =>  $jenjang,
+                'jenjang' =>  $jenjang->jenjang,
                 'nik' => $request->nik,
                 'nama' => $request->nama,
                 'nohp' => $request->nohp,
