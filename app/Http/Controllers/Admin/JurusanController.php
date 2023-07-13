@@ -14,10 +14,16 @@ class JurusanController extends Controller
 {
     public function index(Request $request)
     {
-        $menu = 'Jurusan';
-        $kelas = Kelas::where('sekolah_id', Auth::user()->sekolah_id)->get();
+        $auth = Auth::user();
+        if ($auth->jenjang == "SMP") {
+            $menu = 'Ruangan';
+        } else {
+            $menu = 'Jurusan';
+        }
+
+        $kelas = Kelas::where('sekolah_id', $auth->sekolah_id)->get();
         if ($request->ajax()) {
-            $data = Jurusan::where('sekolah_id', Auth::user()->sekolah_id)->latest()->get();
+            $data = Jurusan::where('sekolah_id', $auth->sekolah_id)->latest()->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('kelas', function ($data) {
@@ -43,8 +49,14 @@ class JurusanController extends Controller
             'kelas_id.required' => 'Kelas harus dipilih.',
             'ruangan.required' => 'Ruangan harus diisi.',
         );
+
+        if (Auth::user()->jenjang == "SMP") {
+            $nama = 'null';
+        } else {
+            $nama = 'required';
+        }
         $validator = Validator::make($request->all(), [
-            'nama' => 'required',
+            'nama' => $nama,
             'kelas_id' => 'required',
             'ruangan' => 'required',
         ], $message);

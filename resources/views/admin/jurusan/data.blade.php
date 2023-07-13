@@ -14,8 +14,13 @@
                 <option value="{{ $data->id }}">{{ $data->nama }}</option>
             @endforeach
         </x-dropdown>
-        <x-input type="text" name="nama" label="Nama Jurusan"></x-input>
-        <x-input type="text" name="ruangan" label="Ruangan"></x-input>
+        @if (Auth::user()->jenjang == 'SMP')
+            <x-input type="text" name="ruangan" label="Ruangan"></x-input>
+        @else
+            <x-input type="text" name="nama" label="Nama Jurusan"></x-input>
+            <x-input type="text" name="ruangan" label="Ruangan"></x-input>
+        @endif
+
     </x-ajaxModel>
     <x-delete></x-delete>
 @endsection

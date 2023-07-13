@@ -164,6 +164,15 @@
                     <p>Kelas</p>
                 </a>
             </li>
+            @if (Auth::user()->jenjang == 'SMP')
+                <li class="nav-item">
+                    <a href="{{ route('jurusan.index') }}"
+                        class="nav-link {{ request()->segment(1) == 'jurusan' ? 'active' : '' }}">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Ruangan</p>
+                    </a>
+                </li>
+            @endif
             @if (Auth::user()->jenjang == 'SMA' or Auth::user()->jenjang == 'SMK')
                 <li class="nav-item">
                     <a href="{{ route('jurusan.index') }}"
