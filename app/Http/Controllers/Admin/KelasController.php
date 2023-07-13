@@ -33,7 +33,7 @@ class KelasController extends Controller
             'nama.unique' => 'Nama Kelas sudah ada.',
         );
         $validator = Validator::make($request->all(), [
-            'nama' => 'required|unique:kelas,nama',
+            'nama' => 'required|unique:kelas,nama,NULL,id,sekolah_id,' . Auth::user()->sekolah_id,
         ], $message);
 
         if ($validator->fails()) {

@@ -10,9 +10,11 @@
             <option value="VII">Kelas VII</option>
             <option value="VIII">Kelas VIII</option>
             <option value="IX">Kelas IX</option>
-            <option value="X">Kelas X</option>
-            <option value="XI">Kelas XI</option>
-            <option value="XII">Kelas XII</option>
+            @if (Auth::user()->jenjang == 'SMA' or Auth::user()->jenjang == 'SMK')
+                <option value="X">Kelas X</option>
+                <option value="XI">Kelas XI</option>
+                <option value="XII">Kelas XII</option>
+            @endif
         </x-dropdown>
     </x-ajaxModel>
     <x-delete></x-delete>
