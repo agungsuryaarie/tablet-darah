@@ -3,7 +3,10 @@
     <x-header menu="{{ $menu }}"></x-header>
     <x-datatable link="javascript:void(0)" label="Tambah">
         <th style="width:5%">No</th>
-        <th>Jurusan</th>
+        @if (Auth::user()->jenjang == 'SMP')
+        @else
+            <th>Jurusan</th>
+        @endif
         <th style="width: 8%">Kelas</th>
         <th style="width: 5%">Ruangan</th>
         <th class="text-center" style="width: 10%">Action</th>
@@ -37,10 +40,14 @@
                     data: "DT_RowIndex",
                     name: "DT_RowIndex",
                 },
-                {
-                    data: "nama",
-                    name: "nama",
-                },
+                @if (Auth::user()->jenjang == 'SMP')
+                @else
+                    {
+                        data: "nama",
+                        name: "nama",
+                    },
+                @endif
+
                 {
                     data: "kelas",
                     name: "kelas",
