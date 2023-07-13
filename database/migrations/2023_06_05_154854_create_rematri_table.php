@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('nokk');
             $table->string('nik')->unique();
             $table->string('nama');
-            $table->string('nohp');
-            $table->string('email')->unique();
+            $table->string('nohp')->nullable();
+            $table->string('email')->nullable();
             $table->string('tempat_lahir');
             $table->string('tgl_lahir');
             $table->integer('anak_ke');
@@ -28,7 +28,7 @@ return new class extends Migration
             $table->string('agama');
             $table->string('nama_ortu');
             $table->string('nik_ortu');
-            $table->string('tlp_ortu');
+            $table->string('tlp_ortu')->nullable();
             $table->string('alamat');
             $table->timestamps();
 

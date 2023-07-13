@@ -136,10 +136,11 @@
                                             id="agama" name="agama" style="width: 100%;">
                                             <option value="">:::Pilih Agama:::</option>
                                             <option value="1" @selected($data->rematri->agama == '1')>Islam</option>
-                                            <option value="2" @selected($data->rematri->agama == '2')>Kristen </option>
+                                            <option value="2" @selected($data->rematri->agama == '2')>Kristen</option>
                                             <option value="3" @selected($data->rematri->agama == '3')>Hindu</option>
                                             <option value="4" @selected($data->rematri->agama == '4')>Buddha</option>
                                             <option value="5" @selected($data->rematri->agama == '5')>Khonghucu</option>
+                                            <option value="6" @selected($data->rematri->agama == '6')>Katolik</option>
                                         </select>
                                         @error('agama')
                                             <span class="text-danger">{{ $message }}</span>

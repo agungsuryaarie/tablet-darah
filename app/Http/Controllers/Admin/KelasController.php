@@ -19,12 +19,6 @@ class KelasController extends Controller
             $data = Kelas::where('sekolah_id', Auth::user()->sekolah_id)->latest()->get();
             return Datatables::of($data)
                 ->addIndexColumn()
-                ->addColumn('action', function ($row) {
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs"><i class="fas fa-edit"></i></a>';
-                    $btn = '<center>' . $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-xs delete"><i class="fas fa-trash"></i></a><center>';
-                    return $btn;
-                })
-                ->rawColumns(['action'])
                 ->make(true);
         }
 
@@ -36,9 +30,10 @@ class KelasController extends Controller
         //Translate Bahasa Indonesia
         $message = array(
             'nama.required' => 'Nama Kelas harus diisi.',
+            'nama.unique' => 'Nama Kelas sudah ada.',
         );
         $validator = Validator::make($request->all(), [
-            'nama' => 'required',
+            'nama' => 'required|unique:kelas,nama',
         ], $message);
 
         if ($validator->fails()) {
@@ -53,13 +48,7 @@ class KelasController extends Controller
                 'nama' => $request->nama,
             ]
         );
-        return response()->json(['success' => 'Desa saved successfully.']);
-    }
-
-    public function edit($id)
-    {
-        $kelas = Kelas::find($id);
-        return response()->json($kelas);
+        return response()->json(['success' => 'Kelas saved successfully.']);
     }
 
     public function destroy($id)

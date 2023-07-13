@@ -4,16 +4,15 @@
     <x-datatable link="javascript:void(0)" label="Tambah">
         <th style="width:5%">No</th>
         <th>Kelas</th>
-        <th class="text-center" style="width: 10%">Action</th>
     </x-datatable>
     <x-ajaxModel size="">
         <x-dropdown name="nama" label="Nama Kelas">
-            <option value="VII">VII</option>
-            <option value="VIII">VIII</option>
-            <option value="IX">IX</option>
-            <option value="X">X</option>
-            <option value="XII">XII</option>
-            <option value="XII">XII</option>
+            <option value="VII">Kelas VII</option>
+            <option value="VIII">Kelas VIII</option>
+            <option value="IX">Kelas IX</option>
+            <option value="X">Kelas X</option>
+            <option value="XI">Kelas XI</option>
+            <option value="XII">Kelas XII</option>
         </x-dropdown>
     </x-ajaxModel>
     <x-delete></x-delete>
@@ -35,12 +34,6 @@
                     data: "nama",
                     name: "nama",
                 },
-                {
-                    data: "action",
-                    name: "action",
-                    orderable: false,
-                    searchable: false,
-                },
             ]);
 
             // Create
@@ -48,19 +41,19 @@
             createModel(createHeading)
 
             // Edit
-            var editUrl = "{{ route('kelas.index') }}";
-            var editHeading = "Edit Kelas";
-            var field = ['nama', ]; // disesuaikan dengan data yang ingin di tampilkan
-            editModel(editUrl, editHeading, field)
+            // var editUrl = "{{ route('kelas.index') }}";
+            // var editHeading = "Edit Kelas";
+            // var field = ['nama', ]; // disesuaikan dengan data yang ingin di tampilkan
+            // editModel(editUrl, editHeading, field)
 
             // Save
             saveBtn("{{ route('kelas.store') }}", myTable);
 
             // Delete
-            var fitur = "Kelas";
-            var editUrl = "{{ route('kelas.index') }}";
-            var deleteUrl = "{{ route('kelas.store') }}";
-            Delete(fitur, editUrl, deleteUrl, myTable)
+            // var fitur = "Kelas";
+            // var editUrl = "{{ route('kelas.index') }}";
+            // var deleteUrl = "{{ route('kelas.store') }}";
+            // Delete(fitur, editUrl, deleteUrl, myTable)
 
         });
     </script>

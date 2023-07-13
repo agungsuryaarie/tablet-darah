@@ -141,6 +141,8 @@
                                             </option>
                                             <option value="5" {{ old('agama') == '5' ? 'selected' : '' }}>Khonghucu
                                             </option>
+                                            <option value="6" {{ old('agama') == '6' ? 'selected' : '' }}>Katolik
+                                            </option>
                                         </select>
                                         @error('agama')
                                             <span class="text-danger">{{ $message }}</span>
