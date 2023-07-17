@@ -1,21 +1,21 @@
 @extends('admin.layouts.app')
 @section('content')
     <x-header menu="{{ $menu }}"></x-header>
-    {{-- @if (!$kelas || !$kelas->isFilled())
+    @if (!$ruangan || !$ruangan->isFilled())
         <div class="col-md-6 mx-auto">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="text-center text-danger font-weight-bold">Silahkan tambah kelas yang ada di
-                        sekolah {{ Auth::user()->sekolah->sekolah }}
+                    <h5 class="text-center text-danger font-weight-bold">SILAHKAN TAMBAHKAN RUANGAN PADA SEKOLAH
+                        {{ Auth::user()->sekolah->sekolah }} TERLEBIH DAHULU.
                     </h5>
                 </div>
             </div>
         </div>
-    @endif --}}
+    @endif
     <x-datatable link="javascript:void(0)" label="Tambah">
         <th style="width:5%">No</th>
         <th>Kelas</th>
-        <th>Ruangan</th>
+        <th style="width:8%">Ruangan</th>
     </x-datatable>
     <x-ajaxModel size="">
         <x-dropdown name="kelas_id" label="Kelas">

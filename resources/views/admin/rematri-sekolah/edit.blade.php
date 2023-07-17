@@ -172,7 +172,7 @@
                                         <select class="form-control" name="ruangan_id" id="ruangan_id"
                                             style="width: 100%;">
                                             <option value="{{ $data->ruangan }}">
-                                                {{ $data->ruangan->nama ?? '' }}
+                                                {{ $data->ruangan->name ?? '' }}
                                             </option>
                                         </select>
                                     </div>

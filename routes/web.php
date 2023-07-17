@@ -42,6 +42,9 @@ Route::controller(AuthController::class)->group(function () {
 
 Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']], function () {
     // Dashboard
+    // API DESA
+    Route::post('desa/get-desa', [DesaController::class, 'getDesa']);
+
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('puskesmas/rematri/count', [DashboardController::class, 'puskesmas'])->name('puskesmas.rematri.count');
     Route::group(['middleware' => ['checkUser:1']], function () {
@@ -55,7 +58,6 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
 
         // Desa/Kelurahan
         Route::resource('desa', DesaController::class);
-        Route::post('desa/get-desa', [DesaController::class, 'getDesa']);
 
         // Puskesmas
         Route::resource('puskesmas', PuskesController::class);
@@ -139,11 +141,11 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
 
         // Ruangan
         Route::resource('ruangan', RuanganController::class);
-        Route::get('ruangan/get-ruangan', [RuanganController::class, 'getRuangan']);
+        Route::post('ruangan/get-ruangan', [RuanganController::class, 'getRuangan']);
 
         // Rematri
         Route::get('rematri', [RematriController::class, 'index'])->name('rematri.index');
-        Route::get('rematri-create', [RematriController::class, 'create'])->name('rematri.create');
+        Route::get('rematri-create', [RematriController::class, 'create'])->name('rematri.create')->middleware('checkDataRuangan');
         Route::post('rematri/store', [RematriController::class, 'store'])->name('rematri.store');
         Route::get('rematri/edit/{rematri}', [RematriController::class, 'edit'])->name('rematri.edit');
         Route::post('rematri/update/{rematri}', [RematriController::class, 'update'])->name('rematri.update');

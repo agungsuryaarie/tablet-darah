@@ -171,10 +171,13 @@
                                 <div class="form-group row">
                                     <label for="text" class="col-sm-2 col-form-label">Ruangan</label>
                                     <div class="col-sm-4">
-                                        <select class="form-control" name="ruangan_id" id="ruangan_id"
-                                            style="width: 100%;">
-
+                                        <select
+                                            class="form-control select2 select2bs4 @error('ruangan_id') is-invalid @enderror"
+                                            name="ruangan_id" id="ruangan_id" style="width: 100%;">
                                         </select>
+                                        @error('ruangan')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -311,16 +314,21 @@
             $("#ruangan_id").html('');
             $.ajax({
                 url: "{{ url('ruangan/get-ruangan') }}",
-                type: 'GET',
+                type: "POST",
                 data: {
-                    kelas_id: idKelas
+                    kelas_id: idKelas,
+                    _token: '{{ csrf_token() }}'
                 },
                 success: function(result) {
-                    $('#ruangan_id').html('<option value="">:::Pilih Ruangan:::</option>');
-                    $.each(result, function(key, value) {
-                        $("#ruangan_id").append('<option value="' + value
-                            .id + '">' + value.nama + '</option>');
-                    });
+                    if (result.length == 0) {
+                        $('#ruangan_id').html('<option value="">:::Tidak ada ruangan:::</option>');
+                    } else {
+                        $('#ruangan_id').html('<option value="">:::Pilih Ruangan:::</option>');
+                        $.each(result, function(key, value) {
+                            $("#ruangan_id").append('<option value="' + value
+                                .id + '">' + value.name + '</option>');
+                        });
+                    }
                 }
             });
         });
@@ -329,7 +337,7 @@
             var idKecamatan = this.value;
             $("#desa_id").html('');
             $.ajax({
-                url: "{{ url('rematri/get-desa') }}",
+                url: "{{ url('desa/get-desa') }}",
                 type: "POST",
                 data: {
                     kecamatan_id: idKecamatan,
@@ -337,11 +345,18 @@
                 },
                 dataType: 'json',
                 success: function(result) {
-                    $('#desa_id').html('<option value="">:::Pilih Desa/Kelurahan:::</option>');
-                    $.each(result.desa, function(key, value) {
-                        $("#desa_id").append('<option value="' + value
-                            .id + '">' + value.desa + '</option>');
-                    });
+                    if (result == "") {
+                        $('#desa_id').html(
+                            '<option value="">----Data Desa Kosong----</option>'
+                        );
+                    } else {
+                        $('#desa_id').html(
+                            '<option value="">:::Pilih Desa/Kelurahan:::</option>');
+                        $.each(result, function(key, value) {
+                            $("#desa_id").append('<option value="' + value
+                                .id + '">' + value.desa + '</option>');
+                        });
+                    }
                 }
             });
         });

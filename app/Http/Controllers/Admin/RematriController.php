@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Desa;
 use App\Models\Rematri;
 use App\Models\Kecamatan;
 use App\Models\HB;
@@ -36,10 +37,10 @@ class RematriController extends Controller
                         return $data->rematri->nama;
                     })
                     ->addColumn('kelas', function ($data) {
-                        return $data->kelas->nama ?? null;
+                        return '<center>' . $data->kelas->nama ?? null . '</center>';
                     })
                     ->addColumn('ruangan', function ($data) {
-                        return $data->ruangan->nama ?? null;
+                        return '<center>' . $data->ruangan->name ?? null . '</center>';
                     })
                     ->addColumn('tgl_lahir', function ($data) {
                         return $data->rematri->tgl_lahir;
@@ -53,7 +54,7 @@ class RematriController extends Controller
                         $btn = '<center>' . $btn . '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . Crypt::encryptString($row->id) . '" data-original-title="History HB" class="btn btn-warning btn-xs text-white hbRematri"><i class="fas fa-plus-circle"></i></a><center>';
                         return $btn;
                     })
-                    ->rawColumns(['kecamatan', 'action'])
+                    ->rawColumns(['kelas', 'ruangan', 'kecamatan', 'action'])
                     ->make(true);
             }
             return view('admin.rematri-sekolah.data', compact('menu'));
