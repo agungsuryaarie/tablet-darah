@@ -39,6 +39,7 @@ class KecController extends Controller
 
         return view('admin.kecamatan.data', compact('menu', 'kabupaten'));
     }
+    
     public function store(Request $request)
     {
         //Translate Bahasa Indonesia
