@@ -16,6 +16,19 @@
             </div>
         </div>
     </section>
+    @if (!$rematri || !$rematri->isFilled())
+        <div class="col-md-12 mx-auto">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="text-center text-danger font-weight-bold"><i class="fa fa-info-circle"></i> UNTUK MEMULAI
+                        SESI,
+                        SILAHKAN TAMBAHKAN REMATRI
+                        TERLEBIH DAHULU
+                    </h6>
+                </div>
+            </div>
+        </div>
+    @endif
     <section class="content">
         <div class="container-fluid">
             <div class="row">
@@ -291,6 +304,7 @@
                             <!-- /.card-body -->
                             <div class="card-footer">
                                 <button type="submit" class="btn btn-info">Simpan</button>
+                                <a href="{{ route('rematri.index') }}" class="btn btn-default">Batal</a>
                             </div>
                             <!-- /.card-footer -->
                         </form>
@@ -326,7 +340,7 @@
                         $('#ruangan_id').html('<option value="">:::Pilih Ruangan:::</option>');
                         $.each(result, function(key, value) {
                             $("#ruangan_id").append('<option value="' + value
-                                .id + '">' + value.name + '</option>');
+                                .id + '">Ruangan - ' + value.name + '</option>');
                         });
                     }
                 }

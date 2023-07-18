@@ -2,12 +2,13 @@
 @section('content')
     <x-header menu="{{ $menu }}"></x-header>
     @if (!$ruangan || !$ruangan->isFilled())
-        <div class="col-md-6 mx-auto">
+        <div class="col-md-12 mx-auto">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="text-center text-danger font-weight-bold">SILAHKAN TAMBAHKAN RUANGAN PADA SEKOLAH
-                        {{ Auth::user()->sekolah->sekolah }} TERLEBIH DAHULU.
-                    </h5>
+                    <h6 class="text-center text-danger font-weight-bold"><i class="fa fa-info-circle"></i>UNTUK MENAMBAHKAN
+                        REMATRI, SILAHKAN TAMBAHKAN
+                        RUANGAN TERLEBIH DAHULU.
+                    </h6>
                 </div>
             </div>
         </div>

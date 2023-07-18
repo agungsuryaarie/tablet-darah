@@ -19,7 +19,7 @@ class RuanganController extends Controller
         $kelas = Kelas::where('jenjang', $auth->jenjang)->get();
         $ruangan = Ruangan::where('sekolah_id', $auth->sekolah_id)->first();
         if ($request->ajax()) {
-            $data = Ruangan::where('sekolah_id', $auth->sekolah_id)->latest()->get();
+            $data = Ruangan::where('sekolah_id', $auth->sekolah_id)->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('kelas', function ($data) {
@@ -88,6 +88,11 @@ class RuanganController extends Controller
     public function getRuangan(Request $request)
     {
         $data = Ruangan::where("sekolah_id", Auth::user()->sekolah_id)->where("kelas_id", $request->kelas_id)->get(["name", "id"]);
+        return response()->json($data);
+    }
+    public function getRuanganSesi(Request $request)
+    {
+        $data = Ruangan::where("sekolah_id", Auth::user()->sekolah_id)->get(["name", "id"]);
         return response()->json($data);
     }
 }

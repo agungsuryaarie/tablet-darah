@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Kelas;
 use App\Models\Rematri;
 use App\Models\RematriSekolah;
 use App\Models\Sesi;
 use App\Models\SesiRematri;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -26,26 +28,43 @@ class SesiController extends Controller
     public function index()
     {
         $menu = 'Sesi';
+        $kelas = Kelas::where('jenjang', Auth::user()->jenjang)->get();
         $sesi = Sesi::where('sekolah_id', Auth::user()->sekolah_id)->latest()->get();
-        return view('admin.sesi.data', compact('menu', 'sesi'));
+        return view('admin.sesi.data', compact('menu', 'sesi', 'kelas'));
     }
 
     public function store(Request $request)
     {
         //Translate Bahasa Indonesia
         $message = array(
-            'nama.required' => 'Nama Sesi harus diisi.',
             'kelas_id.required' => 'Kelas harus dipilih.',
+            'ruangan_id.required' => 'Ruangan harus dipilih.',
         );
         $validator = Validator::make($request->all(), [
-            'nama' => 'required',
             'kelas_id' => 'required',
+            'ruangan_id' => 'required',
         ], $message);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()->all()]);
         }
 
+        $rematri = RematriSekolah::where('ruangan_id', $request->ruangan_id)->get();
+        // Memeriksa apakah ada data rematri
+        if ($rematri->isEmpty()) {
+            // Jika tidak ada data rematri, tampilkan notifikasi
+            return response()->json(['errors' => ['Rematri pada Ruangan ini tidak ditemukan.']]);
+        }
+        // Memeriksa apakah kombinasi kelas dan ruangan sudah ada dalam tabel Sesi
+        $namaSesi = 'Minggu ke - ' . Carbon::now()->weekOfMonth . ' Bulan ' . Carbon::now()->isoFormat('MMMM');
+        $sesiExists = Sesi::where('kelas_id', $request->kelas_id)
+            ->where('ruangan_id', $request->ruangan_id)
+            ->where('nama', $namaSesi)
+            ->exists();
+        if ($sesiExists) {
+            // Jika kombinasi kelas dan ruangan sudah ada, tampilkan notifikasi
+            return response()->json(['errors' => ['Kelas dan Ruangan sudah ada pada Sesi yang sama.']]);
+        }
         Sesi::updateOrCreate(
             [
                 'id' => $request->sesi_id
@@ -54,12 +73,12 @@ class SesiController extends Controller
                 'kecamatan_id' => Auth::user()->kecamatan_id,
                 'puskesmas_id' => Auth::user()->puskesmas_id,
                 'sekolah_id' => Auth::user()->sekolah_id,
-                'nama' => $request->nama,
-                'jurusan_id' => $request->jurusan_id,
+                'ruangan_id' => $request->ruangan_id,
                 'kelas_id' => $request->kelas_id,
+                'nama' => $namaSesi,
             ]
         );
-        $rematri = RematriSekolah::where('kelas_id', $request->kelas_id)->get();
+        $rematri = RematriSekolah::where('ruangan_id', $request->ruangan_id)->get();
         $sesiid  = Sesi::orderBy('id', 'DESC')->first();
         // fecth rematri
         foreach ($rematri as $r) {
@@ -68,6 +87,7 @@ class SesiController extends Controller
             SesiRematri::create(
                 [
                     'sesi_id' => $sesiid->id,
+                    'ruangan_id' => $sesiid->ruangan_id,
                     'kelas_id' => $sesiid->kelas_id,
                     'rematri_id' => $id_rematri,
                 ]
@@ -75,8 +95,6 @@ class SesiController extends Controller
         }
         return response()->json(['success' => 'Sesi saved successfully.']);
     }
-
-
     public function rematri(Request $request, $id)
     {
         $menu = 'Sesi';
@@ -142,8 +160,7 @@ class SesiController extends Controller
                     $constraint->aspectRatio();
                     $constraint->upsize();
                 }) // Mengubah ukuran gambar menjadi lebar 800px, dengan menjaga aspek rasio dan memperbesar jika perlu
-                ->encode('webp', 80);
-            // Menyimpan dalam format WebP dengan kualitas 80%
+                ->encode('jpg', 75); // Menyimpan dalam format JPG dengan kualitas 75%
 
             // Simpan foto yang sudah dikompresi
             Storage::disk('public')->put('foto-sesi/' . $filename, (string)$image);
@@ -155,22 +172,27 @@ class SesiController extends Controller
 
             $filename = time() . '_' . $request->sesi_id . $request->rematri_id . '.jpeg';
 
-            // Mengompresi ukuran file foto menggunakan Intervention Image
-            $image = Image::make($imageData)
-                ->resize(800, null, function ($constraint) {
-                    $constraint->aspectRatio();
-                    $constraint->upsize();
-                })
-                ->encode('jpg', 75); // Menyimpan dalam format JPG dengan kualitas 75%
-
-            // Simpan gambar ke direktori yang diinginkan
             $imagePath = public_path('storage/foto-sesi/' . $filename);
-            $image->save($imagePath);
+            file_put_contents($imagePath, $imageData);
+
+            // Kompress
+            // // Mengompresi ukuran file foto menggunakan Intervention Image
+            // $image = Image::make($imageData)
+            //     ->resize(800, null, function ($constraint) {
+            //         $constraint->aspectRatio();
+            //         $constraint->upsize();
+            //     })
+            //     ->encode('jpg', 75); // Menyimpan dalam format JPG dengan kualitas 75%
+
+            // // Simpan gambar ke direktori yang diinginkan
+            // $imagePath = public_path('storage/foto-sesi/' . $filename);
+            // $image->save($imagePath);
 
             // Jika Anda juga ingin menyimpan gambar yang sudah dikompresi ke penyimpanan Laravel
-            Storage::disk('public')->put('foto-sesi/' . $filename, file_get_contents($imagePath));
+            Storage::disk('public')->put('foto-sesi/' . $filename, $imageData);
+            // Kompress
+            // Storage::disk('public')->put('foto-sesi/' . $filename, file_get_contents($imagePath));
         }
-
         SesiRematri::updateOrCreate(
             ['id' => $request->ttd_id],
             [
@@ -178,7 +200,7 @@ class SesiController extends Controller
             ]
         );
         //redirect to index
-        return redirect()->route('sesi.rematri', Crypt::encryptString($request->sesi_id))->with(['status' => 'Foto uploaded successfully.']);
+        return redirect()->route('sesi.rematri', Crypt::encryptString($request->sesi_id))->with('toast_success', 'Photo upload successfully.');
     }
 
     public function rematriview(Request $request, $id)
@@ -232,13 +254,8 @@ class SesiController extends Controller
         $sheet->setCellValue('D8', 'Status');
         $sheet->setCellValue('B3', $sesi->created_at->isoFormat('D MMMM Y'));
         $sheet->setCellValue('B4', $sesi->nama);
-        if ($sesi->jurusan_id == null) {
-            $sheet->setCellValue('B5', $sesi->kelas->nama);
-            $sheet->setCellValue('B6', $count);
-        } else {
-            $sheet->setCellValue('B5', $sesi->kelas->nama . ', ' . $sesi->jurusan->nama . ',' . $sesi->jurusan->ruangan);
-            $sheet->setCellValue('B6', $count);
-        }
+        $sheet->setCellValue('B5', $sesi->kelas->nama .  ',' . $sesi->ruangan->name);
+        $sheet->setCellValue('B6', $count);
         $no = 1;
         $row = 10;
 
@@ -306,7 +323,7 @@ class SesiController extends Controller
         // Export
         $writer = new Xlsx($spreadsheet);
         $sekolah = Auth::user()->sekolah->sekolah;
-        $filename = time() . '_Laporan Hasil Sesi TTD_' . $sekolah . '.xlsx';
+        $filename = time() . '_Laporan Hasil Sesi TTD_' . $sesi->nama . '_' . $sekolah . '.xlsx';
 
         $writer->save($filename);
 

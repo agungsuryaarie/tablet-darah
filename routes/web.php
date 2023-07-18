@@ -10,7 +10,6 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\KabController;
 use App\Http\Controllers\Admin\KecController;
 use App\Http\Controllers\Admin\DesaController;
-use App\Http\Controllers\Admin\JurusanController;
 use App\Http\Controllers\Admin\KelasController;
 use App\Http\Controllers\Admin\PuskesController;
 use App\Http\Controllers\Admin\PosyanduController;
@@ -142,6 +141,7 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
         // Ruangan
         Route::resource('ruangan', RuanganController::class);
         Route::post('ruangan/get-ruangan', [RuanganController::class, 'getRuangan']);
+        Route::post('ruangan/get-ruangan-sesi', [RuanganController::class, 'getRuanganSesi']);
 
         // Rematri
         Route::get('rematri', [RematriController::class, 'index'])->name('rematri.index');
@@ -156,7 +156,7 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
         Route::delete('rematri/{rematri}/destroyhb', [RematriController::class, 'destroyhb'])->name('rematri.destroyhb');
 
         // Sesi
-        Route::resource('sesi', SesiController::class);
+        Route::resource('sesi', SesiController::class)->middleware('checkDataRematri');
         Route::get('sesi/{id}/rematri', [SesiController::class, 'rematri'])->name('sesi.rematri');
         Route::get('sesi/{id}/rematri-view', [SesiController::class, 'rematriview'])->name('sesi.rematriview');
         Route::get('sesi/{id}/export', [SesiController::class, 'export'])->name('sesi.export');

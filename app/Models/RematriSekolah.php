@@ -40,4 +40,8 @@ class RematriSekolah extends Model
     {
         return $this->belongsTo(Kelas::class);
     }
+    public function isFilled()
+    {
+        return !empty($this->rematri_id);
+    }
 }

@@ -28,10 +28,9 @@
                                         <th style="width:5%">No</th>
                                         <th style="width:10%">NIK</th>
                                         <th>Nama</th>
-                                        <th style="width:10%">Tgl Lahir</th>
-                                        <th style="width:5%">Kelas</th>
-                                        <th style="width:5%">Ruangan</th>
-                                        <th style="width:25%">Nama Ortu</th>
+                                        <th style="width:12%">Tanggal Lahir</th>
+                                        <th class="text-center" style="width:10%">Kelas</th>
+                                        <th style="width:25%">Nama Orang Tua</th>
                                         <th class="text-center" style="width: 10%">Action</th>
                                     </tr>
                                 </thead>
@@ -115,10 +114,6 @@
                     {
                         data: "kelas",
                         name: "kelas",
-                    },
-                    {
-                        data: "ruangan",
-                        name: "ruangan",
                     },
                     {
                         data: "nama_ortu",

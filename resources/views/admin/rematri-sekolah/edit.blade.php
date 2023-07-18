@@ -25,6 +25,7 @@
                             class="form-horizontal">
                             @csrf
                             <div class="card-body">
+                                <input type="hidden" name="id" id="id" value="{{ $data->rematri_id }}">
                                 <div class="form-group row">
                                     <label for="text" class="col-sm-2 col-form-label">Nama<span
                                             class="text-danger">*</span></label>
@@ -169,11 +170,8 @@
                                 <div class="form-group row">
                                     <label for="text" class="col-sm-2 col-form-label">Ruangan</label>
                                     <div class="col-sm-4">
-                                        <select class="form-control" name="ruangan_id" id="ruangan_id"
+                                        <select class="form-control select2 select2bs4" name="ruangan_id" id="ruangan_id"
                                             style="width: 100%;">
-                                            <option value="{{ $data->ruangan }}">
-                                                {{ $data->ruangan->name ?? '' }}
-                                            </option>
                                         </select>
                                     </div>
                                 </div>
@@ -267,8 +265,6 @@
                                         <select
                                             class="form-control select2 select2bs4 @error('desa_id') is-invalid @enderror"
                                             name="desa_id" id="desa_id" style="width: 100%;">
-                                            <option value="{{ $data->rematri->desa_id }}">
-                                                {{ $data->rematri->desa->desa }}</option>
                                         </select>
                                         @error('desa_id')
                                             <span class="text-danger">{{ $message }}</span>
@@ -287,15 +283,12 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- /.card-body -->
                             <div class="card-footer">
-                                <button type="submit" class="btn btn-info">Simpan</button>
-                                <button type="submit" class="btn btn-default">Cancel</button>
+                                <button type="submit" class="btn btn-info">Update</button>
+                                <a href="{{ route('rematri.index') }}" class="btn btn-default">Batal</a>
                             </div>
-                            <!-- /.card-footer -->
                         </form>
                     </div>
-                    <!-- /.card -->
                 </div>
             </div>
         </div>
@@ -309,55 +302,93 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+        var kelas = "{{ $data->kelas_id }}";
+        var ruangan = "{{ $data->ruangan_id }}";
+
+        // Fungsi untuk memuat opsi ruangan berdasarkan kelas_id
+        function loadRuanganOptions(idKelas) {
+            $.ajax({
+                url: "{{ url('ruangan/get-ruangan') }}",
+                type: "POST",
+                data: {
+                    kelas_id: idKelas,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(result) {
+                    console.log(result);
+                    if (result.length == 0) {
+                        $('#ruangan_id').html('<option value="">:::Tidak ada ruangan:::</option>');
+                    } else {
+                        $('#ruangan_id').html('<option value="">:::Pilih Ruangan:::</option>');
+                        $.each(result, function(key, value) {
+                            $("#ruangan_id").append('<option value="' + value.id + '">Ruangan - ' +
+                                value.name + '</option>');
+                        });
+                        $('#ruangan_id').val(ruangan);
+                    }
+                }
+            });
+        }
+
+        // Panggil fungsi loadRuanganOptions untuk pertama kali saat halaman dimuat
+        $(document).ready(function() {
+            loadRuanganOptions(kelas);
+        });
+
+        // Event handler ketika nilai kelas_id berubah
         $('#kelas_id').on('change', function() {
             var idKelas = this.value;
             $("#ruangan_id").html('');
-            $.ajax({
-                url: "{{ url('ruangan/get-ruangan') }}",
-                type: 'GET',
-                data: {
-                    kelas_id: idKelas
-                },
-                success: function(result) {
-                    $('#ruangan_id').html('<option value="">:::Pilih Ruangan:::</option>');
-                    $.each(result, function(key, value) {
-                        $("#ruangan_id").append('<option value="' + value
-                            .id + '">' + value.nama + '</option>');
-                    });
-                }
-            });
+            loadRuanganOptions(idKelas);
         });
 
-        $('#kecamatan_id').on('change', function() {
-            var idKecamatan = this.value;
-            $("#desa_id").html('');
+        var kecamatan = "{{ $data->rematri->kecamatan_id }}";
+        var desa = "{{ $data->rematri->desa_id }}";
+
+        // Fungsi untuk memuat opsi ruangan berdasarkan kelas_id
+        function loadDesaOptions(idKecamatan) {
             $.ajax({
-                url: "{{ url('rematri/get-desa') }}",
+                url: "{{ url('desa/get-desa') }}",
                 type: "POST",
                 data: {
                     kecamatan_id: idKecamatan,
                     _token: '{{ csrf_token() }}'
                 },
-                dataType: 'json',
                 success: function(result) {
-                    $('#desa_id').html('<option value="">:::Pilih Desa/Kelurahan:::</option>');
-                    $.each(result.desa, function(key, value) {
-                        $("#desa_id").append('<option value="' + value
-                            .id + '">' + value.desa + '</option>');
-                    });
+                    console.log(result);
+                    if (result.length == 0) {
+                        $('#desa_id').html('<option value="">:::Tidak ada data Desa/Kelurahan:::</option>');
+                    } else {
+                        $('#desa_id').html('<option value="">:::Pilih Desa/Kelurahan:::</option>');
+                        $.each(result, function(key, value) {
+                            $("#desa_id").append('<option value="' + value.id + '">' +
+                                value.desa + '</option>');
+                        });
+                        $('#desa_id').val(desa);
+                    }
                 }
             });
+        }
+
+        // Panggil fungsi loadRuanganOptions untuk pertama kali saat halaman dimuat
+        $(document).ready(function() {
+            loadDesaOptions(kecamatan);
+        });
+
+        // Event handler ketika nilai kelas_id berubah
+        $('#kecamatan_id').on('change', function() {
+            var idKecamatan = this.value;
+            $("#desa_id").html('');
+            loadDesaOptions(idKecamatan);
         });
 
         $(function() {
             //Initialize Select2 Elements
             $('.select2').select2()
-
             //Initialize Select2 Elements
             $('.select2bs4').select2({
                 theme: 'bootstrap4'
             })
-
             //Date picker
             $('#reservationdate').datetimepicker({
                 format: 'L'

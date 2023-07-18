@@ -29,7 +29,7 @@
                                 minggu.
                             </h6>
                             <button href="javascript:void(0)" id="createNewSesi" class="btn btn-info btn-xs float-right">
-                                <i class="fas fa-plus-circle"></i> Tambah</button>
+                                <i class="fas fa-users"></i> Mulai</button>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -64,13 +64,7 @@
                                                         <h5>{{ $item->sekolah->sekolah }}</h5>
                                                     </div>
                                                     <div class="col-6 text-center text-sm mt-2">
-                                                        Kelas :
-                                                        @if ($item->jurusan_id == null)
-                                                            {{ $item->kelas->nama }}
-                                                        @else
-                                                            {{ $item->kelas->nama }} {{ $item->jurusan->nama }}
-                                                            {{ $item->jurusan->ruangan }}
-                                                        @endif
+                                                        Kelas : {{ $item->kelas->nama }} - {{ $item->ruangan->name }}
                                                     </div>
                                                     <div class="col-6 text-center text-sm mt-2">
                                                         Sesi : {{ $item->nama }}
@@ -119,36 +113,27 @@
                         @csrf
                         <input type="hidden" name="sesi_id" id="sesi_id">
                         <small class="mb-5"><i class="fas fa-info-circle"></i> Seluruh rematri yang ada di
-                            kelas terpilih otomatis masuk kedalam sesi.
+                            ruangan terpilih otomatis masuk kedalam sesi.
                         </small>
                         <div class="col-md-12 mt-3">
-                            <div class="form-group">
-                                <label>Kelas<span class="text-danger">*</span></label>
-                                <select class="form-control select2 select2bs4 @error('kelas_id') is-invalid @enderror"
-                                    name="kelas_id" id="kelas_id" style="width: 100%;">
-                                </select>
-                            </div>
+                            <x-dropdown name="kelas_id" label="Kelas">
+                                @foreach ($kelas as $room)
+                                    <option value="{{ $room->id }}">{{ $room->nama }}</option>
+                                @endforeach
+                            </x-dropdown>
                         </div>
-                        @if (Auth::user()->jenjang == 'SMA' or Auth::user()->jenjang == 'SMK')
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label>Jurusan<span class="text-danger">*</span></label>
-                                    <select class="browser-default custom-select select2bs4" name="jurusan_id"
-                                        id="jurusan_id">
-                                    </select>
-                                </div>
-                            </div>
-                        @endif
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label">Nama Sesi<span class="text-danger"> *</span></label>
-                            <div class="col-sm-12">
-                                <input type="text" class="form-control" id="nama" name="nama"
-                                    placeholder="contoh : Januari 1 / Januari Minggu ke 1">
+                        <div class="col-md-12 mt-3">
+                            <div class="form-group">
+                                <label>Pilih Ruangan <span class="text-danger">*</span></label>
+                                <select class="form-control select2 select2bs4 @error('ruangan_id') is-invalid @enderror"
+                                    name="ruangan_id" id="ruangan_id" style="width: 100%;">
+                                </select>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="card-footer">
-                                <button type="submit" class="btn btn-primary btn-sm" id="saveBtn" value="create">Simpan
+                                <button type="submit" class="btn btn-primary btn-sm" id="saveBtn" value="create">Buat
+                                    Sesi
                                 </button>
                             </div>
                         </div>
@@ -161,22 +146,17 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-body">
-                    <h6><i class="fa fa-info-circle text-danger"></i> Mohon Perhatian</h6>
+                    <h6><i class="fa fa-info-circle text-danger"></i> Informasi</h6>
                     <hr>
-                    <p style="text-align: justify">Untuk mengurangi kesalahan pada sesi, pastikan <b>DATA REMATRI</b>
-                        sudah terinput semua berdasarkan kelas dan ruangan masing-masing. Jika <b>DATA REMATRI</b> tidak
-                        tersedia tombol
-                        <button class="btn btn-info btn-xs" disabled><i class="fas fa-plus-circle"></i> Tambah</button>
-                        tidak akan aktif. Ketika membuat sesi, sistem hanya menyingkronisasikan
+                    <p style="text-align: justify">Ketika membuat sesi, sistem hanya menyingkronisasikan
                         <b>DATA REMATRI</b> yang saat ini tersedia. Jika sesi telah dibuat dan admin sekolah baru saja
                         menginputkan
                         <b>DATA REMATRI</b> terbaru, maka <b>DATA REMATRI</b> terbaru tersebut tidak tergabung kedalam sesi.
+                        Untuk itu pastikan <b>DATA REMATRI</b> sudah terinputkan semua.
                     </p>
                     <footer class="blockquote-footer">developer diskominfo</footer>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="dataRematri" class="btn btn-primary btn-sm" data-dismiss="modal">Lengkapi
-                        Dulu</button>
                     <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Mengerti</button>
                 </div>
             </div>
@@ -192,49 +172,28 @@
             $("#modelHeading").html("Tambah Sesi");
             $("#ajaxModel").modal("show");
             $("#deleteSesi").modal("show");
-            $.ajax({
-                url: "{{ url('kelas/get-kelas') }}",
-                type: "POST",
-                data: {
-                    sekolah_id: {{ Auth::user()->sekolah_id }},
-                    _token: '{{ csrf_token() }}'
-                },
-                dataType: 'json',
-                success: function(result) {
-                    $('#kelas_id').html(
-                        '<option value="">:::Pilih Kelas:::</option>');
-                    $.each(result, function(key, value) {
-                        $("#kelas_id").append('<option value="' + value
-                            .id + '">' + value.nama + '</option>');
-                    });
-                }
-            });
-        });
-
-        $(document).ready(function() {
             $('#kelas_id').on('change', function() {
                 var idKelas = this.value;
-                $("#jurusan_id").html('');
+                $("#ruangan_id").html('');
                 $.ajax({
-                    url: "{{ url('jurusan/get-jurusan') }}",
+                    url: "{{ url('ruangan/get-ruangan') }}",
                     type: "POST",
                     data: {
                         kelas_id: idKelas,
                         _token: '{{ csrf_token() }}'
                     },
-                    dataType: 'json',
                     success: function(result) {
-                        $('#jurusan_id').html(
-                            '<option value="">::Pilih Jurusan::</option>'
-                        );
-                        $.each(result, function(key, value) {
-                            $("#jurusan_id").append(
-                                '<option value="' + value
-                                .id + '">' + value
-                                .kelas.nama + ' ' + value.nama + ' ' + value
-                                .ruangan +
-                                '</option>');
-                        });
+                        if (result.length == 0) {
+                            $('#ruangan_id').html(
+                                '<option value="">:::Tidak ada ruangan:::</option>');
+                        } else {
+                            $('#ruangan_id').html(
+                                '<option value="">:::Pilih Ruangan:::</option>');
+                            $.each(result, function(key, value) {
+                                $("#ruangan_id").append('<option value="' + value
+                                    .id + '">Ruangan - ' + value.name + '</option>');
+                            });
+                        }
                     }
                 });
             });
@@ -243,7 +202,7 @@
         $("#saveBtn").click(function(e) {
             e.preventDefault();
             $(this).html(
-                "<span class='spinner-border spinner-border-sm'></span><span class='visually-hidden'><i> menyimpan...</i></span>"
+                "<span class='spinner-border spinner-border-sm'></span><span class='visually-hidden'><i> membuat sesi...</i></span>"
             ).attr('disabled', 'disabled');
 
             $.ajax({
@@ -260,11 +219,11 @@
                                 value +
                                 '</li></strong>');
                             $(".alert-danger").fadeOut(5000);
-                            $("#saveBtn").html("Simpan").removeAttr("disabled");
+                            $("#saveBtn").html("Buat Sesi").removeAttr("disabled");
                         });
                     } else {
                         toastr.success("Sesi saved successfully.");
-                        $("#saveBtn").html("Simpan").removeAttr("disabled");;
+                        $("#saveBtn").html("Buat Sesi").removeAttr("disabled");;
                         $('#ajaxModel').modal('hide');
                         setTimeout(function() {
                             window.location.reload();
@@ -276,13 +235,6 @@
         $('.select2bs4').select2({
             theme: 'bootstrap4'
         })
-        // $('.SesiError').click(function() {
-        //     toastr.error('Sesi sudah berakhir.')
-        // });
-        $("body").on("click", "#dataRematri", function() {
-            var url = "{{ route('rematri.create') }}";
-            window.location = url;
-        });
         //waktu sesi
         // Dapatkan tanggal dari database
         var data = {!! json_encode($sesi) !!};

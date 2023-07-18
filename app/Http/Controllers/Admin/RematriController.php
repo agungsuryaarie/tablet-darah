@@ -37,13 +37,10 @@ class RematriController extends Controller
                         return $data->rematri->nama;
                     })
                     ->addColumn('kelas', function ($data) {
-                        return '<center>' . $data->kelas->nama ?? null . '</center>';
-                    })
-                    ->addColumn('ruangan', function ($data) {
-                        return '<center>' . $data->ruangan->name ?? null . '</center>';
+                        return '<center>' . ($data->kelas ? $data->kelas->nama : null) . ' - ' . ($data->ruangan ? $data->ruangan->name : null) . '</center>';
                     })
                     ->addColumn('tgl_lahir', function ($data) {
-                        return $data->rematri->tgl_lahir;
+                        return '<center>' . $data->rematri->tgl_lahir . '</center>';
                     })
                     ->addColumn('nama_ortu', function ($data) {
                         return $data->rematri->nama_ortu;
@@ -54,7 +51,7 @@ class RematriController extends Controller
                         $btn = '<center>' . $btn . '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . Crypt::encryptString($row->id) . '" data-original-title="History HB" class="btn btn-warning btn-xs text-white hbRematri"><i class="fas fa-plus-circle"></i></a><center>';
                         return $btn;
                     })
-                    ->rawColumns(['kelas', 'ruangan', 'kecamatan', 'action'])
+                    ->rawColumns(['kelas', 'tgl_lahir', 'kecamatan', 'action'])
                     ->make(true);
             }
             return view('admin.rematri-sekolah.data', compact('menu'));
@@ -92,9 +89,10 @@ class RematriController extends Controller
     {
         $menu = 'Tambah Data Rematri';
         if (Auth::user()->sekolah_id) {
+            $rematri = RematriSekolah::where('sekolah_id', Auth::user()->sekolah_id)->first();
             $kelas = Kelas::where('jenjang', Auth::user()->jenjang)->get();
             $kecamatan = Kecamatan::get();
-            return view('admin.rematri-sekolah.create', compact('menu', 'kelas', 'kecamatan'));
+            return view('admin.rematri-sekolah.create', compact('menu', 'kelas', 'kecamatan', 'rematri'));
         } else {
             $kecamatan = Kecamatan::get();
             return view('admin.rematri-posyandu.create', compact('menu', 'kecamatan'));
