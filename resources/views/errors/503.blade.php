@@ -39,7 +39,7 @@
     </style>
     <script>
         function countdown() {
-            var targetDate = new Date('July 19, 2023 06:00:00')
+            var targetDate = new Date('July 20, 2023 06:00:00')
                 .getTime(); // Mengatur waktu target menjadi 06:00 PM tanggal 13 Juli 2023
             var countdownElement = document.getElementById("countdown");
 
