@@ -24,7 +24,7 @@
                                         <td>Kelas</td>
                                         <td>:</td>
                                         <td>
-                                            {{ $sesi->kelas->nama }} - {{ $sesi->ruangan->name }}
+                                            {{ $sesi->kelas->nama ?? '' }} - {{ $sesi->ruangan->name ?? '' }}
                                         </td>
                                     </tr>
                                     <tr>

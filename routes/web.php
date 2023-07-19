@@ -35,7 +35,7 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 Route::controller(AuthController::class)->group(function () {
     // Login
     Route::get('/', 'index')->name('index')->middleware('guest');
-    Route::post('login', 'login')->name('login');
+    Route::post('/', 'login')->name('login');
     Route::get('logout', 'logout')->name('logout');
 });
 

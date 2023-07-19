@@ -159,7 +159,7 @@
                 <a href="{{ route('ruangan.index') }}"
                     class="nav-link {{ request()->segment(1) == 'ruangan' ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Ruangan</p>
+                    <p>Kelas</p>
                 </a>
             </li>
         </ul>

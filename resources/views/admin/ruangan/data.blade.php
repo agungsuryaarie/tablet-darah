@@ -16,7 +16,6 @@
     <x-datatable link="javascript:void(0)" label="Tambah">
         <th style="width:5%">No</th>
         <th>Kelas</th>
-        <th style="width:8%">Ruangan</th>
     </x-datatable>
     <x-ajaxModel size="">
         <x-dropdown name="kelas_id" label="Kelas">
@@ -44,10 +43,6 @@
                 {
                     data: "kelas",
                     name: "kelas",
-                },
-                {
-                    data: "nama",
-                    name: "nama",
                 },
             ]);
 

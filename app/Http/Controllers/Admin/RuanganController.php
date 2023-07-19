@@ -14,7 +14,7 @@ class RuanganController extends Controller
 {
     public function index(Request $request)
     {
-        $menu = 'Ruangan';
+        $menu = 'Kelas';
         $auth = Auth::user();
         $kelas = Kelas::where('jenjang', $auth->jenjang)->get();
         $ruangan = Ruangan::where('sekolah_id', $auth->sekolah_id)->first();
@@ -23,10 +23,7 @@ class RuanganController extends Controller
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('kelas', function ($data) {
-                    return $data->kelas->nama;
-                })
-                ->addColumn('nama', function ($data) {
-                    return '<center><span class="badge badge-primary">' . $data->name . '</span></cenetr>';
+                    return $data->kelas->nama . ' - ' . $data->name;
                 })
                 ->rawColumns(['nama', 'action'])
                 ->make(true);

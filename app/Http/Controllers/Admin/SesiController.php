@@ -238,6 +238,19 @@ class SesiController extends Controller
         $sesi = Sesi::where('id', $id)->where('sekolah_id', Auth::user()->sekolah_id)->first();
         $data = SesiRematri::where('sesi_id', $sesi->id)->get();
         $count = SesiRematri::where('sesi_id', $sesi->id)->count();
+
+        if (isset($sesi->kelas->nama)) {
+            $kelas = $sesi->kelas->nama;
+        } else {
+            $kelas = '-';
+        }
+
+        if (isset($sesi->ruangan->name)) {
+            $ruangan = $sesi->ruangan->name;
+        } else {
+            $ruangan = '-';
+        }
+
         // Design Table
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -254,7 +267,7 @@ class SesiController extends Controller
         $sheet->setCellValue('D8', 'Status');
         $sheet->setCellValue('B3', $sesi->created_at->isoFormat('D MMMM Y'));
         $sheet->setCellValue('B4', $sesi->nama);
-        $sheet->setCellValue('B5', $sesi->kelas->nama .  ',' . $sesi->ruangan->name);
+        $sheet->setCellValue('B5', $kelas .  ',' . $ruangan);
         $sheet->setCellValue('B6', $count);
         $no = 1;
         $row = 10;

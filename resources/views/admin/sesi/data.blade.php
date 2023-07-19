@@ -64,7 +64,8 @@
                                                         <h5>{{ $item->sekolah->sekolah }}</h5>
                                                     </div>
                                                     <div class="col-6 text-center text-sm mt-2">
-                                                        Kelas : {{ $item->kelas->nama }} - {{ $item->ruangan->name }}
+                                                        Kelas : {{ $item->kelas->nama ?? '' }} -
+                                                        {{ $item->ruangan->name ?? '' }}
                                                     </div>
                                                     <div class="col-6 text-center text-sm mt-2">
                                                         Sesi : {{ $item->nama }}
