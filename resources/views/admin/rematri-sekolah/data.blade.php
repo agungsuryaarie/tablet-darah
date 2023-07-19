@@ -18,18 +18,88 @@
     </section>
     <section class="content">
         <div class="container-fluid">
-            <div class="row">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert" style="display: none;">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="naikForm" name="naikForm" method="post" class="form-horizontal">
+                @csrf
                 <div class="col-12">
+                    <div class="card">
+                        <div class="col-md-12">
+                            <div class="alert alert-dismissible fade show" role="alert" style="display: none;">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <small class="mb-5"><i class="fas fa-info-circle text-danger"></i>Untuk lebih mudah kenaikan
+                                kelas, Silahkan filter Rematri berdasarkan kelasnya masing-masing.
+                            </small>
+                            <hr>
+                            <div class="row justify-content-center">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Filter Kelas<span class="text-danger">*</span></label>
+                                        <select data-column="5" id="kelas_filter_id" class="form-control select2bs4 filter">
+                                            <option selected disabled>:::Filter Kelas:::</option>
+                                            <option value="">Semua</option>
+                                            @foreach ($kelas as $item)
+                                                <option value="{{ $item->nama }}">{{ $item->nama }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Pilih Kelas<span class="text-danger">*</span></label>
+                                        <select name="kelas_id" id="kelas_id"
+                                            class="form-control select2bs4  @error('kelas_id') is-invalid @enderror"">
+                                            <option selected disabled>:::Pilih Kelas:::</option>
+                                            @foreach ($kelas as $item)
+                                                <option value="{{ $item->id }}"
+                                                    {{ old('kelas_id') == $item->id ? 'selected' : '' }}>
+                                                    {{ $item->nama }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('kelas_id')
+                                            <span class="invalid-feedback"><strong>{{ $message }}</strong></span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Pilih Ruangan<span class="text-danger">*</span></label>
+                                        <select name="ruangan_id" id="ruangan_id"
+                                            class="form-control select2bs4  @error('ruangan_id') is-invalid @enderror"">
+                                        </select>
+                                        @error('ruangan_id')
+                                            <span class="invalid-feedback"><strong>{{ $message }}</strong></span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-md-2 mt-4 p-2">
+                                    <div class="form-group">
+                                        <button class="btn btn-primary" id="up"><i class="fa fa-arrow-up"></i>
+                                            Naikkan</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="card">
                         <div class="card-body">
                             <table id="example1" class="table table-bordered table-striped data-table">
                                 <thead>
                                     <tr>
-                                        <th style="width:5%">No</th>
+                                        <th class="text-center" style="width: 5%"><input type="checkbox" id="selectAll">
+                                        </th>
+                                        <th class="text-center" style="width:3%">No</th>
                                         <th style="width:10%">NIK</th>
                                         <th>Nama</th>
                                         <th style="width:12%">Tanggal Lahir</th>
-                                        <th class="text-center" style="width:10%">Kelas</th>
+                                        <th class="text-center" style="width:5%">Kelas</th>
+                                        <th class="text-center" style="width:8%">Ruangan</th>
                                         <th style="width:25%">Nama Orang Tua</th>
                                         <th class="text-center" style="width: 10%">Action</th>
                                     </tr>
@@ -39,7 +109,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     </section>
 @endsection
@@ -96,6 +166,11 @@
                 autoWidth: false,
                 ajax: "{{ route('rematri.index') }}",
                 columns: [{
+                        data: "checkbox",
+                        name: "checkbox",
+                        orderable: false,
+                        searchable: false,
+                    }, {
                         data: "DT_RowIndex",
                         name: "DT_RowIndex",
                     },
@@ -116,6 +191,10 @@
                         name: "kelas",
                     },
                     {
+                        data: "ruangan",
+                        name: "ruangan",
+                    },
+                    {
                         data: "nama_ortu",
                         name: "nama_ortu",
                     },
@@ -127,6 +206,31 @@
                         searchable: false,
                     },
                 ],
+            });
+            $('#kelas_id').on('change', function() {
+                var idKelas = this.value;
+                $("#ruangan_id").html('');
+                $.ajax({
+                    url: "{{ url('ruangan/get-ruangan') }}",
+                    type: "POST",
+                    data: {
+                        kelas_id: idKelas,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(result) {
+                        if (result.length == 0) {
+                            $('#ruangan_id').html(
+                                '<option value="">:::Tidak ada ruangan:::</option>');
+                        } else {
+                            $('#ruangan_id').html(
+                                '<option value="">:::Pilih Ruangan:::</option>');
+                            $.each(result, function(key, value) {
+                                $("#ruangan_id").append('<option value="' + value
+                                    .id + '">Ruangan - ' + value.name + '</option>');
+                            });
+                        }
+                    }
+                });
             });
 
             $("body").on("click", ".editRematri", function() {
@@ -178,6 +282,59 @@
                             }
                         },
                     });
+                });
+            });
+            $("#up").click(function(e) {
+                e.preventDefault();
+                $(this).html(
+                    "<span class='spinner-border spinner-border-sm'></span><span class='visually-hidden'><i> sedang diproses...</i></span>"
+                ).attr('disabled', 'disabled');
+                $.ajax({
+                    data: $("#naikForm").serialize(),
+                    url: "{{ route('kenaikan-kelas.naik') }}",
+                    type: "POST",
+                    dataType: "json",
+                    success: function(data) {
+                        $('#selectAll').prop('checked', false);
+                        if (data.errors) {
+                            $('.alert-danger').html('');
+                            $.each(data.errors, function(key, value) {
+                                $('.alert-danger').show();
+                                $('.alert-danger').append('<strong><li>' +
+                                    value +
+                                    '</li></strong>');
+                                $(".alert-danger").fadeOut(5000);
+                                $("#up").html(
+                                        "<i class='fa fa-arrow-up'></i> Naikkan")
+                                    .removeAttr("disabled");
+                            });
+                        } else {
+                            table.draw();
+                            toastr.success(data.success);
+                            $("#up").html("<i class='fa fa-arrow-up'></i> Naikkan").removeAttr(
+                                "disabled");
+                        }
+                    },
+                });
+            });
+            $('.filter').change(function() {
+                table.column($(this).data('column'))
+                    .search($(this).val())
+                    .draw();
+            });
+            //select all
+            $(document).ready(function() {
+                // Checkbox "Pilih Semua"
+                $('#selectAll').click(function() {
+                    $('.itemCheckbox').prop('checked', $(this).prop('checked'));
+                });
+                // Periksa apakah checkbox "Pilih Semua" harus dicentang
+                $('.itemCheckbox').click(function() {
+                    if ($('.itemCheckbox:checked').length === $('.itemCheckbox').length) {
+                        $('#selectAll').prop('checked', true);
+                    } else {
+                        $('#selectAll').prop('checked', false);
+                    }
                 });
             });
         });
