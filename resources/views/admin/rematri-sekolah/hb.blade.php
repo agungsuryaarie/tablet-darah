@@ -38,13 +38,8 @@
                                         <td>Kelas</td>
                                         <td>:</td>
                                         <td>
-                                            @if ($data->jurusan_id == null)
-                                                {{ $data->kelas->nama }}
-                                            @else
-                                                {{ $data->kelas->nama }} {{ $data->jurusan->nama }}
-                                                {{ $data->jurusan->ruangan }}
+                                            {{ $data->kelas->nama }} - {{ $data->ruangan->name }}
                                         </td>
-                                        @endif
                                     </tr>
                                     <tr>
                                         <td>Umur</td>

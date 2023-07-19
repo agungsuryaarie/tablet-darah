@@ -254,7 +254,7 @@ class SesiController extends Controller
         $sheet->setCellValue('D8', 'Status');
         $sheet->setCellValue('B3', $sesi->created_at->isoFormat('D MMMM Y'));
         $sheet->setCellValue('B4', $sesi->nama);
-        $sheet->setCellValue('B5', $sesi->kelas->nama .  ',' . $sesi->ruangan->name);
+        $sheet->setCellValue('B5', $sesi->kelas->nama .  '-' . $sesi->ruangan->name);
         $sheet->setCellValue('B6', $count);
         $no = 1;
         $row = 10;
