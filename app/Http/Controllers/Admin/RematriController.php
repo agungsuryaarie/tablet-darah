@@ -23,6 +23,7 @@ class RematriController extends Controller
     {
         $menu = 'Rematri';
         $kecamatan = Kecamatan::get();
+        $kelas = Kelas::where('jenjang', Auth::user()->jenjang)->get();
         $data = RematriSekolah::where('sekolah_id', '=', Auth::user()->sekolah_id)->get();
         // dd($data);
         if (Auth::user()->sekolah_id) {
@@ -30,6 +31,9 @@ class RematriController extends Controller
                 $data = RematriSekolah::where('sekolah_id', '=', Auth::user()->sekolah_id)->get();
                 return Datatables::of($data)
                     ->addIndexColumn()
+                    ->addColumn('checkbox', function ($row) {
+                        return '<center><input type="checkbox" class="itemCheckbox" name="siswaID[]" value="' . $row->id . '"></center>';
+                    })
                     ->addColumn('nik', function ($data) {
                         return $data->rematri->nik;
                     })
@@ -37,7 +41,10 @@ class RematriController extends Controller
                         return $data->rematri->nama;
                     })
                     ->addColumn('kelas', function ($data) {
-                        return '<center>' . ($data->kelas ? $data->kelas->nama : null) . ' - ' . ($data->ruangan ? $data->ruangan->name : null) . '</center>';
+                        return '<center>' . ($data->kelas ? $data->kelas->nama : null) . '</center>';
+                    })
+                    ->addColumn('ruangan', function ($data) {
+                        return '<center>' . ($data->ruangan ? $data->ruangan->name : null) . '</center>';
                     })
                     ->addColumn('tgl_lahir', function ($data) {
                         return '<center>' . $data->rematri->tgl_lahir . '</center>';
@@ -51,10 +58,10 @@ class RematriController extends Controller
                         $btn = '<center>' . $btn . '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . Crypt::encryptString($row->id) . '" data-original-title="History HB" class="btn btn-warning btn-xs text-white hbRematri"><i class="fas fa-plus-circle"></i></a><center>';
                         return $btn;
                     })
-                    ->rawColumns(['kelas', 'tgl_lahir', 'kecamatan', 'action'])
+                    ->rawColumns(['checkbox', 'kelas', 'ruangan', 'tgl_lahir', 'kecamatan', 'action'])
                     ->make(true);
             }
-            return view('admin.rematri-sekolah.data', compact('menu'));
+            return view('admin.rematri-sekolah.data', compact('menu', 'kelas'));
         } else {
             if ($request->ajax()) {
                 $data = RematriPosyandu::where('posyandu_id', '=', Auth::user()->posyandu_id)->get();
@@ -604,5 +611,33 @@ class RematriController extends Controller
             HbPosyandu::find($id)->delete();
             return response()->json(['success' => 'HB deleted successfully.']);
         }
+    }
+    public function naik(Request $request)
+    {
+        //Translate Bahasa Indonesia
+        $message = array(
+            'kelas_id.required' => 'Silahkan pilih Kelas terlebih dahulu.',
+            'ruangan_id.required' => 'Silahkan pilih Ruangan terlebih dahulu.',
+            'siswaID.required' => 'Silahkan pilih Rematri terlebih dahulu.',
+        );
+        $validator = Validator::make($request->all(), [
+            'kelas_id' => 'required',
+            'ruangan_id' => 'required',
+            'siswaID' => 'required',
+        ], $message);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()->all()]);
+        }
+        $siswaID = $request->input('siswaID', []);
+        $jumlahSiswaID = count($siswaID);
+        $kelas = $request->input('kelas_id');
+        $ruangan = $request->input('ruangan_id');
+        // Menggunakan Model Eloquent untuk mengupdate data
+        RematriSekolah::whereIn('id', $siswaID)->update([
+            'kelas_id' => $kelas,
+            'ruangan_id' => $ruangan,
+        ]);
+        return response()->json(['success' => '<span class="text-white">' . $jumlahSiswaID . '</span> Rematri berhasil naik kelas.']);
     }
 }

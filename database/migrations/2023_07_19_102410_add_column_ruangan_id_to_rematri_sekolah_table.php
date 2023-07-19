@@ -11,19 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('sesi_rematri', function (Blueprint $table) {
-            $table->string('ruangan_id')->after('sesi_id')->nullable();
+        Schema::table('rematri_sekolah', function (Blueprint $table) {
+            $table->dropColumn(['jurusan_id']);
+            $table->string('ruangan_id')->after('sekolah_id')->nullable();
             $table->string('kelas_id')->nullable()->change();
         });
     }
 
     /**
-     *
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::table('sesi_rematri', function (Blueprint $table) {
+        Schema::table('rematri_sekolah', function (Blueprint $table) {
             //
         });
     }

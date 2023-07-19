@@ -154,6 +154,7 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
         Route::get('rematri/{rematri}/hb', [RematriController::class, 'hb'])->name('rematri.hb');
         Route::post('rematri/hb', [RematriController::class, 'storehb'])->name('hb.store');
         Route::delete('rematri/{rematri}/destroyhb', [RematriController::class, 'destroyhb'])->name('rematri.destroyhb');
+        Route::post('kenaikan-kelas/naik', [RematriController::class, 'naik'])->name('kenaikan-kelas.naik');
 
         // Sesi
         Route::resource('sesi', SesiController::class)->middleware('checkDataRematri');
