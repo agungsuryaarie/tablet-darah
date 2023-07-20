@@ -57,7 +57,6 @@
                                         <thead>
                                             <tr>
                                                 <th style="width:5%">No</th>
-                                                <th style="width:15%">NIK</th>
                                                 <th>Nama</th>
                                                 <th class="text-center" style="width:10%">Foto</th>
                                                 <th class="text-center" style="width: 8%">Action</th>
@@ -153,10 +152,6 @@
                 columns: [{
                         data: "DT_RowIndex",
                         name: "DT_RowIndex",
-                    },
-                    {
-                        data: "nik",
-                        name: "nik",
                     },
                     {
                         data: "nama",
