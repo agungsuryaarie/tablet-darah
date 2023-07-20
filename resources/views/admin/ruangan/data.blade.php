@@ -16,6 +16,7 @@
     <x-datatable link="javascript:void(0)" label="Tambah">
         <th style="width:5%">No</th>
         <th>Kelas</th>
+        <th class="text-center" style="width: 10%">Action</th>
     </x-datatable>
     <x-ajaxModel size="">
         <x-dropdown name="kelas_id" label="Kelas">
@@ -23,7 +24,7 @@
                 <option value="{{ $room->id }}">{{ $room->nama }}</option>
             @endforeach
         </x-dropdown>
-        <x-input type="text" name="nama" label="Nama Ruangan"
+        <x-input type="text" name="name" label="Nama Ruangan"
             placeholder="contoh : Angka (1,2,3) atau huruf (A,B,C) atau Jurusan">
         </x-input>
     </x-ajaxModel>
@@ -46,6 +47,12 @@
                     data: "kelas",
                     name: "kelas",
                 },
+                {
+                    data: "action",
+                    name: "action",
+                    orderable: false,
+                    searchable: false,
+                },
             ]);
 
             // Create
@@ -53,10 +60,10 @@
             createModel(createHeading)
 
             // Edit
-            // var editUrl = "{{ route('kelas.index') }}";
-            // var editHeading = "Edit Kelas";
-            // var field = ['nama', ]; // disesuaikan dengan data yang ingin di tampilkan
-            // editModel(editUrl, editHeading, field)
+            var editUrl = "{{ route('ruangan.index') }}";
+            var editHeading = "Edit Kelas";
+            var field = ['kelas_id', 'name', ]; // disesuaikan dengan data yang ingin di tampilkan
+            editModel(editUrl, editHeading, field)
 
             // Save
             saveBtn("{{ route('ruangan.store') }}", myTable);

@@ -16,16 +16,21 @@ class RuanganController extends Controller
     {
         $menu = 'Kelas';
         $auth = Auth::user();
-        $kelas = Kelas::where('jenjang', $auth->jenjang)->get();
+        $kelas = Kelas::where('jenjang', $auth->jenjang)->latest()->get();
         $ruangan = Ruangan::where('sekolah_id', $auth->sekolah_id)->first();
         if ($request->ajax()) {
-            $data = Ruangan::where('sekolah_id', $auth->sekolah_id)->get();
+            $data = Ruangan::where('sekolah_id', $auth->sekolah_id)->latest()->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('kelas', function ($data) {
                     return $data->kelas->nama . ' - ' . $data->name;
                 })
-                ->rawColumns(['nama', 'action'])
+                ->addColumn('action', function ($row) {
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-xs"><i class="fas fa-edit"></i> Edit</a>';
+                    // $btn = '<center>' . $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-xs delete"><i class="fas fa-trash"></i></a><center>';
+                    return $btn;
+                })
+                ->rawColumns(['action'])
                 ->make(true);
         }
 
@@ -37,13 +42,13 @@ class RuanganController extends Controller
         //Translate Bahasa Indonesia
         $message = array(
             'kelas_id.required' => 'Kelas harus dipilih.',
-            'nama.required' => 'Nama Ruangan harus diisi.',
-            'nama.unique' => 'Kombinasi kelas dan Ruangan sudah ada untuk sekolah ini.',
+            'name.required' => 'Nama Ruangan harus diisi.',
+            'name.unique' => 'Kombinasi kelas dan Ruangan sudah ada untuk sekolah ini.',
         );
 
         $validator = Validator::make($request->all(), [
             'kelas_id' => 'required',
-            'nama' => 'required|unique:ruangan,name,NULL,id,kelas_id,' . $request->kelas_id . ',sekolah_id,' . Auth::user()->sekolah_id,
+            'name' => 'required|unique:ruangan,name,NULL,id,kelas_id,' . $request->kelas_id . ',sekolah_id,' . Auth::user()->sekolah_id,
         ], $message);
 
         if ($validator->fails()) {
@@ -57,7 +62,7 @@ class RuanganController extends Controller
             [
                 'sekolah_id' => Auth::user()->sekolah_id,
                 'kelas_id' => $request->kelas_id,
-                'name' => $request->nama,
+                'name' => $request->name,
             ]
         );
 
