@@ -38,6 +38,18 @@ class KelasTableSeeder extends Seeder
                 'jenjang' => 'SMA',
                 'nama' => 'XII',
             ],
+            [
+                'jenjang' => 'SMK',
+                'nama' => 'X',
+            ],
+            [
+                'jenjang' => 'SMK',
+                'nama' => 'XI',
+            ],
+            [
+                'jenjang' => 'SMK',
+                'nama' => 'XII',
+            ],
         ];
         Kelas::insert($data);
     }

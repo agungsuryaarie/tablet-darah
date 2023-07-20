@@ -218,7 +218,7 @@ class SesiController extends Controller
             ]
         );
         //redirect to index
-        return redirect()->route('sesi.rematri', Crypt::encryptString($request->sesi_id))->with('toast_success', 'Photo upload successfully.');
+        return redirect()->route('sesi.rematri', $request->sesi_id)->with('toast_success', 'Photo upload successfully.');
     }
 
     public function rematriview(Request $request, $id)

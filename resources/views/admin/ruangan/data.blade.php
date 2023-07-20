@@ -23,7 +23,9 @@
                 <option value="{{ $room->id }}">{{ $room->nama }}</option>
             @endforeach
         </x-dropdown>
-        <x-input type="text" name="nama" label="Nama Ruangan"></x-input>
+        <x-input type="text" name="nama" label="Nama Ruangan"
+            placeholder="contoh : Angka (1,2,3) atau huruf (A,B,C) atau Jurusan">
+        </x-input>
     </x-ajaxModel>
     <x-delete></x-delete>
 @endsection
