@@ -49,7 +49,12 @@ class SesiController extends Controller
             return response()->json(['errors' => $validator->errors()->all()]);
         }
 
-        $rematri = RematriSekolah::where('ruangan_id', $request->ruangan_id)->get();
+        if ($request->ruangan_id) {
+            $rematri = RematriSekolah::where('ruangan_id', $request->ruangan_id)->get();
+        } else {
+            $rematri = RematriSekolah::where('kelas_id', $request->kelas_id)->where('sekolah_id', Auth::user()->sekolah_id)->get();
+        }
+
         // Memeriksa apakah ada data rematri
         if ($rematri->isEmpty()) {
             // Jika tidak ada data rematri, tampilkan notifikasi
@@ -57,10 +62,19 @@ class SesiController extends Controller
         }
         // Memeriksa apakah kombinasi kelas dan ruangan sudah ada dalam tabel Sesi
         $namaSesi = 'Minggu ke - ' . Carbon::now()->weekOfMonth . ' Bulan ' . Carbon::now()->isoFormat('MMMM');
-        $sesiExists = Sesi::where('kelas_id', $request->kelas_id)
-            ->where('ruangan_id', $request->ruangan_id)
-            ->where('nama', $namaSesi)
-            ->exists();
+
+        if ($request->ruangan_id) {
+            $sesiExists = Sesi::where('kelas_id', $request->kelas_id)
+                ->where('ruangan_id', $request->ruangan_id)
+                ->where('nama', $namaSesi)
+                ->exists();
+        } else {
+            $sesiExists = Sesi::where('kelas_id', $request->kelas_id)
+                ->where('sekolah_id', Auth::user()->sekolah_id)
+                ->where('nama', $namaSesi)
+                ->exists();
+        }
+
         if ($sesiExists) {
             // Jika kombinasi kelas dan ruangan sudah ada, tampilkan notifikasi
             return response()->json(['errors' => ['Kelas dan Ruangan sudah ada pada Sesi yang sama.']]);
