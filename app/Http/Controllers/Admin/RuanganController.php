@@ -38,11 +38,12 @@ class RuanganController extends Controller
         $message = array(
             'kelas_id.required' => 'Kelas harus dipilih.',
             'nama.required' => 'Nama Ruangan harus diisi.',
+            'nama.unique' => 'Kombinasi kelas dan Ruangan sudah ada untuk sekolah ini.',
         );
 
         $validator = Validator::make($request->all(), [
             'kelas_id' => 'required',
-            'nama' => 'required',
+            'nama' => 'required|unique:ruangan,name,NULL,id,kelas_id,' . $request->kelas_id . ',sekolah_id,' . Auth::user()->sekolah_id,
         ], $message);
 
         if ($validator->fails()) {
