@@ -116,7 +116,7 @@ class SesiController extends Controller
     public function rematri(Request $request, $id)
     {
         $menu = 'Sesi';
-        $sesi = Sesi::where('id', Crypt::decryptString($id))->where('sekolah_id', Auth::user()->sekolah_id)->first();
+        $sesi = Sesi::where('id', $id)->where('sekolah_id', Auth::user()->sekolah_id)->first();
         $count = SesiRematri::where('sesi_id', $sesi->id)->count();
         if ($request->ajax()) {
             $data = SesiRematri::where('sesi_id', $sesi->id)->get();

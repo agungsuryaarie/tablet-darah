@@ -41,7 +41,7 @@
                                                 $today = \Carbon\Carbon::now();
                                             @endphp
                                             @if ($today->lessThan($createdDate))
-                                                <a href="{{ route('sesi.rematri', Crypt::encryptString($item->id)) }}">
+                                                <a href="{{ route('sesi.rematri', $item->id) }}">
                                                 @else
                                                     <a href="#">
                                             @endif
