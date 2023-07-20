@@ -38,11 +38,11 @@ class SesiController extends Controller
         //Translate Bahasa Indonesia
         $message = array(
             'kelas_id.required' => 'Kelas harus dipilih.',
-            'ruangan_id.required' => 'Ruangan harus dipilih.',
+            // 'ruangan_id.required' => 'Ruangan harus dipilih.',
         );
         $validator = Validator::make($request->all(), [
             'kelas_id' => 'required',
-            'ruangan_id' => 'required',
+            // 'ruangan_id' => 'required',
         ], $message);
 
         if ($validator->fails()) {
@@ -73,12 +73,18 @@ class SesiController extends Controller
                 'kecamatan_id' => Auth::user()->kecamatan_id,
                 'puskesmas_id' => Auth::user()->puskesmas_id,
                 'sekolah_id' => Auth::user()->sekolah_id,
-                'ruangan_id' => $request->ruangan_id,
                 'kelas_id' => $request->kelas_id,
+                'ruangan_id' => $request->ruangan_id,
                 'nama' => $namaSesi,
             ]
         );
-        $rematri = RematriSekolah::where('ruangan_id', $request->ruangan_id)->get();
+
+        if ($request->ruangan_id) {
+            $rematri = RematriSekolah::where('ruangan_id', $request->ruangan_id)->get();
+        } else {
+            $rematri = RematriSekolah::where('kelas_id', $request->kelas_id)->where('sekolah_id', Auth::user()->sekolah_id)->get();
+        }
+
         $sesiid  = Sesi::orderBy('id', 'DESC')->first();
         // fecth rematri
         foreach ($rematri as $r) {
@@ -87,8 +93,6 @@ class SesiController extends Controller
             SesiRematri::create(
                 [
                     'sesi_id' => $sesiid->id,
-                    'ruangan_id' => $sesiid->ruangan_id,
-                    'kelas_id' => $sesiid->kelas_id,
                     'rematri_id' => $id_rematri,
                 ]
             );
