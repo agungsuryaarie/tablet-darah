@@ -2,6 +2,12 @@
 <script src="{{ asset('/') }}dist/assets/js/popper.js"></script>
 <script src="{{ asset('/') }}dist/assets/js/bootstrap.min.js"></script>
 <script src="{{ asset('/') }}dist/assets/js/main.js"></script>
+<script>
+    // Function to reset the modal shown status to false
+    function resetModalShownStatus() {
+        localStorage.setItem('modalShown', 'false');
+    }
+</script>
 </body>
 
 </html>

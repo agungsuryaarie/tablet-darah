@@ -164,6 +164,7 @@ Route::group(['middleware' => ['auth:admdinas,admpuskes,admsekolah,admposyandu']
         Route::get('sesi/ttd/{id}/{ids}/{ttd}', [SesiController::class, 'ttd'])->name('sesi.ttd');
         Route::post('sesi/upload', [SesiController::class, 'upload'])->name('sesi.uploadfoto');
         Route::get('sesi/{id}/foto-rematri', [SesiController::class, 'foto'])->name('sesi.foto');
+        Route::get('get-sesi-page',  [SesiController::class, 'getPaginatedData'])->name('get_sesi_page');
     });
     Route::group(['middleware' => ['checkUser:4']], function () {
         //Profil

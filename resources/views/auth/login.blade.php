@@ -66,3 +66,7 @@
     </div>
 </section>
 @include('auth.layout.js')
+<script>
+    // Panggil fungsi resetModalShownStatus() saat logout berhasil
+    resetModalShownStatus();
+</script>

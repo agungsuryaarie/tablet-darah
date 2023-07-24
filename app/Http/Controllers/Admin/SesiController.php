@@ -29,10 +29,16 @@ class SesiController extends Controller
     {
         $menu = 'Sesi';
         $kelas = Kelas::where('jenjang', Auth::user()->jenjang)->get();
-        $sesi = Sesi::where('sekolah_id', Auth::user()->sekolah_id)->latest()->get();
+        $sesi = Sesi::where('sekolah_id', Auth::user()->sekolah_id)->latest()->paginate(6);
         return view('admin.sesi.data', compact('menu', 'sesi', 'kelas'));
     }
 
+    public function getPaginatedData(Request $request)
+    {
+        $sesi = Sesi::where('sekolah_id', Auth::user()->sekolah_id)->latest()->paginate(6);
+
+        return $sesi->toJson();
+    }
     public function store(Request $request)
     {
         //Translate Bahasa Indonesia
