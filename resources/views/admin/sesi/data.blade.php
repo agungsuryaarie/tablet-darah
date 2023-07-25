@@ -274,11 +274,13 @@
                 var minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
                 var seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
 
-                // Tampilkan countdown pada elemen HTML
-                document.getElementById('berakhir_' + index).innerHTML = days + " hari, " + hours + " jam, " +
-                    minutes +
-                    " menit, " +
-                    seconds + " detik";
+                // Periksa apakah elemen dengan ID berakhir_ ada di halaman
+                var countdownElement = document.getElementById('berakhir_' + index);
+                if (countdownElement) {
+                    // Tampilkan countdown pada elemen HTML
+                    countdownElement.innerHTML = days + " hari, " + hours + " jam, " +
+                        minutes + " menit, " + seconds + " detik";
+                }
 
                 if (timeDiff < 0) {
                     var countdownElement = document.getElementById('berakhir_' + index);
