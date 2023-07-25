@@ -19,7 +19,7 @@
     <section class="content">
         <div class="container-fluid">
             <div class="d-flex justify-content-center align-items-center">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="card">
                         <figure class="highcharts-figure">
                             <div class='buttons'>

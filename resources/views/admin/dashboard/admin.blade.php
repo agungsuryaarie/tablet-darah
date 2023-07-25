@@ -84,7 +84,7 @@
                 </div>
 
                 {{-- Tabel --}}
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <x-datatableNoHeader header="Jumlah Rematri Perpuskesmas">
                         <th style="width: 3%" class="text-center"></th>
                         <th>Puskesmas</th>
@@ -106,20 +106,29 @@
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
                 },
             });
-
-            var myTable = DataTable("{{ route('puskesmas.rematri.count') }}", [{
-                    data: "DT_RowIndex",
-                    name: "DT_RowIndex",
-                },
-                {
-                    data: "puskesmas",
-                    name: "puskesmas",
-                },
-                {
-                    data: "rematri",
-                    name: "rematri",
-                },
-            ]);
+            var myTable = $(".data-table").DataTable({
+                processing: true,
+                serverSide: true,
+                responsive: true,
+                pageLength: 20,
+                lengthMenu: [10, 20],
+                lengthChange: true,
+                autoWidth: false,
+                ajax: "{{ route('puskesmas.rematri.count') }}",
+                columns: [{
+                        data: "DT_RowIndex",
+                        name: "DT_RowIndex",
+                    },
+                    {
+                        data: "puskesmas",
+                        name: "puskesmas",
+                    },
+                    {
+                        data: "rematri",
+                        name: "rematri",
+                    },
+                ],
+            });
         });
 
         var puskesmas_count = {!! json_encode($puskesmas_count) !!};

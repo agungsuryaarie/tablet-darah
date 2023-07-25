@@ -47,7 +47,15 @@ class DashboardController extends Controller
                 ->orderBy('bulan')
                 ->get();
 
-            return view('admin.dashboard.puskesmas', compact('menu', 'sekolah_puskes', 'posyandu_puskes', 'usersekolah_puskes', 'userposyandu_puskes', 'bulan'));
+            $puskesmas_id = Auth::user()->puskesmas_id;
+
+            $rematriData = Sekolah::select('sekolah.sekolah as sekolah_nama', 'sekolah.id as sekolah_id', \DB::raw('COUNT(rematri_sekolah.id) as rematri_count'))
+                ->leftJoin('rematri_sekolah', 'sekolah.id', '=', 'rematri_sekolah.sekolah_id')
+                ->where('sekolah.puskesmas_id', $puskesmas_id)
+                ->groupBy('sekolah.id', 'sekolah.sekolah')
+                ->get();
+
+            return view('admin.dashboard.puskesmas', compact('menu', 'sekolah_puskes', 'posyandu_puskes', 'usersekolah_puskes', 'userposyandu_puskes', 'bulan', 'rematriData'));
         } elseif ($auth == 3) {
 
             $bulan = Sesi::with('sesi_rematri')
@@ -56,7 +64,6 @@ class DashboardController extends Controller
                 ->groupBy('nama_bulan', 'bulan')
                 ->orderBy('bulan')
                 ->get();
-
             return view('admin.dashboard.sekolah', compact('menu', 'bulan'));
         } else {
             return view('admin.dashboard.posyandu', compact('menu', 'rematri_count'));

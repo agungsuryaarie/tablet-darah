@@ -93,7 +93,13 @@
                         </figure>
                     </div>
                 </div>
-
+                <div class="col-md-12">
+                    <div class="card">
+                        <figure class="highcharts-figure">
+                            <div id="container-sekolah"></div>
+                        </figure>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -194,5 +200,43 @@
                 return groups;
             }, {});
         }
+
+
+        //Sekolah rematri
+        document.addEventListener('DOMContentLoaded', function() {
+            // Data passed from the controller
+            var rematriData = @json($rematriData);
+
+            // Prepare the data for Highcharts
+            var categories = [];
+            var counts = [];
+
+            rematriData.forEach(function(item) {
+                categories.push(item.sekolah_nama); // School name from the 'sekolah' table
+                counts.push(item.rematri_count);
+            });
+
+            // Create the Highcharts chart
+            Highcharts.chart('container-sekolah', {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Grafik Data Rematri'
+                },
+                xAxis: {
+                    categories: categories
+                },
+                yAxis: {
+                    title: {
+                        text: 'Jumlah'
+                    }
+                },
+                series: [{
+                    name: 'Jumlah Data Rematri',
+                    data: counts
+                }]
+            });
+        });
     </script>
 @endsection
