@@ -29,16 +29,28 @@ class SesiController extends Controller
     {
         $menu = 'Sesi';
         $kelas = Kelas::where('jenjang', Auth::user()->jenjang)->get();
-        $sesi = Sesi::where('sekolah_id', Auth::user()->sekolah_id)->latest()->paginate(6);
+        $sesi = Sesi::where('sekolah_id', Auth::user()->sekolah_id)->latest()->get();
         return view('admin.sesi.data', compact('menu', 'sesi', 'kelas'));
     }
 
-    public function getPaginatedData(Request $request)
-    {
-        $sesi = Sesi::where('sekolah_id', Auth::user()->sekolah_id)->latest()->paginate(6);
+    // public function getPaginatedData(Request $request)
+    // {
+    //     $perPage = 6; // Number of items per page
+    //     $currentPage = $request->input('page') ?? 1;
 
-        return $sesi->toJson();
-    }
+    //     // Fetch data based on the user's school_id, order by the latest date
+    //     $sesi = Sesi::where('sekolah_id', Auth::user()->sekolah_id)
+    //         ->latest()
+    //         ->paginate($perPage, ['*'], 'page', $currentPage);
+
+    //     // Format the 'created_at' timestamp as ISO 8601 string
+    //     $sesi->getCollection()->transform(function ($item) {
+    //         $item->created_at = $item->created_at->toIso8601String();
+    //         return $item;
+    //     });
+
+    //     return $sesi->toJson();
+    // }
     public function store(Request $request)
     {
         //Translate Bahasa Indonesia

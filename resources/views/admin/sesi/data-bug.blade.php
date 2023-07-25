@@ -91,6 +91,13 @@
                                 @endif
                             </div>
                         </div>
+                        <div class="card-footer">
+                            <nav aria-label="Contacts Page Navigation">
+                                <ul class="pagination justify-content-center m-0">
+                                    {{ $sesi->links('pagination.custom_pagination') }}
+                                </ul>
+                            </nav>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -237,82 +244,126 @@
             theme: 'bootstrap4'
         })
         //waktu sesi
+        // Variable untuk menyimpan referensi interval
+        var countdownIntervals = [];
+
+        // Function untuk membersihkan semua interval yang ada
+        function clearCountdownIntervals() {
+            countdownIntervals.forEach(function(interval) {
+                clearInterval(interval);
+            });
+            countdownIntervals = [];
+        }
         // Dapatkan tanggal dari database
-        var data = {!! json_encode($sesi) !!};
-        // Mengakses setiap data tanggal dan jam dalam perulangan
-        data.forEach(function(item, index) {
-            // Ubah tanggal database menjadi objek Date
-            var targetDate = new Date(item.created_at);
+        function updateCountdown(data) {
+            clearCountdownIntervals();
+            data.forEach(function(item, index) {
+                // Ubah tanggal database menjadi objek Date
+                var targetDate = new Date(item.created_at);
 
-            // Tambahkan 7 hari ke tanggal target
-            targetDate = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate() + (6 -
-                targetDate.getDay()));
+                // Tambahkan 7 hari ke tanggal target
+                targetDate = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate() + (6 -
+                    targetDate.getDay()));
 
-            // Hitung selisih waktu antara tanggal target dan tanggal saat ini
-            var timeDiff = targetDate.getTime() - new Date().getTime();
+                // Hitung selisih waktu antara tanggal target dan tanggal saat ini
+                var timeDiff = targetDate.getTime() - new Date().getTime();
 
-            // Hitung jumlah hari, jam, menit, dan detik yang tersisa
-            var days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-            var hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            var minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+                // Hitung jumlah hari, jam, menit, dan detik yang tersisa
+                var days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
 
-            // Tampilkan countdown pada elemen HTML
-            document.getElementById('berakhir_' + index).innerHTML = days + " hari, " + hours + " jam, " + minutes +
-                " menit, " +
-                seconds + " detik";
-
-            if (timeDiff < 0) {
-                var countdownElement = document.getElementById('berakhir_' + index);
-                countdownElement.innerHTML = "sesi berakhir";
-            }
-
-            // Update berakhir setiap detik
-            setInterval(function() {
-                timeDiff = targetDate.getTime() - new Date().getTime();
-                days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-                hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-                seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
-
-                document.getElementById('berakhir_' + index).innerHTML = days + " hari, " + hours +
-                    " jam, " +
+                // Tampilkan countdown pada elemen HTML
+                document.getElementById('berakhir_' + index).innerHTML = days + " hari, " + hours + " jam, " +
                     minutes +
-                    " menit, " + seconds + " detik";
+                    " menit, " +
+                    seconds + " detik";
 
                 if (timeDiff < 0) {
                     var countdownElement = document.getElementById('berakhir_' + index);
                     countdownElement.innerHTML = "sesi berakhir";
-                    // Tambahkan tombol View
-                    var viewButton = document.createElement('button');
-                    viewButton.className = 'btn btn-primary btn-xs ml-2 mr-2';
-                    viewButton.innerHTML = '<i class="fa fa-eye"></i> View';
-                    viewButton.addEventListener('click', function() {
-                        var sesi_id = item.id;
-                        var url = "{{ url('sesi') }}" + "/" + sesi_id +
-                            "/rematri-view";
-                        window.location = url;
-                    });
-                    countdownElement.appendChild(viewButton);
-
-                    // Tambahkan tombol Export
-                    var exportButton = document.createElement('button');
-                    exportButton.className =
-                        'btn btn-success btn-xs';
-                    exportButton.innerHTML =
-                        '<i class="fa fa-download"></i> Export';
-                    exportButton.addEventListener('click',
-                        function() {
-                            var sesi_id = item.id;
-                            var url = "{{ url('sesi') }}" + "/" + sesi_id +
-                                "/export";
-                            window.location = url;
-                        });
-                    countdownElement.appendChild(exportButton);
                 }
 
-            }, 1000);
-        })
+                // Update berakhir setiap detik
+                var interval = setInterval(function() {
+                    timeDiff = targetDate.getTime() - new Date().getTime();
+                    days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+                    hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+                    seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+
+                    document.getElementById('berakhir_' + index).innerHTML = days + " hari, " + hours +
+                        " jam, " +
+                        minutes +
+                        " menit, " + seconds + " detik";
+
+                    if (timeDiff < 0) {
+                        var countdownElement = document.getElementById('berakhir_' + index);
+                        countdownElement.innerHTML = "sesi berakhir";
+                        // Tambahkan tombol View
+                        var viewButton = document.createElement('button');
+                        viewButton.className = 'btn btn-primary btn-xs ml-2 mr-2';
+                        viewButton.innerHTML = '<i class="fa fa-eye"></i> View';
+                        viewButton.addEventListener('click', function() {
+                            var sesi_id = item.id;
+                            var url = "{{ url('sesi') }}" + "/" + sesi_id +
+                                "/rematri-view";
+                            window.location = url;
+                        });
+                        countdownElement.appendChild(viewButton);
+
+                        // Tambahkan tombol Export
+                        var exportButton = document.createElement('button');
+                        exportButton.className =
+                            'btn btn-success btn-xs';
+                        exportButton.innerHTML =
+                            '<i class="fa fa-download"></i> Export';
+                        exportButton.addEventListener('click',
+                            function() {
+                                var sesi_id = item.id;
+                                var url = "{{ url('sesi') }}" + "/" + sesi_id +
+                                    "/export";
+                                window.location = url;
+                            });
+                        countdownElement.appendChild(exportButton);
+                        clearInterval(interval);
+                    }
+                }, 1000);
+                // Menyimpan referensi interval ke dalam array
+                countdownIntervals.push(interval);
+
+            });
+        }
+        // Function to fetch paginated data using AJAX
+        function fetchPaginatedData(page) {
+            $.ajax({
+                url: "{{ route('get_sesi_page') }}",
+                data: {
+                    page: page
+                },
+                dataType: 'json',
+                success: function(response) {
+                    var data = response.data;
+                    updateCountdown(data);
+                },
+                error: function(error) {
+                    console.error(error);
+                }
+            });
+        }
+        // Call the fetchPaginatedData function initially with the initial page number (1)
+        fetchPaginatedData(1);
+
+        // Pagination links click event
+        document.addEventListener('click', function(event) {
+            var target = event.target;
+            if (target.classList.contains('page-link')) {
+                // event.preventDefault();
+                var page = parseInt(target.innerText); // Get the clicked page number
+                fetchPaginatedData(page);
+            }
+        });
         //validasi data
         document.addEventListener('DOMContentLoaded', function() {
             var submitButton = document.getElementById('createNewSesi');
@@ -323,13 +374,36 @@
                 submitButton.disabled = false;
             @endif
         });
-        // modal auto
+        // Function to check if the modal has been shown before
+        function hasModalBeenShown() {
+            return localStorage.getItem('modalShown') === 'true';
+        }
+
+        // Function to set the modal shown flag in localStorage
+        function setModalShown() {
+            localStorage.setItem('modalShown', 'true');
+        }
+
+        // Function to show the modal if it has not been shown before
+        function showFirstTimeModal() {
+            if (!hasModalBeenShown()) {
+                $('#myModal').modal('show');
+                setModalShown();
+            }
+        }
+
+        // Modal auto show on first page load
         window.addEventListener('DOMContentLoaded', function() {
-            $('#myModal').modal('show');
+            showFirstTimeModal();
         });
+
         $(document).ready(function() {
-            $('#myModal').modal('show');
+            showFirstTimeModal();
             $("#modelHeadingInfo").html("<h6><i class='fa fa-info-circle'></i> Informasi</h6>");
         });
+        // Function to reset the modal shown status to false
+        function resetModalShownStatus() {
+            localStorage.setItem('modalShown', 'false');
+        }
     </script>
 @endsection
