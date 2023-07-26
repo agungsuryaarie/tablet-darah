@@ -75,22 +75,35 @@
                 </div>
 
                 {{-- Chart --}}
-                <div class="col-md-12">
+                {{-- <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
                             <div id="bar-chart" style="height: 400px; width:100%;"></div>
                         </div>
                     </div>
-                </div>
-
-                {{-- Tabel --}}
+                </div> --}}
                 <div class="col-md-12">
+                    <div class="card">
+                        <figure class="highcharts-figure">
+                            <div id="container-puskesmas" style="height: 400px; width:100%;"></div>
+                        </figure>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="card">
+                        <figure class="highcharts-figure">
+                            <div id="container-sekolah-rematri" style="height: 400px; width:100%;"></div>
+                        </figure>
+                    </div>
+                </div>
+                {{-- Tabel --}}
+                {{-- <div class="col-md-12">
                     <x-datatableNoHeader header="Jumlah Rematri Perpuskesmas">
                         <th style="width: 3%" class="text-center"></th>
                         <th>Puskesmas</th>
                         <th style="width:12%" class="text-center">Jumlah Rematri</th>
                     </x-datatableNoHeader>
-                </div>
+                </div> --}}
             </div>
         </div>
     </section>
@@ -99,78 +112,155 @@
     <script src="{{ url('plugins/flot/jquery.flot.js') }}"></script>
     <script src="{{ url('plugins/flot/plugins/jquery.flot.resize.js') }}"></script>
     <script src="{{ url('plugins/flot/plugins/jquery.flot.pie.js') }}"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
     <script>
-        $(function() {
-            $.ajaxSetup({
-                headers: {
-                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-                },
+        // $(function() {
+        //     $.ajaxSetup({
+        //         headers: {
+        //             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        //         },
+        //     });
+        //     var myTable = $(".data-table").DataTable({
+        //         processing: true,
+        //         serverSide: true,
+        //         responsive: true,
+        //         pageLength: 20,
+        //         lengthMenu: [10, 20],
+        //         lengthChange: true,
+        //         autoWidth: false,
+        //         ajax: "{{ route('puskesmas.rematri.count') }}",
+        //         columns: [{
+        //                 data: "DT_RowIndex",
+        //                 name: "DT_RowIndex",
+        //             },
+        //             {
+        //                 data: "puskesmas",
+        //                 name: "puskesmas",
+        //             },
+        //             {
+        //                 data: "rematri",
+        //                 name: "rematri",
+        //             },
+        //         ],
+        //     });
+        // });
+
+        // var puskesmas_count = {!! json_encode($puskesmas_count) !!};
+
+        // var bar_data = {
+        //     data: puskesmas_count.map(function(item, index) {
+        //         return [index + 1, item.rematri_count];
+        //     }),
+        //     bars: {
+        //         show: true
+        //     }
+        // };
+
+        // var xaxis_ticks = puskesmas_count.map(function(item, index) {
+        //     return [index + 1, item.puskesmas];
+
+        // });
+        // $.plot('#bar-chart', [bar_data], {
+        //     grid: {
+        //         borderWidth: 1,
+        //         borderColor: '#f3f3f3',
+        //         tickColor: '#f3f3f3'
+        //     },
+        //     series: {
+        //         bars: {
+        //             show: true,
+        //             barWidth: 0.5,
+        //             align: 'center',
+        //         },
+        //     },
+        //     colors: ['#3c8dbc'],
+        //     // autoScale: "sliding-window",
+        //     xaxis: {
+        //         mode: "categories",
+        //         tickLength: 0,
+        //         font: {
+        //             size: 10,
+        //             variant: "small-caps"
+        //         },
+        //         // ticks: xaxis_ticks,
+        //     },
+
+        // });
+
+        //Puskesmas rematri
+        document.addEventListener('DOMContentLoaded', function() {
+            // Data passed from the controller
+            var rematriData = @json($rematriData);
+
+            // Prepare the data for Highcharts
+            var categories = [];
+            var counts = [];
+
+            rematriData.forEach(function(item) {
+                categories.push(item.puskesmas_nama); // School name from the 'sekolah' table
+                counts.push(item.rematri_count);
             });
-            var myTable = $(".data-table").DataTable({
-                processing: true,
-                serverSide: true,
-                responsive: true,
-                pageLength: 20,
-                lengthMenu: [10, 20],
-                lengthChange: true,
-                autoWidth: false,
-                ajax: "{{ route('puskesmas.rematri.count') }}",
-                columns: [{
-                        data: "DT_RowIndex",
-                        name: "DT_RowIndex",
-                    },
-                    {
-                        data: "puskesmas",
-                        name: "puskesmas",
-                    },
-                    {
-                        data: "rematri",
-                        name: "rematri",
-                    },
-                ],
+
+            // Create the Highcharts chart
+            Highcharts.chart('container-puskesmas', {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Grafik Data Rematri Seluruh Puskesmas'
+                },
+                xAxis: {
+                    categories: categories
+                },
+                yAxis: {
+                    title: {
+                        text: 'Jumlah'
+                    }
+                },
+                series: [{
+                    name: 'Jumlah Data Rematri',
+                    data: counts
+                }]
             });
         });
 
-        var puskesmas_count = {!! json_encode($puskesmas_count) !!};
+        document.addEventListener('DOMContentLoaded', function() {
+            // Data passed from the controller
+            var rematriDataS = @json($rematriDataS);
 
-        var bar_data = {
-            data: puskesmas_count.map(function(item, index) {
-                return [index + 1, item.rematri_count];
-            }),
-            bars: {
-                show: true
-            }
-        };
+            // Prepare the data for Highcharts
+            var categories = [];
+            var counts = [];
 
-        var xaxis_ticks = puskesmas_count.map(function(item, index) {
-            return [index + 1, item.puskesmas];
+            rematriDataS.forEach(function(item) {
+                categories.push(item.sekolah_nama); // School name from the 'sekolah' table
+                counts.push(item.rematri_count);
+            });
 
-        });
-        $.plot('#bar-chart', [bar_data], {
-            grid: {
-                borderWidth: 1,
-                borderColor: '#f3f3f3',
-                tickColor: '#f3f3f3'
-            },
-            series: {
-                bars: {
-                    show: true,
-                    barWidth: 0.5,
-                    align: 'center',
+            // Create the Highcharts chart
+            Highcharts.chart('container-sekolah-rematri', {
+                chart: {
+                    type: 'column'
                 },
-            },
-            colors: ['#3c8dbc'],
-            // autoScale: "sliding-window",
-            xaxis: {
-                mode: "categories",
-                tickLength: 0,
-                font: {
-                    size: 10,
-                    variant: "small-caps"
+                title: {
+                    text: 'Grafik Data Rematri Seluruh Sekolah'
                 },
-                // ticks: xaxis_ticks,
-            },
-
+                xAxis: {
+                    categories: categories
+                },
+                yAxis: {
+                    title: {
+                        text: 'Jumlah'
+                    }
+                },
+                series: [{
+                    name: 'Jumlah Data Rematri',
+                    data: counts
+                }]
+            });
         });
     </script>
 @endsection

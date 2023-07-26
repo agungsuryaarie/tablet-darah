@@ -96,7 +96,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <figure class="highcharts-figure">
-                            <div id="container-sekolah"></div>
+                            <div id="container-sekolah" style="height: 400px; width:100%;"></div>
                         </figure>
                     </div>
                 </div>

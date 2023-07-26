@@ -38,7 +38,18 @@ class DashboardController extends Controller
         $auth = Auth::user()->role;
 
         if ($auth == 1) {
-            return view('admin.dashboard.admin', compact('menu', 'puskesmas', 'sekolah', 'posyandu', 'user_puskes', 'puskesmas_count'));
+            $rematriDataS = Sekolah::select('sekolah.sekolah as sekolah_nama', \DB::raw('COUNT(rematri_sekolah.id) as rematri_count'))
+                ->leftJoin('rematri_sekolah', 'sekolah.id', '=', 'rematri_sekolah.sekolah_id')
+                ->groupBy('sekolah.id', 'sekolah.sekolah')
+                ->get();
+            // dd($rematriDataS);
+            $rematriData = Puskesmas::select('puskesmas.puskesmas as puskesmas_nama', \DB::raw('COUNT(rematri_sekolah.id) as rematri_count'))
+                ->leftJoin('sekolah', 'puskesmas.id', '=', 'sekolah.puskesmas_id')
+                ->leftJoin('rematri_sekolah', 'sekolah.id', '=', 'rematri_sekolah.sekolah_id')
+                ->groupBy('puskesmas.id', 'puskesmas.puskesmas')
+                ->get();
+            // dd($rematriData);
+            return view('admin.dashboard.admin', compact('menu', 'puskesmas', 'sekolah', 'posyandu', 'user_puskes', 'puskesmas_count', 'rematriData', 'rematriDataS'));
         } elseif ($auth == 2) {
             $bulan = Sesi::with('sesi_rematri')
                 ->selectRaw("DATE_FORMAT(sesi.created_at, '%b') as nama_bulan, MONTH(sesi.created_at) as bulan")
@@ -146,17 +157,17 @@ class DashboardController extends Controller
         return response()->json($sesi);
     }
 
-    public function puskesmas(Request $request)
-    {
-        if ($request->ajax()) {
-            $data = Puskesmas::with('rematri')->get();
-            return DataTables::of($data)
-                ->addIndexColumn()
-                ->addColumn('rematri', function ($data) {
-                    return '<center>' . $data->rematri->count() . '</center>';
-                })
-                ->rawColumns(['rematri'])
-                ->make(true);
-        }
-    }
+    // public function puskesmas(Request $request)
+    // {
+    //     if ($request->ajax()) {
+    //         $data = Puskesmas::with('rematri')->get();
+    //         return DataTables::of($data)
+    //             ->addIndexColumn()
+    //             ->addColumn('rematri', function ($data) {
+    //                 return '<center>' . $data->rematri->count() . '</center>';
+    //             })
+    //             ->rawColumns(['rematri'])
+    //             ->make(true);
+    //     }
+    // }
 }
