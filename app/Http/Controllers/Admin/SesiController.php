@@ -185,11 +185,13 @@ class SesiController extends Controller
     }
     public function upload(Request $request)
     {
+        // Membuat instance dari Agent
         $agent = new Agent();
-
-        if ($agent->isMobile()) {
+        // Mendeteksi apakah pengguna menggunakan perangkat mobile
+        $isMobile = $agent->isMobile();
+        if ($isMobile) {
             $img = $request->file('foto');
-            $filename = $img->hashName();
+            $filename = time() . '-' . $img->getClientOriginalName();
             // Mengompresi ukuran file foto
             $image = Image::make($img)
                 ->resize(800, null, function ($constraint) {
