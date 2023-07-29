@@ -245,7 +245,7 @@
             var targetDate = new Date(item.created_at);
 
             // Tambahkan 7 hari ke tanggal target
-            targetDate = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate() + (6 -
+            targetDate = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate() + (7 -
                 targetDate.getDay()));
 
             // Hitung selisih waktu antara tanggal target dan tanggal saat ini
