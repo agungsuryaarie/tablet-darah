@@ -37,7 +37,9 @@
                                     @foreach ($sesi as $item)
                                         <div class="col-sm-4 mb-3">
                                             @php
-                                                $createdDate = \Carbon\Carbon::parse($item->created_at)->endOfWeek();
+                                                $createdDate = \Carbon\Carbon::parse($item->created_at);
+                                                $createdDate->endOfWeek();
+                                                $createdDate->setTime(0, 0, 0);
                                                 $today = \Carbon\Carbon::now();
                                             @endphp
                                             @if ($today->lessThan($createdDate))
