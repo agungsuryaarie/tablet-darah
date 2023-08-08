@@ -58,7 +58,7 @@ class SekolahController extends Controller
             'jenjang.required' => 'Jenjang harus dipilih.',
             'status.required' => 'Status harus dipilih.',
             'alamat_jalan.required' => 'Alamat harus diisi.',
-            'alamat_jalan..max' => 'Alamat melebihi batas maksimal karakter.',
+            'alamat_jalan.max' => 'Alamat melebihi batas maksimal karakter.',
         );
         //Check If Field Unique
         if (!$request->hidden_id) {
